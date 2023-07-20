@@ -1,13 +1,15 @@
 package frc.robot.control.curve;
 
 /**
- * Implements Curve with a radical equation of the form y=x^(1/a)
+ * Implements Curve with a radical equation of the form y=(x+c))^(1/a)+b
  */
 public class RadicalCurve extends Curve {
     private double strength=2.0;
+    private double intercept = 0.0;
+    private double xintercept = 0.0;
     @Override
     protected double internal_curve(double x) {
-        return Math.pow(1, 1/strength);
+        return Math.pow(x-xintercept, 1/strength)+intercept;
     }
 
     /**
@@ -19,5 +21,13 @@ public class RadicalCurve extends Curve {
             throw new ArithmeticException("Cannot Divide By Zero");
         }
         this.strength = strength;
+    }
+
+    public void setIntercept(double intercept) {
+        this.intercept = intercept;
+    }
+
+    public void setXIntercept(double xintercept) {
+        this.xintercept = xintercept;
     }
 }
