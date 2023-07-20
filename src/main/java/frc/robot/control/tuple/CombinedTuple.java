@@ -11,10 +11,12 @@ import frc.robot.control.single.SingleControl;
 public class CombinedTuple extends TupleControl{
     private SingleControl xStyle;
     private SingleControl yStyle;
+
     @Override
     public Tuple2<Double> getValue() {
-        return new Tuple2<>(xStyle.getValue() , yStyle.getValue());
+        return new Tuple2<>(xStyle.getValue(), yStyle.getValue());
     }
+
     public CombinedTuple(SingleControl xStyle, SingleControl yStyle) {
         this.xStyle = xStyle;
         this.yStyle = yStyle;

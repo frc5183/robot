@@ -3,6 +3,8 @@ package frc.robot.subsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Tuple2;
+import frc.robot.control.tuple.AutonomousTupleControl;
+import frc.robot.control.tuple.TupleControl;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.MotorGroup;
 
@@ -12,13 +14,15 @@ public class GenericDriveTrain extends Subsystem {
     private final MotorGroup right;
     private final XboxController controller;
     private final SingleAxisGyroscope gyroscope;
+    private final TupleControl tupleControl;
 
-    public GenericDriveTrain(MotorGroup left, MotorGroup right, XboxController controller, SingleAxisGyroscope gyroscope) {
+    public GenericDriveTrain(MotorGroup left, MotorGroup right, XboxController controller, SingleAxisGyroscope gyroscope, TupleControl tupleControl) {
         this.drive = new DifferentialDrive(left, right);
         this.left = left;
         this.right = right;
         this.controller = controller;
         this.gyroscope = gyroscope;
+        this.tupleControl = tupleControl;
 
         this.left.setSafety(true);
         this.right.setSafety(true);
@@ -26,19 +30,19 @@ public class GenericDriveTrain extends Subsystem {
 
     /**
      * @see DifferentialDrive#arcadeDrive(double, double)
-     * @param input Tuple2<Double> with val1 being the xSpeed and val2 being the zRotation
+     * @see TupleControl#getValue()
      */
-    public void arcadeDrive(Tuple2<Double> input) {
-        drive.arcadeDrive(input.getVal1(), input.getVal2());
+    public void arcadeDrive() {
+        drive.arcadeDrive(tupleControl.getValue().getVal1(), tupleControl.getValue().getVal2());
     }
 
     /**
      * @see DifferentialDrive#arcadeDrive(double, double, boolean)
-     * @param input Tuple2<Double> with val1 being the xSpeed and val2 being the zRotation
+     * @see TupleControl#getValue()
      * @param squared Whether to square the inputs
      */
-    public void arcadeDrive(Tuple2<Double> input, boolean squared) {
-        drive.arcadeDrive(input.getVal1(), input.getVal2(), squared);
+    public void arcadeDrive(boolean squared) {
+        drive.arcadeDrive(tupleControl.getValue().getVal1(), tupleControl.getValue().getVal2(), squared);
     }
 
     public void setSpeed(double speed) {

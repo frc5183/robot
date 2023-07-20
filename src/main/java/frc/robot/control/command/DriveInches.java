@@ -50,7 +50,7 @@ public class DriveInches extends Command {
     @Override
     public void run() {
         driveTrain.setSpeed(maxSpeed);
-        driveTrain.arcadeDrive(new Tuple2<Double>(maxSpeed, 0D), true);
+        driveTrain.arcadeDrive(true);
 
         double dist = 0;
         double rotations = dist / 2048;

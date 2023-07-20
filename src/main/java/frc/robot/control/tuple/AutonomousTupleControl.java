@@ -17,7 +17,7 @@ public class AutonomousTupleControl extends TupleControl{
         value = new Tuple2<>(value1, value2);
     }
     public AutonomousTupleControl(Tuple2<Double> value) {
-        this.value=value;
+        this.value = value;
     }
 
     /** Sets a new Tuple2 value

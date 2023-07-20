@@ -24,7 +24,7 @@ public abstract class TupleControl {
      * @return Returns this Instance for chaining Purposes.
      */
     public TupleControl setXboxController(XboxController xbox) {
-        this.xbox=xbox;
+        this.xbox = xbox;
         return this;
     }
 }
