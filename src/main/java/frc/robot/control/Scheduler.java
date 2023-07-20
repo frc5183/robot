@@ -32,6 +32,13 @@ public class Scheduler {
     private ArrayList<Command> activeCommands = new ArrayList<>();
 
     /**
+     * Adds a command to the end of the queue.
+     * @param c the command to add
+     */
+    public void scheduleCommand(Command c) {
+        commandQueue.add(c);
+    }
+    /**
      * The main method of the Scheduler, to be run every periodic loop.
      */
     public void run() {
