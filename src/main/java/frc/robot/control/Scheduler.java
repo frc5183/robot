@@ -4,6 +4,7 @@ import frc.robot.control.command.Command;
 import frc.robot.subsystem.Subsystem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 public class Scheduler {
@@ -33,11 +34,12 @@ public class Scheduler {
 
     /**
      * Adds a command to the end of the queue.
-     * @param c the command to add
+     * @param command the command to add
      */
-    public void scheduleCommand(Command c) {
-        commandQueue.add(c);
+    public void scheduleCommand(Command command) {
+        commandQueue.add(command);
     }
+
     /**
      * The main method of the Scheduler, to be run every periodic loop.
      */
