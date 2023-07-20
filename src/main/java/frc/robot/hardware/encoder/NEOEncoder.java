@@ -1,4 +1,4 @@
-package frc.robot.hardware.gyro;
+package frc.robot.hardware.encoder;
 
 import frc.robot.hardware.motor.SparkMaxMotor;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
