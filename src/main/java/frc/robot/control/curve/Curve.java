@@ -22,7 +22,7 @@ public abstract class Curve {
      * @param x the input to be curved
      * @return the output, processed value of the curve
      */
-    private double curve(double x) {
+    public double curve(double x) {
         if (Math.abs(x)<deadzone) {
             return internal_curve(x);
         } else {
