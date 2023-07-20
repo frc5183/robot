@@ -1,4 +1,4 @@
-package frc.robot.hardware.gyro;
+package frc.robot.hardware.encoder;
 
 import com.ctre.phoenix.sensors.CANCoder;
 /**

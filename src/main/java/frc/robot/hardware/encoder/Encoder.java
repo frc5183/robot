@@ -1,4 +1,4 @@
-package frc.robot.hardware.gyro;
+package frc.robot.hardware.encoder;
 
 /**
  * An abstract class that represents a 1 axis gyroscope.
