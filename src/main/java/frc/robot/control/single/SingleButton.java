@@ -44,18 +44,31 @@ public class SingleButton extends SingleControl {
         }
     }
 
+    /**
+     * Sets the Button Style
+     * @param style new ButtonStyle
+     */
     public void setStyle(ButtonStyle style) {
         this.style = style;
     }
 
+    /** Sets the Button
+     * @param button new Button
+     */
     public void setButton(Button button) {
         this.button = button;
     }
 
+    /** Sets the Pressed Value
+     * @param pressed new Pressed Value
+     */
     public void setPressed(double pressed) {
         this.pressed = pressed;
     }
 
+    /** Sets the Unpressed Value
+     * @param unpressed new Unpressed Value
+     */
     public void setUnpressed(double unpressed) {
         this.unpressed = unpressed;
     }
