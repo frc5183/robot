@@ -14,7 +14,7 @@ public class GenericDriveTrain extends Subsystem {
     private final MotorGroup right;
     private final XboxController controller;
     private final SingleAxisGyroscope gyroscope;
-    private final TupleControl tupleControl;
+    private TupleControl tupleControl;
 
     public GenericDriveTrain(MotorGroup left, MotorGroup right, XboxController controller, SingleAxisGyroscope gyroscope, TupleControl tupleControl) {
         this.drive = new DifferentialDrive(left, right);
@@ -42,7 +42,7 @@ public class GenericDriveTrain extends Subsystem {
      * @param squared Whether to square the inputs
      */
     public void arcadeDrive(boolean squared) {
-        drive.arcadeDrive(tupleControl.getValue().getVal1(), tupleControl.getValue().getVal2(), squared);
+        drive.arcadeDrive(tupleControl.getValue().getVal2(), tupleControl.getValue().getVal1(), squared);
     }
 
     public void setSpeed(double speed) {
@@ -69,4 +69,11 @@ public class GenericDriveTrain extends Subsystem {
     public SingleAxisGyroscope getGyroscope() {
         return gyroscope;
     }
+    public void setTupleControl(TupleControl control) {
+        tupleControl=control;
+    }
+    public TupleControl getTupleControl() {
+        return tupleControl;
+    }
+
 }
