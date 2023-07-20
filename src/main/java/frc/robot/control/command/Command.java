@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * needed subsystem during its constructor.
  */
 public abstract class Command {
-    private ArrayList<Subsystem> subsystemList = new ArrayList<>();
+    private final ArrayList<Subsystem> subsystemList = new ArrayList<>();
 
     protected void require(Subsystem c) {
         // Prevent Duplicates for whatever reason they may occur

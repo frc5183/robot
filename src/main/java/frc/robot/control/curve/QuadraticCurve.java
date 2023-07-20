@@ -4,9 +4,11 @@ package frc.robot.control.curve;
  * An Implementation of Curve that uses the Quadratic Equation of the form Ax^2 + BX + C
  */
 public class QuadraticCurve extends Curve {
-    private double A= 1;
+    private double A = 1;
     private double B = 0;
+
     private double intercept = 0;
+
     @Override
     protected double internal_curve(double x) {
         return A*(Math.pow(x, 2)) + B*x + intercept;

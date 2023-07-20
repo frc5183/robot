@@ -5,7 +5,6 @@ package frc.robot;
  * THIS CLASS WILL VARY BETWEEN BRANCHES AND CHANGES SHOULD NOT BE COMMITTED UNLESS ADDING A NEEDED CONFIG TO THE OVERALL CODEBASE
  */
 public class Config {
-
     /**
      * Represents the ID of the first controller as represented in the Driver Station Configuration
      */
@@ -14,5 +13,4 @@ public class Config {
      * Represents the ID of the first controller as represented in the Driver Station Configuration
      */
     public static final int SecondControllerID = 1;
-
 }

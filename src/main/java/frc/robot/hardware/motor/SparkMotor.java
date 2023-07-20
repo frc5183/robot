@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
  * A wrapper class around Spark to make it compatible with other motor types
  */
 public class SparkMotor extends Motor{
-    private Spark sparkMotor;
+    private final Spark sparkMotor;
     public SparkMotor(int port) {
         sparkMotor = new Spark(port);
     }

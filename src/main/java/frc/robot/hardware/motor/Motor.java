@@ -3,7 +3,7 @@ package frc.robot.hardware.motor;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 /**
- * A abstract classes used for building compatible wrapper classes around hardware motors
+ * An abstract classes used for building compatible wrapper classes around hardware motors
  */
 public abstract class Motor implements MotorController {
     /**

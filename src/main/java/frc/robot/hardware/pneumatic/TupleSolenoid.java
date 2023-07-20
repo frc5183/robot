@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj.PneumaticsBase;
  * NEITHER SOLENOID WILL PREVENT ALL AIRFLOW
  */
 public class TupleSolenoid {
-    private DoubleSolenoid solenoid;
+    private final DoubleSolenoid solenoid;
+
     public TupleSolenoid(DoubleSolenoid s) {
-        solenoid=s;
+        solenoid = s;
     }
     public TupleSolenoid(PneumaticsBase base, int idForward, int idReverse) {
         solenoid = base.makeDoubleSolenoid(idForward, idReverse);

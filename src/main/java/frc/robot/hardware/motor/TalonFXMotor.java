@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
  * A wrapper class around WPI_TalonFX to make it compatible with other motor types
  */
 public class TalonFXMotor extends PhoenixMotor {
-    private WPI_TalonFX talonMotor;
+    private final WPI_TalonFX talonMotor;
     public TalonFXMotor(int id) {
         talonMotor = new WPI_TalonFX(id);
         super.motor=talonMotor;

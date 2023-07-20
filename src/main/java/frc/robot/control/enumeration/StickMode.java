@@ -11,6 +11,7 @@ public enum StickMode {
      * Represents a single axis of one of the two available joysticks on the XBOX 360 Controller
      */
     LEFTX, LEFTY, RIGHTX, RIGHTY,
+
     /**
      * Represents an adaptation of the DPAD/HAT's left and right buttons to become a digital axis
      */
@@ -38,18 +39,18 @@ public enum StickMode {
                 return xbox.getRightY();
             case HATY:
                 int x = xbox.getPOV();
-                if (x==0 || x==45 || x==315) {
+                if (x == 0 || x == 45 || x == 315) {
                     return 1;
-                } else if (x==180 || x==135 || x==225) {
+                } else if (x == 180 || x == 135 || x == 225) {
                     return -1;
                 } else {
                     return 0;
                 }
             case HATX:
                 int y = xbox.getPOV();
-                if (y==90 || y==45 || y==135) {
+                if (y == 90 || y == 45 || y == 135) {
                     return 1;
-                } else if (y==270 || y==315 || y==225) {
+                } else if (y == 270 || y == 315 || y == 225) {
                     return -1;
                 } else {
                     return 0;

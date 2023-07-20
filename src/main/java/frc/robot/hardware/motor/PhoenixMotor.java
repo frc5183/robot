@@ -21,7 +21,7 @@ public abstract class PhoenixMotor extends Motor {
     public abstract BaseMotorController getRawMasterMotor();
 
     /** Used to set the Deadband of CTRE motor Controllers
-     * @param deadband deadband ammount
+     * @param deadband deadband amount
      */
     public void setDeadband(double deadband) {
         motor.configNeutralDeadband(deadband);

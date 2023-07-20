@@ -8,18 +8,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  * A wrapper class around CANSparkMax to make it compatible with other motor types
  */
 public class SparkMaxMotor extends Motor {
-    private CANSparkMax motor;
+    private final CANSparkMax motor;
+
     public SparkMaxMotor(int id, MotorType motortype) {
         motor = new CANSparkMax(id, motortype);
     }
+
     @Override
     public void set(double speed) {
         motor.set(speed);
     }
+
     @Override
     public void periodic() {
 
     }
+
     @Override
     public double get() {
         return motor.get();
@@ -33,24 +37,28 @@ public class SparkMaxMotor extends Motor {
     public void setInverted(boolean inverted) {
         motor.setInverted(inverted);
     }
+
     @Override
     public boolean getInverted() {
         return motor.getInverted();
     }
+
     @Override
     public void disable() {
         motor.disable();
     }
+
     @Override
     public void stopMotor() {
         motor.stopMotor();
     }
+
     @Override
     public MotorController getRawMotor() {
         return motor;
     }
+
     public CANSparkMax getTrueRawMotor() {
         return motor;
     }
-
 }

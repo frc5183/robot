@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
  * A wrapper class around WPI_VictorSPX to make it compatible with other motor types
  */
 public class VictorSPXMotor extends PhoenixMotor {
-    WPI_VictorSPX motor;
+    final WPI_VictorSPX motor;
     public VictorSPXMotor(int id) {
         motor = new WPI_VictorSPX(id);
         super.motor=motor;

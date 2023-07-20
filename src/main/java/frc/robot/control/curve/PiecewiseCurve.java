@@ -7,29 +7,43 @@ package frc.robot.control.curve;
 public class PiecewiseCurve extends Curve {
     private Curve leftCurve;
     private Curve rightCurve;
-    private double limit=0.5;
+
+    private double limit;
+
     @Override
     protected double internal_curve(double x) {
-        if (x<limit) {
+        if (x < limit) {
             return leftCurve.curve(x);
         } else {
             return rightCurve.curve(x);
         }
     }
+
     public PiecewiseCurve(Curve lcurve, Curve rcurve, double limit) {
-        leftCurve=lcurve;
-        rightCurve=rcurve;
-        this.limit=limit;
+        leftCurve = lcurve;
+        rightCurve = rcurve;
+        this.limit = limit;
     }
 
+
+    /**
+     * @param leftCurve the leftCurve to set
+     */
     public void setLeftCurve(Curve leftCurve) {
         this.leftCurve = leftCurve;
     }
 
+
+    /**
+     * @param rightCurve the rightCurve to set
+     */
     public void setRightCurve(Curve rightCurve) {
         this.rightCurve = rightCurve;
     }
 
+    /**
+     * @param limit the limit to set
+     */
     public void setLimit(double limit) {
         this.limit = limit;
     }

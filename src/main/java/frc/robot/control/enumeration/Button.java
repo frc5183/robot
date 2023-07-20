@@ -13,7 +13,7 @@ public enum Button {
      * On that Controller. A value of True indicates the button is pressed down.
      * @param button the Button that needs to be evaluated
      * @param xbox The XboxController that is used to retrieve the value
-     * @return
+     * @return true if the button is pressed down, false otherwise
      */
     public static boolean getButtonValue(Button button, XboxController xbox) {
         switch (button) {

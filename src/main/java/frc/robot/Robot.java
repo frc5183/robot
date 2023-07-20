@@ -24,8 +24,7 @@ public class Robot extends TimedRobot
     private final PWMSparkMax rightMotor = new PWMSparkMax(1);
     private final DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
     private final Joystick stick = new Joystick(0);
-    
-    
+
     @Override
     public void robotInit()
     {

@@ -6,9 +6,10 @@ package frc.robot.control.curve;
 public class LinearCurve extends Curve{
     private double slope;
     private double intercept;
+
     @Override
     protected double internal_curve(double x) {
-        return (slope*x)+intercept;
+        return (slope * x) + intercept;
     }
 
     /**
@@ -19,7 +20,8 @@ public class LinearCurve extends Curve{
         this.slope = slope;
     }
 
-    /** Sets the Y-Intercept of the linear equation
+    /**
+     * Sets the Y-Intercept of the linear equation
      * @param intercept the new intercept
      */
     public void setIntercept(double intercept) {

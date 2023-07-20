@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.PneumaticsBase;
  * Represents a Pneumatic Air Compressor on the Robot
  */
 public class PneumaticCompressor {
-    private Compressor compressor;
+    private final Compressor compressor;
     public PneumaticCompressor(Compressor compressor) {
         this.compressor=compressor;
     }
@@ -24,7 +24,7 @@ public class PneumaticCompressor {
     /**
      * Enables the Compressor using an Analog Pressure Switch
      * @param low minimum air (will always run below)
-     * @param high maxinum air (will never run above, and will not run till it reaches low again)
+     * @param high maximum air (will never run above, and will not run till it reaches low again)
      */
     public void enableAnalog(double low, double high) {
         compressor.enableAnalog(low, high);
@@ -38,7 +38,7 @@ public class PneumaticCompressor {
     }
 
     /**
-     * @return whether or not the compressor is enabled.
+     * @return whether the compressor is enabled.
      */
     public boolean isEnabled() {
         return compressor.isEnabled();

@@ -9,13 +9,15 @@ import edu.wpi.first.wpilibj.Solenoid;
  * NEITHER SOLENOID WILL PREVENT ALL AIRFLOW
  */
 public class SingleSolenoid {
-    private Solenoid solenoid;
+    private final Solenoid solenoid;
+
     public SingleSolenoid(Solenoid s) {
-        solenoid=s;
+        solenoid = s;
     }
     public SingleSolenoid(PneumaticsBase base, int id) {
         solenoid = base.makeSolenoid(id);
     }
+
     /**
      * Sets the state of the Single Solenoid
      * @param on what direction the Solenoid should flow
