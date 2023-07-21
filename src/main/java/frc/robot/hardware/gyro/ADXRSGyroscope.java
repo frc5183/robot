@@ -16,12 +16,12 @@ public class ADXRSGyroscope extends SingleAxisGyroscope{
 
     @Override
     public double getRadians() {
-        return getAngle()*Math.PI/180;
+        return getAngle()*Math.PI / 180;
     }
 
     @Override
     public double getRotations() {
-        return getAngle()/360;
+        return getAngle() / 360;
     }
 
     public void calibrate() {

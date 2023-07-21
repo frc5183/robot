@@ -9,7 +9,7 @@ public class VictorSPXMotor extends PhoenixMotor {
     final WPI_VictorSPX motor;
     public VictorSPXMotor(int id) {
         motor = new WPI_VictorSPX(id);
-        super.motor=motor;
+        super.motor = motor;
     }
 
     public void setVoltage(double outputVolts) {

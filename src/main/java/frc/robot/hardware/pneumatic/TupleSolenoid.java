@@ -31,7 +31,7 @@ public class TupleSolenoid {
      * @param mode what TupleSolenoidMode to change the TupleSolenoid to
      */
     public void set (TupleSolenoidMode mode) {
-        switch(mode) {
+        switch (mode) {
             case REVERSE:
                 solenoid.set(DoubleSolenoid.Value.kReverse);
                 break;

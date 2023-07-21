@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.PneumaticsBase;
 public class PneumaticCompressor {
     private final Compressor compressor;
     public PneumaticCompressor(Compressor compressor) {
-        this.compressor=compressor;
+        this.compressor = compressor;
     }
     public PneumaticCompressor(PneumaticsBase base) {
         compressor = base.makeCompressor();

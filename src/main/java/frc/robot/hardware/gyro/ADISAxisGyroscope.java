@@ -10,12 +10,12 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     public final Axis axis;
 
     public ADISAxisGyroscope(ADIS16448_IMU gyro, Axis axis) {
-        this.gyro=gyro;
-        this.axis=axis;
+        this.gyro = gyro;
+        this.axis = axis;
     }
     @Override
     public double getDegrees() {
-        switch(axis) {
+        switch (axis) {
             case YAW:
                 return gyro.getGyroAngleZ();
             case PITCH:
@@ -28,12 +28,12 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     }
     @Override
     public double getRadians() {
-        return getDegrees()*Math.PI/180;
+        return getDegrees() * Math.PI / 180;
     }
 
     @Override
     public double getRotations() {
-        return getDegrees()/360;
+        return getDegrees() / 360;
     }
 
     @Override

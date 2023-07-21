@@ -9,7 +9,7 @@ public class TalonFXMotor extends PhoenixMotor {
     private final WPI_TalonFX talonMotor;
     public TalonFXMotor(int id) {
         talonMotor = new WPI_TalonFX(id);
-        super.motor=talonMotor;
+        super.motor = talonMotor;
     }
 
     public void set(double speed) {

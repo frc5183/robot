@@ -37,6 +37,7 @@ public class MotorGroup extends Motor {
     public double get() {
         return motor1.get();
     }
+
     @Override
     public void setSafety(boolean on) {
         motor1.setSafety(on);
