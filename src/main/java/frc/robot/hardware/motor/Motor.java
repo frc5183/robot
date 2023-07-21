@@ -22,6 +22,7 @@ public abstract class Motor implements MotorController {
     public abstract double get();
 
     /**
+     * THIS SHOULD ALWAYS BE SET TO TRUE APART FROM VERY RARE CIRCUMSTANCES OR IN CONTROLLED ENVIRONMENTS
      * @param on Sets the state of Motor Safety
      */
     public abstract void setSafety(boolean on);
