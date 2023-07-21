@@ -10,6 +10,12 @@ public class PiecewiseCurve extends Curve {
 
     private double limit;
 
+    public PiecewiseCurve(Curve lcurve, Curve rcurve, double limit) {
+        leftCurve = lcurve;
+        rightCurve = rcurve;
+        this.limit = limit;
+    }
+
     @Override
     protected double internal_curve(double x) {
         if (x < limit) {
@@ -17,12 +23,6 @@ public class PiecewiseCurve extends Curve {
         } else {
             return rightCurve.curve(x);
         }
-    }
-
-    public PiecewiseCurve(Curve lcurve, Curve rcurve, double limit) {
-        leftCurve = lcurve;
-        rightCurve = rcurve;
-        this.limit = limit;
     }
 
 

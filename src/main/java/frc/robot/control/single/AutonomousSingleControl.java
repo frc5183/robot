@@ -8,6 +8,10 @@ package frc.robot.control.single;
 public class AutonomousSingleControl extends SingleControl {
     private double value;
 
+    public AutonomousSingleControl(double value) {
+        this.value=value;
+    }
+
     /**
      * Sets the value to be output by getValue()
      * @param value the new value to be output by getValue()
@@ -18,9 +22,5 @@ public class AutonomousSingleControl extends SingleControl {
 
     public double getValue() {
         return value;
-    }
-
-    public AutonomousSingleControl(double value) {
-        this.value=value;
     }
 }

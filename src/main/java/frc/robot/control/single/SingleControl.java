@@ -13,12 +13,6 @@ public abstract class SingleControl {
     protected XboxController xbox;
 
     /**
-     * @return double value between -1 and 1
-     * Implementation return a dynamic value between -1 and 1 based on their inputs (XboxController or Autonomous Input Methods)
-     */
-    public abstract double getValue();
-
-    /**
      * Used to set the XboxController used for this SingleController
      * May be skipped if the implementation of SingleControl does not use
      * an XboxController (for example: Autonomous Controls)
@@ -29,4 +23,10 @@ public abstract class SingleControl {
         this.xbox=xbox;
         return this;
     }
+
+    /**
+     * @return double value between -1 and 1
+     * Implementation return a dynamic value between -1 and 1 based on their inputs (XboxController or Autonomous Input Methods)
+     */
+    public abstract double getValue();
 }

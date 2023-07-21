@@ -5,7 +5,7 @@ import com.ctre.phoenix.sensors.CANCoder;
  * An implementation of Encoder for the physical CANCoders
  */
 public class CANEncoder extends Encoder {
-    private CANCoder encoder;
+    private final CANCoder encoder;
     public CANEncoder(int id) {
         encoder = new CANCoder(id);
     }
@@ -14,12 +14,12 @@ public class CANEncoder extends Encoder {
     }
     @Override
     public double getUnitsRadians() {
-        return (encoder.getPosition()/180)*Math.PI;
+        return (encoder.getPosition() / 180) * Math.PI;
     }
 
     @Override
     public double getUnitsRotations() {
-        return encoder.getPosition()/360;
+        return encoder.getPosition() / 360;
     }
 
     @Override

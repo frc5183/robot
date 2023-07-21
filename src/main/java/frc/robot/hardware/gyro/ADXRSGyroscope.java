@@ -3,7 +3,7 @@ package frc.robot.hardware.gyro;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 public class ADXRSGyroscope extends SingleAxisGyroscope{
-    private ADXRS450_Gyro gyro;
+    private final ADXRS450_Gyro gyro;
 
     public ADXRSGyroscope(ADXRS450_Gyro Gyro) {
         gyro = Gyro;

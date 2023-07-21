@@ -8,18 +8,23 @@ import frc.robot.control.single.SingleControl;
  * Combine 2 different SingleControls, one for each value
  * of the Tuple.
  */
-public class CombinedTuple extends TupleControl{
+public class CombinedTuple extends TupleControl {
     private SingleControl xStyle;
     private SingleControl yStyle;
+
+    /**
+     * Creates a new CombinedTuple
+     * @param xStyle The SingleControl to be used for the X value of the Tuple
+     * @param yStyle The SingleControl to be used for the Y value of the Tuple
+     */
+    public CombinedTuple(SingleControl xStyle, SingleControl yStyle) {
+        this.xStyle = xStyle;
+        this.yStyle = yStyle;
+    }
 
     @Override
     public Tuple2<Double> getValue() {
         return new Tuple2<>(xStyle.getValue(), yStyle.getValue());
-    }
-
-    public CombinedTuple(SingleControl xStyle, SingleControl yStyle) {
-        this.xStyle = xStyle;
-        this.yStyle = yStyle;
     }
 
     /** Sets the X Single Control

@@ -11,11 +11,13 @@ import frc.robot.Tuple2;
  */
 public abstract class TupleControl {
     protected XboxController xbox;
+
     /**
      * @return Tuple2<Double> Value with doubles between -1 and 1
      * Implementation returns a dynamic value between -1 and 1 based on their inputs (XboxController or Autonomous Input Methods)
      */
     public abstract Tuple2<Double> getValue();
+
     /**
      * Used to set the XboxController used for this TupleControl
      * May be skipped if the implementation of TupleControl does not use

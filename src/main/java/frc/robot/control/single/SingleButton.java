@@ -12,35 +12,35 @@ import frc.robot.control.enumeration.ButtonStyle;
 public class SingleButton extends SingleControl {
     private ButtonStyle style;
     private Button button;
-    private double unpressed=0;
-    private double pressed=1;
-    private boolean swapped=false;
-    private boolean lastState=false;
+    private double unpressed = 0;
+    private double pressed = 1;
+    private boolean swapped = false;
+    private boolean lastState = false;
     @Override
     public double getValue() {
-        boolean buttonVal=Button.getButtonValue(button, xbox);
+        boolean buttonVal = Button.getButtonValue(button, xbox);
         switch (style) {
             case SWITCH:
-                lastState=buttonVal;
+                lastState = buttonVal;
                 if (buttonVal) {
-                    swapped=true;
+                    swapped = true;
                     return pressed;
                 } else {
-                    swapped=false;
+                    swapped = false;
                     return unpressed;
                 }
             case SET:
                 if (!lastState && buttonVal) {
-                    swapped=!swapped;
+                    swapped = !swapped;
                 }
-                lastState=buttonVal;
+                lastState = buttonVal;
                 if (swapped) {
                     return pressed;
                 } else {
                     return unpressed;
                 }
             default:
-                return 0;
+                return unpressed;
         }
     }
 

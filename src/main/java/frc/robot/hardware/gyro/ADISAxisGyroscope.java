@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.ADIS16448_IMU;
  * A wrapper for a single axis of the 3 axis ADIS16448_IMU
  */
 public class ADISAxisGyroscope extends SingleAxisGyroscope {
-    public ADIS16448_IMU gyro;
-    public Axis axis;
+    public final ADIS16448_IMU gyro;
+    public final Axis axis;
 
     public ADISAxisGyroscope(ADIS16448_IMU gyro, Axis axis) {
         this.gyro=gyro;

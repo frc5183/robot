@@ -11,29 +11,30 @@ import frc.robot.control.enumeration.StickMode;
  * Allows for setting a Curve to curve the output
  */
 public class HalfStick extends SingleControl{
-    private double maxSpeed=1;
+    private double maxSpeed = 1;
     private Curve curve;
     private StickMode mode;
-    @Override
-    public double getValue() {
-        return maxSpeed*curve.curve(StickMode.getStickValue(mode, xbox));
-    }
-
     public HalfStick(StickMode mode) {
         LinearCurve curve = new LinearCurve();
         curve.setSlope(1);
         curve.setIntercept(0);
-        this.curve=curve;
-        this.mode=mode;
+        this.curve = curve;
+        this.mode = mode;
     }
+
     public HalfStick(StickMode mode, Curve curve) {
-        this.curve=curve;
-        this.mode=mode;
+        this.curve = curve;
+        this.mode = mode;
     }
     public HalfStick(StickMode mode, Curve curve, double max) {
-        this.curve=curve;
-        this.mode=mode;
-        this.maxSpeed=max;
+        this.curve = curve;
+        this.mode = mode;
+        this.maxSpeed = max;
+    }
+
+    @Override
+    public double getValue() {
+        return maxSpeed * curve.curve(StickMode.getStickValue(mode, xbox));
     }
 
     /**

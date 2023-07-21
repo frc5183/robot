@@ -7,17 +7,29 @@ import frc.robot.Tuple2;
  * By using the setValue()/updateValue() function family, the value outputted by getValue can be changed.
  * Commands can use this function every periodic cycle to update the value sent to the subsystem
  */
-public class AutonomousTupleControl extends TupleControl{
+public class AutonomousTupleControl extends TupleControl {
     private Tuple2<Double> value;
-    @Override
-    public Tuple2<Double> getValue() {
-        return value;
-    }
+
+    /**
+     * Creates a new AutonomousTupleControl with a Tuple2 value
+     * @param value1 first value
+     * @param value2 second value
+     */
     public AutonomousTupleControl(double value1, double value2) {
         value = new Tuple2<>(value1, value2);
     }
+
+    /**
+     * Creates a new AutonomousTupleControl with a Tuple2 value
+     * @param value Tuple2 value
+     */
     public AutonomousTupleControl(Tuple2<Double> value) {
         this.value = value;
+    }
+
+    @Override
+    public Tuple2<Double> getValue() {
+        return value;
     }
 
     /** Sets a new Tuple2 value

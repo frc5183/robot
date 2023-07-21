@@ -4,9 +4,10 @@ package frc.robot.control.curve;
  * Implements Curve with a radical equation of the form y=(x+c))^(1/a)+b
  */
 public class RadicalCurve extends Curve {
-    private double strength=2.0;
+    private double strength = 2.0;
     private double intercept = 0.0;
     private double xIntercept = 0.0;
+
     @Override
     protected double internal_curve(double x) {
         return Math.pow(x - xIntercept, 1 / strength) + intercept;
