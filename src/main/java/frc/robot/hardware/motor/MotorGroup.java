@@ -67,6 +67,10 @@ public class MotorGroup extends Motor {
         motor2.stopMotor();
     }
 
+    /**
+     * @return null, as there is no single motor controller
+     * @throws RuntimeException if this method is called
+     */
     @Override
     public MotorController getRawMotor() {
         throw new RuntimeException("Cannot Retrieve Single MotorController from MotorGroup. Use MotorGroup.motor1 and MotorGroup.motor2 instead.");

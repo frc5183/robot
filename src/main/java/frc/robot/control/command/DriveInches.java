@@ -2,7 +2,6 @@ package frc.robot.control.command;
 
 import frc.robot.control.command.enumeration.DriveDirection;
 import frc.robot.control.tuple.AutonomousTupleControl;
-import frc.robot.control.tuple.TupleControl;
 import frc.robot.hardware.encoder.Encoder;
 import frc.robot.subsystem.GenericDriveTrain;
 
@@ -16,8 +15,8 @@ public class DriveInches extends Command {
     private final double distance;
     private final double maxSpeed;
     private final GenericDriveTrain driveTrain;
-    private TupleControl oldControl;
     private final DriveDirection direction;
+
     private final AutonomousTupleControl autonomousControl = new AutonomousTupleControl(0, 0);
     private final Encoder encoder;
 
@@ -48,14 +47,12 @@ public class DriveInches extends Command {
 
     @Override
     public void start() {
-        oldControl = driveTrain.getTupleControl();
-        driveTrain.setTupleControl(autonomousControl);
     }
 
     @Override
     public void run() {
         autonomousControl.updateValue2(maxSpeed);
-        driveTrain.arcadeDrive(true);
+        driveTrain.arcadeDrive(autonomousControl, true);
 
         // Note: needs to be tested: a negative may need to be added to get it to work correctly
         double radians = encoder.getUnitsRadians();
@@ -70,7 +67,6 @@ public class DriveInches extends Command {
 
     @Override
     public void clean() {
-        driveTrain.setTupleControl(oldControl);
     }
 
     @Override

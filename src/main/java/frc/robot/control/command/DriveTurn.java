@@ -2,17 +2,15 @@ package frc.robot.control.command;
 
 import frc.robot.control.command.enumeration.TurnMode;
 import frc.robot.control.tuple.AutonomousTupleControl;
-import frc.robot.control.tuple.TupleControl;
 import frc.robot.subsystem.GenericDriveTrain;
 
 public class DriveTurn extends Command {
     private double angle;
-    private double maxSpeed;
-    private TurnMode mode;
-    private GenericDriveTrain driveTrain;
+    private final double maxSpeed;
+    private final TurnMode mode;
+    private final GenericDriveTrain driveTrain;
 
-    private TupleControl oldControl;
-    private AutonomousTupleControl control = new AutonomousTupleControl(0, 0);
+    private final AutonomousTupleControl control = new AutonomousTupleControl(0, 0);
 
     private boolean finished = false;
 
@@ -28,26 +26,28 @@ public class DriveTurn extends Command {
         if (this.mode == TurnMode.RELATIVE) {
             this.angle += driveTrain.getGyroscope().getDegrees();
         }
-
-        oldControl = driveTrain.getTupleControl();
-        driveTrain.setTupleControl(control);
     }
 
     @Override
     public void run() {
+        control.updateValue2(maxSpeed);
+        driveTrain.arcadeDrive(control);
+
         double currentAngle = driveTrain.getGyroscope().getDegrees();
-        double angleDifference = angle - currentAngle;
-        double speed = angleDifference / 180 * maxSpeed;
-        control.updateValue(0, speed);
-        driveTrain.arcadeDrive();
-        if (Math.abs(angleDifference) < 1) {
+        if (angle < 0) {
+            currentAngle = -currentAngle;
+        }
+        double needed = angle - currentAngle;
+
+        if (Math.abs(needed) < 1) {
+            control.updateValue(0, 0);
+            driveTrain.arcadeDrive(control);
             finished = true;
         }
     }
 
     @Override
     public void clean() {
-        driveTrain.setTupleControl(oldControl);
     }
 
     @Override
