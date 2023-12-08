@@ -5,6 +5,10 @@ import frc.robot.hardware.encoder.Encoder;
 import frc.robot.hardware.motor.Motor;
 import frc.robot.hardware.sensor.LimitSwitch;
 
+/**
+ * A class used to create a single-motor "Spool" system that has forward and reverse limit switches
+ * An Encoder is required for Autonomous use
+ */
 public class LimitedSpooler extends Subsystem {
     private final LimitSwitch forwardSwitch;
     private final LimitSwitch reverseSwitch;
@@ -16,23 +20,44 @@ public class LimitedSpooler extends Subsystem {
         this.spool=spool;
         this.encoder=encoder;
     }
+
+    /**
+     * Feeds motor safety and checks for limit switches
+     */
     public void periodic() {
         spool.periodic();
-        if (forwardSwitch.isClosed() && spool.get()>0) { // If the motor hits the forward switch going forward STOP movement.
-            spool.set(0);
-        }
-        if (reverseSwitch.isClosed() && spool.get()<0) { // If the motor hits the reverse switch going backwards STOP movement
-            spool.set(0);
-        }
+        stopMotorIfNeeded(spool.get());
     }
+
+    /** Drives the main spool motor
+     * @param control SingleControl the control used for this LimitedSpooler
+     */
     public void drive(SingleControl control) {
         double speed = control.getValue();
-        if (forwardSwitch.isClosed() && spool.get()>0) { // If the motor hits the forward switch going forward STOP movement.
+        if (stopMotorIfNeeded(speed)) return;
+        spool.set(speed);
+    }
+
+    /**
+     * @param speed the motor speed needing to be tested
+     * @return boolean, true if motor was forced stopped, false otherwise
+     */
+    private boolean stopMotorIfNeeded(double speed) {
+        if (forwardSwitch.isClosed() && speed>0) {
             spool.set(0);
-        } else if (reverseSwitch.isClosed() && spool.get()<0) { // If the motor hits the reverse switch going backwards STOP movement
-            spool.set(0);
-        } else { // If it's not going against a switch, run it
-            spool.set(speed);
+            return true;
         }
+        if (reverseSwitch.isClosed() && speed<0) {
+            spool.set(0);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return Encoder the encoder corresponding the spool motor
+     */
+    public Encoder getEncoder() {
+        return encoder;
     }
 }
