@@ -1,14 +1,13 @@
 package frc.robot.hardware.motor;
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 /**
  * A wrapper class around WPI_TalonFX to make it compatible with other motor types
  */
 public class TalonFXMotor extends PhoenixMotor {
-    private final WPI_TalonFX talonMotor;
+    private final TalonFX talonMotor;
     public TalonFXMotor(int id) {
-        talonMotor = new WPI_TalonFX(id);
+        talonMotor = new TalonFX(id);
         super.motor = talonMotor;
     }
 
@@ -20,10 +19,10 @@ public class TalonFXMotor extends PhoenixMotor {
         talonMotor.setVoltage(outputVolts);
     }
 
-    public WPI_TalonFX getRawMotor() {
+    public TalonFX getRawMotor() {
         return talonMotor;
     }
-    public WPI_TalonFX getRawMasterMotor() {
+    public TalonFX getRawMasterMotor() {
         return talonMotor;
     }
     public void periodic() {
@@ -36,9 +35,6 @@ public class TalonFXMotor extends PhoenixMotor {
         talonMotor.setSafetyEnabled(on);
     }
     public void setInverted(boolean inverted) {
-        talonMotor.setInverted(inverted);
-    }
-    public void setInverted(InvertType inverted) {
         talonMotor.setInverted(inverted);
     }
     public boolean getInverted() {

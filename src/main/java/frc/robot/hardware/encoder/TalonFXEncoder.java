@@ -1,33 +1,35 @@
 package frc.robot.hardware.encoder;
 
-import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.StatusSignal;
 /**
  * An implementation of Encoder for TalonFX Motors
  * Accepts any raw TalonFX motor including CAN_TalonFX
  */
 public class TalonFXEncoder extends Encoder {
-    private final TalonFXSensorCollection encoder;
+    private final TalonFX motor;
+    private final StatusSignal<Double> signal;
     public TalonFXEncoder(TalonFX tx) {
-        encoder = tx.getSensorCollection();
+        signal = tx.getPosition();
+        motor = tx;
     }
     @Override
     public double getUnitsRadians() {
-        return (encoder.getIntegratedSensorPosition() / 1024) * Math.PI;
+        signal.refresh(); return signal.getValue() * 2 * Math.PI;
     }
 
     @Override
     public double getUnitsRotations() {
-        return (encoder.getIntegratedSensorPosition() / 2048);
+        signal.refresh();  return signal.getValue();
     }
 
     @Override
     public double getUnitsDegrees() {
-        return (encoder.getIntegratedSensorPosition() / 2048) * 360;
+        signal.refresh();  return signal.getValue() * 360;
     }
 
     @Override
     public void reset() {
-        encoder.setIntegratedSensorPosition(0, 0);
+        motor.setPosition(0);
     }
 }

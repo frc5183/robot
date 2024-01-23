@@ -5,10 +5,15 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkLowLevel;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import frc.robot.hardware.motor.SparkMaxMotor;
+import frc.robot.hardware.motor.VictorSPXMotor;
 
 
 /**
@@ -19,27 +24,36 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
  */
 public class Robot extends TimedRobot
 {
-    private final PWMSparkMax leftMotor = new PWMSparkMax(0);
-    private final PWMSparkMax rightMotor = new PWMSparkMax(1);
-    private final DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
-    private final Joystick stick = new Joystick(0);
+    private SparkMaxMotor leftRear;
+    private SparkMaxMotor rightRear;
+    private SparkMaxMotor leftFront;
+    private SparkMaxMotor rightFront;
+    private final XboxController controller = new XboxController(0);
+    private MecanumDrive drive;
 
     @Override
     public void robotInit()
     {
-        // We need to invert one side of the drivetrain so that positive voltages
-        // result in both sides moving forward. Depending on how your robot's
-        // gearbox is constructed, you might have to invert the left side instead.
-        rightMotor.setInverted(true);
+        leftRear=new SparkMaxMotor(0, CANSparkLowLevel.MotorType.kBrushless);
+        rightRear=new SparkMaxMotor(1, CANSparkLowLevel.MotorType.kBrushless);
+        leftFront=new SparkMaxMotor(2, CANSparkLowLevel.MotorType.kBrushless);
+        rightFront=new SparkMaxMotor(3, CANSparkLowLevel.MotorType.kBrushless);
+        drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear);
     }
-    
-    
+
+
     @Override
     public void teleopPeriodic()
     {
-        // Drive with arcade drive.
-        // That means that the Y axis drives forward
-        // and backward, and the X turns left and right.
-        robotDrive.arcadeDrive(-stick.getY(), -stick.getX());
+        double y = controller.getLeftY();
+        double x = controller.getLeftX();
+        double turn = controller.getRightX();
+        drive.driveCartesian(y, x, turn);
+    }
+    public void periodic() {
+        leftRear.periodic();;
+        rightRear.periodic();
+        leftFront.periodic();
+        rightFront.periodic();
     }
 }
