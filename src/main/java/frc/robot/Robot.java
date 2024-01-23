@@ -48,7 +48,7 @@ public class Robot extends TimedRobot
         double y = controller.getLeftY();
         double x = controller.getLeftX();
         double turn = controller.getRightX();
-        drive.driveCartesian(y, x, turn);
+        drive.driveCartesian(-y, -x, -turn); // Inversion to follow the right hand rule
     }
     public void periodic() {
         leftRear.periodic();;
