@@ -6,9 +6,8 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkLowLevel;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
@@ -34,6 +33,8 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
         leftRear=new SparkMaxMotor(0, CANSparkLowLevel.MotorType.kBrushless);
         rightRear=new SparkMaxMotor(1, CANSparkLowLevel.MotorType.kBrushless);
         leftFront=new SparkMaxMotor(2, CANSparkLowLevel.MotorType.kBrushless);

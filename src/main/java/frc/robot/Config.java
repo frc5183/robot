@@ -23,4 +23,18 @@ public class Config {
      * Represents the gearbox ratio of the drivetrain.
      */
     public static final int GearboxRatio = 0;
+
+    /**
+     * Represents the LogTypes that are enabled for the logger.
+     */
+    public static final Logger.LogType[] enabledLogs = {
+        Logger.LogType.Control,
+        Logger.LogType.HardwareEncoder,
+        Logger.LogType.HardwareGyro,
+        Logger.LogType.HardwareMotor,
+        Logger.LogType.HardwarePneumatics,
+        Logger.LogType.HardwareSensor,
+        Logger.LogType.Subsystems,
+        Logger.LogType.Other
+    };
 }
