@@ -105,4 +105,27 @@ public class Scheduler {
         }
         activeCommands.clear();
     }
+
+    /**
+     * Interrupts the current queue with a single command.
+     * The current active commands and pushed back to the front of the queue.
+     * @param command the command to skip the que with
+     */
+    public void interrupt(Command command) {
+        for (Command c: activeCommands) {
+            commandQueue.add(0, c);
+        }
+        activeCommands.clear();
+        commandQueue.add(0, command);
+    }
+
+    /**
+     * Overrides the entire command scheduler with a single command.
+     * The queue and active commands are all cleared
+     * @param command the command to override the entire Scheduler with
+     */
+    public void override(Command command) {
+        forceEnd();
+        commandQueue.add(command);
+    }
 }
