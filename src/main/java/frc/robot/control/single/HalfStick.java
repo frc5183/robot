@@ -1,5 +1,6 @@
 package frc.robot.control.single;
 
+import frc.robot.Logger;
 import frc.robot.control.curve.Curve;
 import frc.robot.control.curve.LinearCurve;
 import frc.robot.control.enumeration.StickMode;
@@ -10,27 +11,45 @@ import frc.robot.control.enumeration.StickMode;
  * Allows for setting of a MaxSpeed
  * Allows for setting a Curve to curve the output
  */
-public class HalfStick extends SingleControl{
+public class HalfStick extends SingleControl {
     private double maxSpeed = 1;
     private Curve curve;
     private StickMode mode;
+
     public HalfStick(StickMode mode) {
         LinearCurve curve = new LinearCurve();
         curve.setSlope(1);
         curve.setIntercept(0);
         this.curve = curve;
         this.mode = mode;
+
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
+
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId(), "New default HalfStick created with mode " + this.mode.name());
     }
 
     public HalfStick(StickMode mode, Curve curve) {
         this.curve = curve;
         this.mode = mode;
+
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
+
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId(), "New HalfStick created with mode " + this.mode.name() + " and curve " + this.curve.getClass().getName());
     }
     public HalfStick(StickMode mode, Curve curve, double max) {
         this.curve = curve;
         this.mode = mode;
         this.maxSpeed = max;
+
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/maxSpeed", this.maxSpeed);
+
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId(), "New HalfStick created with mode " + this.mode.name() + " and curve " + this.curve.getClass().getName() + " and max speed " + this.maxSpeed);
     }
+
 
     @Override
     public double getValue() {
@@ -43,6 +62,7 @@ public class HalfStick extends SingleControl{
      */
     public void setCurve(Curve curve) {
         this.curve = curve;
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
     }
 
     /**
@@ -51,6 +71,7 @@ public class HalfStick extends SingleControl{
      */
     public void setMode(StickMode mode) {
         this.mode = mode;
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
     }
 
     /**
@@ -59,5 +80,6 @@ public class HalfStick extends SingleControl{
      */
     public void setMaxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
+        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/maxSpeed", this.maxSpeed);
     }
 }

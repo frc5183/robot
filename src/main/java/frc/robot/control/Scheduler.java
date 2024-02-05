@@ -1,5 +1,6 @@
 package frc.robot.control;
 
+import frc.robot.Logger;
 import frc.robot.control.command.Command;
 import frc.robot.subsystem.Subsystem;
 
@@ -37,6 +38,7 @@ public class Scheduler {
      */
     public void scheduleCommand(Command command) {
         commandQueue.add(command);
+        Logger.append(Logger.LogType.Control, "scheduler/commands/" + command.getId(), "Command added to queue");
     }
 
     /**
@@ -54,6 +56,7 @@ public class Scheduler {
             if (c.isFinished()) {
                 c.clean();
                 temp.add(c);
+                Logger.append(Logger.LogType.Control, "scheduler/commands/" + c.getId(), "Command finished and cleaned.");
             } else {
                 for (Subsystem s : c.getRequiredSubsystems()) {
                     // Prevent Duplicate Entries
@@ -66,6 +69,7 @@ public class Scheduler {
         // Remove finished commands from activeCommand
         for (Command c : temp) {
             activeCommands.remove(c);
+            Logger.append(Logger.LogType.Control, "scheduler/commands/" + c.getId(), "Command removed from active commands.");
         }
         // Clear temp again
         temp.clear();
@@ -88,6 +92,7 @@ public class Scheduler {
             commandQueue.remove(c);
             activeCommands.add(c);
             c.start();
+            Logger.append(Logger.LogType.Control, "scheduler/commands/" + c.getId(), "Command started.");
         }
     }
 
@@ -97,26 +102,38 @@ public class Scheduler {
      * And prevents reuse of "dirtied" Commands
      */
     public void forceEnd() {
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler force ended.");
         commandQueue.clear();
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler command queue cleared.");
         temp.clear();
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler temporary cache cleared.");
         activeSubsystems.clear();
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler active subsystems cleared.");
+
         for (Command c: activeCommands) {
             c.clean();
+            Logger.append(Logger.LogType.Control, "scheduler/commands/" + c.getId(), "Command cleaned.");
         }
+
         activeCommands.clear();
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler active commands cleared.");
     }
 
     /**
      * Interrupts the current queue with a single command.
      * The current active commands and pushed back to the front of the queue.
-     * @param command the command to skip the que with
+     * @param command the command to skip the queue with
      */
     public void interrupt(Command command) {
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler interrupted by command " + command.getId() + ".");
         for (Command c: activeCommands) {
             commandQueue.add(0, c);
+            Logger.append(Logger.LogType.Control, "scheduler/commands/" + c.getId(), "Command pushed back in queue.");
         }
         activeCommands.clear();
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler active commands cleared.");
         commandQueue.add(0, command);
+        Logger.append(Logger.LogType.Control, "scheduler/commands/" + command.getId(), "Command added to (front of) queue.");
     }
 
     /**
@@ -125,7 +142,9 @@ public class Scheduler {
      * @param command the command to override the entire Scheduler with
      */
     public void override(Command command) {
+        Logger.append(Logger.LogType.Control, "scheduler", "Scheduler overridden by command " + command.getId() + ".");
         forceEnd();
         commandQueue.add(command);
+        Logger.append(Logger.LogType.Control, "scheduler/commands/" + command.getId(), "Command overrode queue.");
     }
 }

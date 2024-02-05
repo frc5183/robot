@@ -1,5 +1,6 @@
 package frc.robot.control.single;
 
+import frc.robot.Logger;
 import frc.robot.control.enumeration.Button;
 import frc.robot.control.enumeration.ButtonStyle;
 
@@ -43,13 +44,14 @@ public class SingleButton extends SingleControl {
                 return unpressed;
         }
     }
-
+    
     /**
      * Sets the Button Style
      * @param style new ButtonStyle
      */
     public void setStyle(ButtonStyle style) {
         this.style = style;
+        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/style", this.style.name());
     }
 
     /** Sets the Button
@@ -57,6 +59,7 @@ public class SingleButton extends SingleControl {
      */
     public void setButton(Button button) {
         this.button = button;
+        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/button", this.button.name());
     }
 
     /** Sets the Pressed Value
@@ -64,6 +67,7 @@ public class SingleButton extends SingleControl {
      */
     public void setPressed(double pressed) {
         this.pressed = pressed;
+        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/pressed", this.pressed);
     }
 
     /** Sets the Unpressed Value
@@ -71,5 +75,6 @@ public class SingleButton extends SingleControl {
      */
     public void setUnpressed(double unpressed) {
         this.unpressed = unpressed;
+        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/unpressed", this.unpressed);
     }
 }

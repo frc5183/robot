@@ -1,6 +1,9 @@
 package frc.robot.control.single;
 
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Logger;
+
+import java.util.UUID;
 
 /**
  * An abstract class representing a class that uses
@@ -10,6 +13,16 @@ import edu.wpi.first.wpilibj.XboxController;
  * There is a similar class available for Tuple2\<Double\>
  */
 public abstract class SingleControl {
+    private final UUID id = UUID.randomUUID();
+
+    /**
+     * Gets the ID of the SingleControl
+     * @return ID of the SingleControl
+     */
+    public UUID getId() {
+        return id;
+    }
+
     protected XboxController xbox;
 
     /**
@@ -21,6 +34,7 @@ public abstract class SingleControl {
      */
     public SingleControl setXboxController(XboxController xbox) {
         this.xbox=xbox;
+        Logger.append(Logger.LogType.Control, "single-control/" + this.id + "/xbox", xbox.getPort());
         return this;
     }
 

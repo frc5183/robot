@@ -1,5 +1,6 @@
 package frc.robot.control.tuple;
 
+import frc.robot.Logger;
 import frc.robot.Tuple2;
 import frc.robot.control.single.SingleControl;
 
@@ -20,6 +21,11 @@ public class CombinedTuple extends TupleControl {
     public CombinedTuple(SingleControl xStyle, SingleControl yStyle) {
         this.xStyle = xStyle;
         this.yStyle = yStyle;
+
+        Logger.append(Logger.LogType.Control, "combined-tuple/" + this.getId() + "/xStyle", this.xStyle.getId().toString());
+        Logger.append(Logger.LogType.Control, "combined-tuple/" + this.getId() + "/yStyle", this.yStyle.getId().toString());
+
+        Logger.append(Logger.LogType.Control, "combined-tuple/" + this.getId(), "New CombinedTuple created with xStyle " + this.xStyle.getId() + " and yStyle " + this.yStyle.getId());
     }
 
     @Override
@@ -32,6 +38,7 @@ public class CombinedTuple extends TupleControl {
      */
     public void setXStyle(SingleControl xStyle) {
         this.xStyle = xStyle;
+        Logger.append(Logger.LogType.Control, "combined-tuple/" + this.getId() + "/xStyle", this.xStyle.getId().toString());
     }
 
     /** Sets the Y Single Control
@@ -39,5 +46,6 @@ public class CombinedTuple extends TupleControl {
      */
     public void setYStyle(SingleControl yStyle) {
         this.yStyle = yStyle;
+        Logger.append(Logger.LogType.Control, "combined-tuple/" + this.getId() + "/yStyle", this.yStyle.getId().toString());
     }
 }

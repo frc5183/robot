@@ -1,7 +1,11 @@
 package frc.robot.control.tuple;
 
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Logger;
 import frc.robot.Tuple2;
+
+import java.util.UUID;
+
 /**
  * An abstract class representing a class that uses
  * an XBOX 360 Controller as input and will dynamically
@@ -10,6 +14,7 @@ import frc.robot.Tuple2;
  * There is a similar class available for Doubles
  */
 public abstract class TupleControl {
+    private final UUID id = UUID.randomUUID();
     protected XboxController xbox;
 
     /**
@@ -17,6 +22,14 @@ public abstract class TupleControl {
      * Implementation returns a dynamic value between -1 and 1 based on their inputs (XboxController or Autonomous Input Methods)
      */
     public abstract Tuple2<Double> getValue();
+
+    /**
+     * Gets the ID of the TupleControl
+     * @return ID of the TupleControl
+     */
+    public UUID getId() {
+        return id;
+    }
 
     /**
      * Used to set the XboxController used for this TupleControl
@@ -27,6 +40,7 @@ public abstract class TupleControl {
      */
     public TupleControl setXboxController(XboxController xbox) {
         this.xbox = xbox;
+        Logger.append(Logger.LogType.Control, "tuple-control/" + this.id + "/xbox", xbox.getPort());
         return this;
     }
 }

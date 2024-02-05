@@ -1,5 +1,6 @@
 package frc.robot.control.command;
 
+import frc.robot.Logger;
 import frc.robot.control.enumeration.DriveDirection;
 import frc.robot.control.tuple.AutonomousTupleControl;
 import frc.robot.hardware.encoder.Encoder;
@@ -41,6 +42,14 @@ public class DriveInches extends Command {
         this.encoder = encoder;
         this.direction = direction;
         this.driveTrain = driveTrain;
+
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/distance", this.distance);
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/maxSpeed", this.maxSpeed);
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/encoder", this.encoder.getClass().getName());
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/direction", this.direction.name());
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/driveTrain", this.driveTrain.getClass().getName());
+
+        Logger.append(Logger.LogType.Control, "command/drive/inches" + this.getId(), "New DriveInches created with distance " + distance + " and max speed " + maxSpeed + " and direction " + direction.name() + " and encoder " + encoder.getClass().getName());
     }
 
     @Override
@@ -58,9 +67,13 @@ public class DriveInches extends Command {
         double needed = radiansAfterGearbox * WheelDiameter;
         double neededRound = (double) ((int) (needed * 100)) / 100.0;
 
-        if ((direction == DriveDirection.FORWARD && neededRound >= distance) || (direction == DriveDirection.BACKWARD && neededRound <= distance)) {
-            finished = true;
-        }
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/run/radians", radians);
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/run/radians/afterGearbox", radiansAfterGearbox);
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/run/needed", needed);
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/run/needed/rounded", neededRound);
+
+        finished = ((direction == DriveDirection.FORWARD && neededRound >= distance) || (direction == DriveDirection.BACKWARD && neededRound <= distance));
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/finished", finished);
     }
 
     @Override

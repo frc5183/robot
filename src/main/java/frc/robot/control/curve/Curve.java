@@ -1,9 +1,21 @@
 package frc.robot.control.curve;
 
+import java.util.UUID;
+
 /**
  * An abstract class containing a single implementable function that turns one double into another
  */
 public abstract class Curve {
+    private final UUID id = UUID.randomUUID();
+
+    /**
+     * Gets the ID of the Curve
+     * @return ID of the Curve
+     */
+    public UUID getId() {
+        return id;
+    }
+
     /**
      * Represents the value that under which inputs should be ignored and return 0
      * This is to prevent "stick drift"
