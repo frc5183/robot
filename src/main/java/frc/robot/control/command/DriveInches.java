@@ -1,9 +1,9 @@
 package frc.robot.control.command;
 
-import frc.robot.control.command.enumeration.DriveDirection;
+import frc.robot.control.enumeration.DriveDirection;
 import frc.robot.control.tuple.AutonomousTupleControl;
 import frc.robot.hardware.encoder.Encoder;
-import frc.robot.subsystem.GenericDriveTrain;
+import frc.robot.subsystem.GenericTankDrive;
 
 import static frc.robot.Config.GearboxRatio;
 import static frc.robot.Config.WheelDiameter;
@@ -14,12 +14,10 @@ import static frc.robot.Config.WheelDiameter;
 public class DriveInches extends Command {
     private final double distance;
     private final double maxSpeed;
-    private final GenericDriveTrain driveTrain;
+    private final GenericTankDrive driveTrain;
     private final DriveDirection direction;
-
     private final AutonomousTupleControl autonomousControl = new AutonomousTupleControl(0, 0);
     private final Encoder encoder;
-
     private boolean finished = false;
 
     /**
@@ -30,7 +28,7 @@ public class DriveInches extends Command {
      * @param driveTrain DriveTrain to move
      * @param encoder Encoder to used to measure distance
      */
-    public DriveInches(double distance, double maxSpeed, DriveDirection direction, GenericDriveTrain driveTrain, Encoder encoder) {
+    public DriveInches(double distance, double maxSpeed, DriveDirection direction, GenericTankDrive driveTrain, Encoder encoder) {
         require(driveTrain);
 
         if (direction == DriveDirection.BACKWARD) {

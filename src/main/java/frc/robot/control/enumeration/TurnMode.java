@@ -1,4 +1,4 @@
-package frc.robot.control.command.enumeration;
+package frc.robot.control.enumeration;
 
 public enum TurnMode {
     ABSOLUTE,

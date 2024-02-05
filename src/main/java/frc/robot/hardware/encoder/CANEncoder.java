@@ -1,30 +1,32 @@
 package frc.robot.hardware.encoder;
 
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.StatusSignal;
 /**
  * An implementation of Encoder for the physical CANCoders
  */
 public class CANEncoder extends Encoder {
-    private final CANCoder encoder;
+    private final CANcoder encoder;
+    private final StatusSignal<Double> signal;
     public CANEncoder(int id) {
-        encoder = new CANCoder(id);
+        encoder = new CANcoder(id); signal = encoder.getPosition();
     }
     public CANEncoder(int id, String canbus) {
-        encoder = new CANCoder(id, canbus);
+        encoder = new CANcoder(id, canbus); signal = encoder.getPosition();
     }
     @Override
     public double getUnitsRadians() {
-        return (encoder.getPosition() / 180) * Math.PI;
+        signal.refresh(); return (signal.getValue()) * 2 * Math.PI;
     }
 
     @Override
     public double getUnitsRotations() {
-        return encoder.getPosition() / 360;
+        signal.refresh(); return signal.getValue();
     }
 
     @Override
     public double getUnitsDegrees() {
-        return encoder.getPosition();
+        signal.refresh(); return signal.getValue();
     }
 
     @Override

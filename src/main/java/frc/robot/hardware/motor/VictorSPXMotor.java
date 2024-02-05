@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 /**
  * A wrapper class around WPI_VictorSPX to make it compatible with other motor types
+ * @apiNote This class is ONLY available with Phoenix5, and will not be available with Phoenix6.
  */
 public class VictorSPXMotor extends PhoenixMotor {
     final WPI_VictorSPX motor;

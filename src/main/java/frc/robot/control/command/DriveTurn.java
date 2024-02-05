@@ -1,20 +1,19 @@
 package frc.robot.control.command;
 
-import frc.robot.control.command.enumeration.TurnMode;
+import frc.robot.control.enumeration.TurnMode;
 import frc.robot.control.tuple.AutonomousTupleControl;
-import frc.robot.subsystem.GenericDriveTrain;
+import frc.robot.subsystem.GenericTankDrive;
 
 public class DriveTurn extends Command {
     private double angle;
     private final double maxSpeed;
     private final TurnMode mode;
-    private final GenericDriveTrain driveTrain;
-
+    private final GenericTankDrive driveTrain;
     private final AutonomousTupleControl control = new AutonomousTupleControl(0, 0);
 
     private boolean finished = false;
 
-    public DriveTurn(double angle, double maxSpeed, TurnMode mode, GenericDriveTrain driveTrain) {
+    public DriveTurn(double angle, double maxSpeed, TurnMode mode, GenericTankDrive driveTrain) {
         this.angle = angle;
         this.maxSpeed = maxSpeed;
         this.mode = mode;

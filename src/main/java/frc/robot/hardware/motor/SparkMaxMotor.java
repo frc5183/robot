@@ -2,7 +2,7 @@ package frc.robot.hardware.motor;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 /**
  * A wrapper class around CANSparkMax to make it compatible with other motor types
@@ -21,7 +21,6 @@ public class SparkMaxMotor extends Motor {
 
     @Override
     public void periodic() {
-
     }
 
     @Override
