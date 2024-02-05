@@ -1,5 +1,6 @@
 package frc.robot.hardware.gyro;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 public class ADXRSGyroscope extends SingleAxisGyroscope{
@@ -22,6 +23,10 @@ public class ADXRSGyroscope extends SingleAxisGyroscope{
     @Override
     public double getRotations() {
         return getAngle() / 360;
+    }
+    @Override
+    public Rotation2d getRotation2D() {
+        return gyro.getRotation2d();
     }
 
     public void calibrate() {
