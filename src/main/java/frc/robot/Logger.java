@@ -42,43 +42,43 @@ public class Logger {
 
     public static void append(LogType logType, String path, boolean value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new BooleanLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new BooleanLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, boolean[] value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new BooleanArrayLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new BooleanArrayLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, double value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new DoubleLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new DoubleLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, double[] value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new DoubleArrayLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new DoubleArrayLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, float value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new FloatLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new FloatLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, float[] value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new FloatArrayLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new FloatArrayLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, int value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new IntegerLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new IntegerLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
@@ -89,37 +89,37 @@ public class Logger {
         }
 
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new IntegerArrayLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(longValues);
+            new IntegerArrayLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(longValues);
         }
     }
 
     public static void append(LogType logType, String path, long value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new IntegerLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new IntegerLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, long[] value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new IntegerArrayLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new IntegerArrayLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, String value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new StringLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new StringLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, String[] value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new StringArrayLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new StringArrayLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 
     public static void append(LogType logType, String path, byte[] value) {
         if (Arrays.asList(Config.enabledLogs).contains(logType)) {
-            new RawLogEntry(DataLogManager.getLog(), logType.getLogPath()).append(value);
+            new RawLogEntry(DataLogManager.getLog(), logType.getLogPath() + "/" + path).append(value);
         }
     }
 }
