@@ -45,11 +45,11 @@ public class DriveInches extends Command {
 
         Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/distance", this.distance);
         Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/maxSpeed", this.maxSpeed);
-        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/encoder", this.encoder.getClass().getName());
-        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/direction", this.direction.name());
-        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/driveTrain", this.driveTrain.getClass().getName());
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/encoder", this.encoder.getId().toString());
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/direction", this.direction.toString());
+        Logger.append(Logger.LogType.Control, "command/drive/inches/" + this.getId() + "/driveTrain", this.driveTrain.getId().toString());
 
-        Logger.append(Logger.LogType.Control, "command/drive/inches" + this.getId(), "New DriveInches created with distance " + distance + " and max speed " + maxSpeed + " and direction " + direction.name() + " and encoder " + encoder.getClass().getName());
+        Logger.append(Logger.LogType.Control, "command/drive/inches" + this.getId(), "New DriveInches created with distance " + distance + " and max speed " + maxSpeed + " and direction " + direction.toString() + " and encoder " + encoder.getId());
     }
 
     @Override

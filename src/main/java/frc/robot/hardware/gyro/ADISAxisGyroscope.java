@@ -16,7 +16,7 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
         this.axis = axis;
 
         Logger.append(Logger.LogType.HardwareGyro, "adis/" + getId() + "/axis", axis.toString());
-        Logger.append(Logger.LogType.HardwareGyro, "adis/" + getId(), "New ADIS16448 Gyroscope created with port: " + gyro.getPort() + " and axis: " + axis.name());
+        Logger.append(Logger.LogType.HardwareGyro, "adis/" + getId(), "New ADIS16448 Gyroscope created with port: " + gyro.getPort() + " and axis: " + axis);
     }
     @Override
     public double getDegrees() {

@@ -23,31 +23,31 @@ public class HalfStick extends SingleControl {
         this.curve = curve;
         this.mode = mode;
 
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/curve", this.curve.getId().toString());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/mode", this.mode.toString());
 
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId(), "New default HalfStick created with mode " + this.mode.name());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId(), "New default HalfStick created with mode " + this.mode);
     }
 
     public HalfStick(StickMode mode, Curve curve) {
         this.curve = curve;
         this.mode = mode;
 
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/curve", this.curve.getId().toString());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/mode", this.mode.toString());
 
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId(), "New HalfStick created with mode " + this.mode.name() + " and curve " + this.curve.getClass().getName());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId(), "New HalfStick created with mode " + this.mode + " and curve " + this.curve.getId());
     }
     public HalfStick(StickMode mode, Curve curve, double max) {
         this.curve = curve;
         this.mode = mode;
         this.maxSpeed = max;
 
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/maxSpeed", this.maxSpeed);
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/curve", this.curve.getId().toString());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/mode", this.mode.toString());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/maxSpeed", this.maxSpeed);
 
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId(), "New HalfStick created with mode " + this.mode.name() + " and curve " + this.curve.getClass().getName() + " and max speed " + this.maxSpeed);
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId(), "New HalfStick created with mode " + this.mode + " and curve " + this.curve.getId() + " and max speed " + this.maxSpeed);
     }
 
 
@@ -62,7 +62,7 @@ public class HalfStick extends SingleControl {
      */
     public void setCurve(Curve curve) {
         this.curve = curve;
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/curve", this.curve.getClass().getName());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/curve", this.curve.getId().toString());
     }
 
     /**
@@ -71,7 +71,7 @@ public class HalfStick extends SingleControl {
      */
     public void setMode(StickMode mode) {
         this.mode = mode;
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/mode", this.mode.name());
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/mode", this.mode.toString());
     }
 
     /**
@@ -80,6 +80,6 @@ public class HalfStick extends SingleControl {
      */
     public void setMaxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
-        Logger.append(Logger.LogType.Control, "half-stick/" + this.getId() + "/maxSpeed", this.maxSpeed);
+        Logger.append(Logger.LogType.Control, "halfStick/" + this.getId() + "/maxSpeed", this.maxSpeed);
     }
 }

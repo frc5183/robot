@@ -51,7 +51,7 @@ public class SingleButton extends SingleControl {
      */
     public void setStyle(ButtonStyle style) {
         this.style = style;
-        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/style", this.style.name());
+        Logger.append(Logger.LogType.Control, "singleButton/" + this.getId() + "/style", this.style.toString());
     }
 
     /** Sets the Button
@@ -59,7 +59,7 @@ public class SingleButton extends SingleControl {
      */
     public void setButton(Button button) {
         this.button = button;
-        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/button", this.button.name());
+        Logger.append(Logger.LogType.Control, "singleButton/" + this.getId() + "/button", this.button.toString());
     }
 
     /** Sets the Pressed Value
@@ -67,7 +67,7 @@ public class SingleButton extends SingleControl {
      */
     public void setPressed(double pressed) {
         this.pressed = pressed;
-        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/pressed", this.pressed);
+        Logger.append(Logger.LogType.Control, "singleButton/" + this.getId() + "/pressed", this.pressed);
     }
 
     /** Sets the Unpressed Value
@@ -75,6 +75,6 @@ public class SingleButton extends SingleControl {
      */
     public void setUnpressed(double unpressed) {
         this.unpressed = unpressed;
-        Logger.append(Logger.LogType.Control, "single/single-button/" + this.getId() + "/unpressed", this.unpressed);
+        Logger.append(Logger.LogType.Control, "singleButton/" + this.getId() + "/unpressed", this.unpressed);
     }
 }

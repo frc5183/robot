@@ -13,9 +13,9 @@ public class AutonomousSingleControl extends SingleControl {
     public AutonomousSingleControl(double value) {
         this.value=value;
 
-        Logger.append(Logger.LogType.Control, "autonomous-single-control/" + this.getId() + "/value", this.value);
+        Logger.append(Logger.LogType.Control, "autonomousSingleControl/" + this.getId() + "/value", this.value);
 
-        Logger.append(Logger.LogType.Control, "autonomous-single-control/"  + this.getId(), "New AutonomousSingleControl created with value " + value);
+        Logger.append(Logger.LogType.Control, "autonomousSingleControl/"  + this.getId(), "New AutonomousSingleControl created with value " + value);
     }
 
     /**
@@ -25,7 +25,7 @@ public class AutonomousSingleControl extends SingleControl {
     public void setValue(double value) {
         this.value=value;
 
-        Logger.append(Logger.LogType.Control, "autonomous-single-control/" + this.getId() + "/value", this.value);
+        Logger.append(Logger.LogType.Control, "autonomousSingleControl/" + this.getId() + "/value", this.value);
     }
 
     public double getValue() {

@@ -22,10 +22,10 @@ public class DriveTurn extends Command {
 
         Logger.append(Logger.LogType.Control, "command/drive/turn/" + this.getId() + "/angle", this.angle);
         Logger.append(Logger.LogType.Control, "command/drive/turn/" + this.getId() + "/maxSpeed", this.maxSpeed);
-        Logger.append(Logger.LogType.Control, "command/drive/turn/" + this.getId() + "/mode", this.mode.name());
-        Logger.append(Logger.LogType.Control, "command/drive/turn/" + this.getId() + "/driveTrain", this.driveTrain.getClass().getName());
+        Logger.append(Logger.LogType.Control, "command/drive/turn/" + this.getId() + "/mode", this.mode.toString());
+        Logger.append(Logger.LogType.Control, "command/drive/turn/" + this.getId() + "/driveTrain", this.driveTrain.getId().toString());
 
-        Logger.append(Logger.LogType.Control, "command/drive/turn" + this.getId(), "New DriveTurn created with angle " + this.angle + " and max speed " + this.maxSpeed + " and mode " + this.mode.name() + " and driveTrain " + this.driveTrain.getClass().getName());
+        Logger.append(Logger.LogType.Control, "command/drive/turn" + this.getId(), "New DriveTurn created with angle " + this.angle + " and max speed " + this.maxSpeed + " and mode " + this.mode + " and driveTrain " + this.driveTrain.getId());
     }
 
     @Override

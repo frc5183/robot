@@ -18,10 +18,10 @@ public class AutonomousTupleControl extends TupleControl {
      */
     public AutonomousTupleControl(double value1, double value2) {
         value = new Tuple2<>(value1, value2);
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/1", value.getVal1());
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/2", value.getVal2());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/1", value.getVal1());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/2", value.getVal2());
 
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId(), "New AutonomousTupleControl created with values " + value.getVal1() + " and " + value.getVal2());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId(), "New AutonomousTupleControl created with values " + value.getVal1() + " and " + value.getVal2());
     }
 
     /**
@@ -30,10 +30,10 @@ public class AutonomousTupleControl extends TupleControl {
      */
     public AutonomousTupleControl(Tuple2<Double> value) {
         this.value = value;
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/1", value.getVal1());
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/2", value.getVal2());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/1", value.getVal1());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/2", value.getVal2());
 
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId(), "New AutonomousTupleControl created with values " + value.getVal1() + " and " + value.getVal2());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId(), "New AutonomousTupleControl created with values " + value.getVal1() + " and " + value.getVal2());
     }
 
     @Override
@@ -46,8 +46,8 @@ public class AutonomousTupleControl extends TupleControl {
      */
     public void setValue(Tuple2<Double> value) {
         this.value = value;
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/1", value.getVal1());
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/2", value.getVal2());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/1", value.getVal1());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/2", value.getVal2());
     }
 
     /** Changes the first value of the tuple
@@ -55,7 +55,7 @@ public class AutonomousTupleControl extends TupleControl {
      */
     public void updateValue1(double val) {
         value.setVal1(val);
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/1", value.getVal1());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/1", value.getVal1());
     }
 
     /** Changes the second value of the tuple
@@ -63,7 +63,7 @@ public class AutonomousTupleControl extends TupleControl {
      */
     public void updateValue2(double val) {
         value.setVal2(val);
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/2", value.getVal2());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/2", value.getVal2());
     }
 
     /** Changes both values of the tuple
@@ -73,7 +73,7 @@ public class AutonomousTupleControl extends TupleControl {
     public void updateValue(double val1, double val2) {
         value.setVal1(val1);
         value.setVal2(val2);
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/1", value.getVal1());
-        Logger.append(Logger.LogType.Control, "autonomous-tuple-control/" + this.getId() + "/value/2", value.getVal2());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/1", value.getVal1());
+        Logger.append(Logger.LogType.Control, "autonomousTupleControl/" + this.getId() + "/value/2", value.getVal2());
     }
 }

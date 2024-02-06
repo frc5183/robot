@@ -34,7 +34,7 @@ public abstract class SingleControl {
      */
     public SingleControl setXboxController(XboxController xbox) {
         this.xbox=xbox;
-        Logger.append(Logger.LogType.Control, "single-control/" + this.id + "/xbox", xbox.getPort());
+        Logger.append(Logger.LogType.Control, "singleControl/" + this.id + "/xbox", xbox.getPort());
         return this;
     }
 
