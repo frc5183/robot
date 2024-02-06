@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import frc.robot.hardware.motor.SparkMaxMotor;
+import org.littletonrobotics.urcl.URCL;
 
 
 /**
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot
     {
         DataLogManager.start();
         DriverStation.startDataLog(DataLogManager.getLog());
+        URCL.start();
         leftRear=new SparkMaxMotor(0, CANSparkLowLevel.MotorType.kBrushless);
         rightRear=new SparkMaxMotor(1, CANSparkLowLevel.MotorType.kBrushless);
         leftFront=new SparkMaxMotor(2, CANSparkLowLevel.MotorType.kBrushless);
@@ -59,6 +61,7 @@ public class Robot extends TimedRobot
         double turn = controller.getRightX();
         drive.driveCartesian(-y, -x, -turn); // Inversion to follow the right hand rule
     }
+
     public void periodic() {
         leftRear.periodic();;
         rightRear.periodic();
