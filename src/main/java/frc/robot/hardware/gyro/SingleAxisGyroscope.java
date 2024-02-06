@@ -1,10 +1,14 @@
 package frc.robot.hardware.gyro;
 
+import java.util.UUID;
+
 /**
  * Represents a Single Axis Gyroscope
  * Implementations connect this with hardware
  */
 public abstract class SingleAxisGyroscope {
+    private final UUID id = UUID.randomUUID();
+
     /**
      * @return the angle in Degrees
      */
@@ -35,5 +39,13 @@ public abstract class SingleAxisGyroscope {
      */
     public enum Axis {
         YAW, PITCH, ROLL
+    }
+
+    /**
+     * Gets the ID of the Gyroscope
+     * @return ID of the Gyroscope
+     */
+    public UUID getId() {
+        return id;
     }
 }

@@ -1,6 +1,7 @@
 package frc.robot.hardware.gyro;
 
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
+import frc.robot.Logger;
 
 /**
  * A wrapper for a single axis of the 3 axis ADIS16448_IMU
@@ -12,6 +13,9 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     public ADISAxisGyroscope(ADIS16448_IMU gyro, Axis axis) {
         this.gyro = gyro;
         this.axis = axis;
+
+        Logger.append(Logger.LogType.HardwareGyro, "adis/" + getId() + "/axis", axis.toString());
+        Logger.append(Logger.LogType.HardwareGyro, "adis/" + getId(), "New ADIS16448 Gyroscope created with port: " + gyro.getPort() + " and axis: " + axis.name());
     }
     @Override
     public double getDegrees() {
@@ -39,10 +43,12 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     @Override
     public void calibrate() {
         gyro.calibrate();
+        Logger.append(Logger.LogType.HardwareGyro, "adis/" + getId(), "Gyroscope calibrated");
     }
 
     @Override
     public void reset() {
         gyro.reset();
+        Logger.append(Logger.LogType.HardwareGyro, "adis/" + getId(), "Gyroscope reset");
     }
 }
