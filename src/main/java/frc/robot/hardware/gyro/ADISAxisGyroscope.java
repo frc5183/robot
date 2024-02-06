@@ -1,5 +1,6 @@
 package frc.robot.hardware.gyro;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import frc.robot.Logger;
 
@@ -38,6 +39,10 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     @Override
     public double getRotations() {
         return getDegrees() / 360;
+    }
+    @Override
+    public Rotation2d getRotation2D() {
+        return Rotation2d.fromRadians(getRadians());
     }
 
     @Override
