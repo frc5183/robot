@@ -18,10 +18,16 @@ public class SingleSolenoid {
 
     public SingleSolenoid(Solenoid s) {
         solenoid = s;
+
+        Logger.append(Logger.LogType.HardwarePneumatics, "singleSolenoid/" + this.getId() + "/channel", this.solenoid.getChannel());
+
         Logger.append(Logger.LogType.HardwarePneumatics, "singleSolenoid/" + this.getId(), "New SingleSolenoid created with solenoid channel: " + this.solenoid.getChannel());
     }
     public SingleSolenoid(PneumaticsBase base, int id) {
         solenoid = base.makeSolenoid(id);
+
+        Logger.append(Logger.LogType.HardwarePneumatics, "singleSolenoid/" + this.getId() + "/channel", this.solenoid.getChannel());
+
         Logger.append(Logger.LogType.HardwarePneumatics, "singleSolenoid/" + this.getId(), "New SingleSolenoid created with solenoid channel: " + this.solenoid.getChannel());
     }
 

@@ -18,10 +18,18 @@ public class TupleSolenoid {
 
     public TupleSolenoid(DoubleSolenoid s) {
         solenoid = s;
+
+        Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId() + "/forward/channel", this.solenoid.getFwdChannel());
+        Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId() + "/reverse/channel", this.solenoid.getRevChannel());
+
         Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId(), "New TupleSolenoid created with forward channel: " + this.solenoid.getFwdChannel() + " and reverse channel: " + this.solenoid.getRevChannel());
     }
     public TupleSolenoid(PneumaticsBase base, int idForward, int idReverse) {
         solenoid = base.makeDoubleSolenoid(idForward, idReverse);
+
+        Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId() + "/forward/channel", this.solenoid.getFwdChannel());
+        Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId() + "/reverse/channel", this.solenoid.getRevChannel());
+
         Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId(), "New TupleSolenoid created with forward channel: " + this.solenoid.getFwdChannel() + " and reverse channel: " + this.solenoid.getRevChannel());
     }
 
@@ -48,6 +56,8 @@ public class TupleSolenoid {
                 solenoid.set(DoubleSolenoid.Value.kOff);
                 break;
         }
+
+        Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId() + "/mode", mode.toString());
     }
 
     /**
