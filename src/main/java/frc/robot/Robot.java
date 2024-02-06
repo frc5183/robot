@@ -6,13 +6,12 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkLowLevel;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import frc.robot.hardware.motor.SparkMaxMotor;
-import frc.robot.hardware.motor.VictorSPXMotor;
 
 
 /**
@@ -40,6 +39,15 @@ public class Robot extends TimedRobot
         leftFront=new SparkMaxMotor(2, CANSparkLowLevel.MotorType.kBrushless);
         rightFront=new SparkMaxMotor(3, CANSparkLowLevel.MotorType.kBrushless);
         drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear);
+
+        Logger.append(Logger.LogType.Other, "robot/leftRear", leftRear.getId().toString());
+        Logger.append(Logger.LogType.Other, "robot/rightRear", rightRear.getId().toString());
+        Logger.append(Logger.LogType.Other, "robot/leftFront", leftFront.getId().toString());
+        Logger.append(Logger.LogType.Other, "robot/rightFront", rightFront.getId().toString());
+
+        Logger.append(Logger.LogType.Other, "robot/controller", controller.getPort());
+
+        Logger.append(Logger.LogType.Other, "robot", "Robot initialized");
     }
 
 
