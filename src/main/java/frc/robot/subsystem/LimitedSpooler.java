@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import frc.robot.Logger;
 import frc.robot.control.single.SingleControl;
 import frc.robot.hardware.encoder.Encoder;
 import frc.robot.hardware.motor.Motor;
@@ -19,6 +20,13 @@ public class LimitedSpooler extends Subsystem {
         this.reverseSwitch=reverseSwitch;
         this.spool=spool;
         this.encoder=encoder;
+
+        Logger.append(Logger.LogType.Subsystems, "limitedSpooler/" + this.getId() + "/forwardSwitch", this.forwardSwitch.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "limitedSpooler/" + this.getId() + "/reverseSwitch", this.reverseSwitch.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "limitedSpooler/" + this.getId() + "/spool", this.spool.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "limitedSpooler/" + this.getId() + "/encoder", this.encoder.getId().toString());
+
+        Logger.append(Logger.LogType.Subsystems, "limitedSpooler/" + this.getId(), "New LimitedSpooler created with forwardSwitch " + this.forwardSwitch.getId() + " and reverseSwitch " + this.reverseSwitch.getId() + " and spool " + this.spool.getId() + " and encoder " + this.encoder.getId());
     }
 
     /**

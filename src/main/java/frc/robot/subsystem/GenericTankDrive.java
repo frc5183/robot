@@ -1,9 +1,10 @@
 package frc.robot.subsystem;
 
-import frc.robot.Tuple2;
-import frc.robot.hardware.encoder.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Logger;
+import frc.robot.Tuple2;
 import frc.robot.control.tuple.TupleControl;
+import frc.robot.hardware.encoder.Encoder;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.Motor;
 import frc.robot.hardware.motor.MotorGroup;
@@ -39,6 +40,13 @@ public class GenericTankDrive extends Subsystem {
         this.gyroscope = gyroscope;
         this.left.setSafety(true);
         this.right.setSafety(true);
+
+        Logger.append(Logger.LogType.Subsystems, "tankDrive/" + this.getId() + "/left", this.left.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "tankDrive/" + this.getId() + "/right", this.right.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "tankDrive/" + this.getId() + "/encoder", this.encoder.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "tankDrive/" + this.getId() + "/gyroscope", this.gyroscope.getId().toString());
+
+        Logger.append(Logger.LogType.Subsystems, "tankDrive/" + this.getId(), "New TankDrive created with left " + this.left.getId() + " and right " + this.right.getId() + " and encoder " + this.encoder.getId() + " and gyroscope " + this.gyroscope.getId());
     }
     /**
      * @see DifferentialDrive#arcadeDrive(double, double)

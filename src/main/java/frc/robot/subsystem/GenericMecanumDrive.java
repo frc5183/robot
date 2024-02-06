@@ -1,13 +1,13 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import frc.robot.Logger;
 import frc.robot.control.single.SingleControl;
 import frc.robot.control.tuple.TupleControl;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.Motor;
 
-public class GenericMecanumDrive {
-
+public class GenericMecanumDrive extends Subsystem {
     public enum MecanumMode {
         RELATIVE, ABSOLUTE
     }
@@ -26,6 +26,15 @@ public class GenericMecanumDrive {
         this.gyroscope = gyroscope;
         this.mode = mode;
         this.drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear);
+
+        Logger.append(Logger.LogType.Subsystems, "mecanumDrive/" + this.getId() + "/leftRear", this.leftRear.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "mecanumDrive/" + this.getId() + "/leftFront", this.leftFront.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "mecanumDrive/" + this.getId() + "/rightFront", this.rightFront.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "mecanumDrive/" + this.getId() + "/rightRear", this.rightRear.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "mecanumDrive/" + this.getId() + "/gyroscope", this.gyroscope.getId().toString());
+        Logger.append(Logger.LogType.Subsystems, "mecanumDrive/" + this.getId() + "/mode", this.mode.toString());
+
+        Logger.append(Logger.LogType.Subsystems, "mecanumDrive/" + this.getId(), "New MecanumDrive created with leftRear " + this.leftRear.getId() + " and leftFront " + this.leftFront.getId() + " and rightFront " + this.rightFront.getId() + " and rightRear " + this.rightRear.getId() + " and gyroscope " + this.gyroscope.getId() + " and mode " + this.mode);
 
     }
     public void periodic() {
