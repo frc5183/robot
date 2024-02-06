@@ -1,15 +1,17 @@
 package frc.robot.hardware.encoder;
 
+import com.revrobotics.*;
 import frc.robot.hardware.motor.SparkMaxMotor;
-import com.revrobotics.SparkAbsoluteEncoder;
 
 /**
  * An Implementation of Encoder for NEO motors
  */
 public class NEOEncoder extends Encoder {
-    private final SparkAbsoluteEncoder encoder;
+    private final RelativeEncoder encoder;
+    private final double count = 0;
     public NEOEncoder(SparkMaxMotor spark) {
-        encoder = spark.getTrueRawMotor().getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        encoder = spark.getTrueRawMotor().getEncoder();
+
     }
     @Override
     public double getUnitsRadians() {
