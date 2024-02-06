@@ -2,6 +2,9 @@ package frc.robot.hardware.pneumatic;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsBase;
+import frc.robot.Logger;
+
+import java.util.UUID;
 
 /**
  * Represents a physical DoubleSolenoid.
@@ -10,13 +13,16 @@ import edu.wpi.first.wpilibj.PneumaticsBase;
  * NEITHER SOLENOID WILL PREVENT ALL AIRFLOW
  */
 public class TupleSolenoid {
+    private final UUID id = UUID.randomUUID();
     private final DoubleSolenoid solenoid;
 
     public TupleSolenoid(DoubleSolenoid s) {
         solenoid = s;
+        Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId(), "New TupleSolenoid created with forward channel: " + this.solenoid.getFwdChannel() + " and reverse channel: " + this.solenoid.getRevChannel());
     }
     public TupleSolenoid(PneumaticsBase base, int idForward, int idReverse) {
         solenoid = base.makeDoubleSolenoid(idForward, idReverse);
+        Logger.append(Logger.LogType.HardwarePneumatics, "tupleSolenoid/" + this.getId(), "New TupleSolenoid created with forward channel: " + this.solenoid.getFwdChannel() + " and reverse channel: " + this.solenoid.getRevChannel());
     }
 
     /**
@@ -42,5 +48,13 @@ public class TupleSolenoid {
                 solenoid.set(DoubleSolenoid.Value.kOff);
                 break;
         }
+    }
+
+    /**
+     * Get the ID of the TupleSolenoid
+     * @return the ID of the TupleSolenoid
+     */
+    public UUID getId() {
+        return id;
     }
 }
