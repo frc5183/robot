@@ -8,7 +8,6 @@ import frc.robot.hardware.motor.SparkMaxMotor;
  */
 public class NEOEncoder extends Encoder {
     private final RelativeEncoder encoder;
-    private final double count = 0;
     public NEOEncoder(SparkMaxMotor spark) {
         encoder = spark.getTrueRawMotor().getEncoder();
 

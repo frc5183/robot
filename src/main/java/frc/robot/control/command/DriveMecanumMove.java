@@ -148,6 +148,6 @@ public class DriveMecanumMove extends Command{
 
     @Override
     public boolean isFinished() {
-        return false;
+        return isFinished;
     }
 }
