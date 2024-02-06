@@ -1,6 +1,7 @@
 package frc.robot.hardware.motor;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.Logger;
 
 /**
  * A class used to virtually combine two motors.
@@ -13,18 +14,25 @@ public class MotorGroup extends Motor {
     public MotorGroup(Motor motor1, Motor motor2) {
         this.motor1 = motor1;
         this.motor2 = motor2;
+
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/motor1", motor1.getId().toString());
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/motor2", motor2.getId().toString());
+
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId(), "New MotorGroup created with motors: " + motor1.getId() + " and " + motor2.getId());
     }
 
     @Override
     public void set(double speed) {
         motor1.set(speed);
         motor2.set(speed);
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/speed", speed);
     }
 
     @Override
     public void setVoltage(double outputVolts) {
         motor1.setVoltage(outputVolts);
         motor2.setVoltage(outputVolts);
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/outVoltage", outputVolts);
     }
 
     @Override
@@ -42,12 +50,14 @@ public class MotorGroup extends Motor {
     public void setSafety(boolean on) {
         motor1.setSafety(on);
         motor2.setSafety(on);
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/safety", on);
     }
 
     @Override
     public void setInverted(boolean inverted) {
         motor1.setInverted(inverted);
         motor2.setInverted(inverted);
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/inverted", inverted);
     }
 
     @Override
@@ -59,12 +69,14 @@ public class MotorGroup extends Motor {
     public void disable() {
         motor1.disable();
         motor2.disable();
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/disabled", true);
     }
 
     @Override
     public void stopMotor() {
         motor1.stopMotor();
         motor2.stopMotor();
+        Logger.append(Logger.LogType.HardwareMotor, "group/" + getId() + "/stopped", true);
     }
 
     /**

@@ -2,10 +2,14 @@ package frc.robot.hardware.motor;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
+import java.util.UUID;
+
 /**
  * An abstract classes used for building compatible wrapper classes around hardware motors
  */
 public abstract class Motor implements MotorController {
+    private final UUID id = UUID.randomUUID();
+
     /**
      * @param speed The speed to set. Value should be between -1.0 and 1.0.
      */
@@ -42,4 +46,12 @@ public abstract class Motor implements MotorController {
      * @return the true hardware motor
      */
     public abstract MotorController getRawMotor();
+
+    /**
+     * Gets the ID of the Motor
+     * @return ID of the Motor
+     */
+    public UUID getId() {
+        return id;
+    }
 }

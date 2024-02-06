@@ -12,9 +12,9 @@ public class NEOEncoder extends Encoder {
     public NEOEncoder(SparkMaxMotor spark) {
         encoder = spark.getTrueRawMotor().getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
-        Logger.append(Logger.LogType.HardwareEncoder, "neo/" + this.getId() + "/motor", spark.getTrueRawMotor().getDeviceId());
+        Logger.append(Logger.LogType.HardwareEncoder, "neo/" + this.getId() + "/motor", spark.getId().toString());
 
-        Logger.append(Logger.LogType.HardwareEncoder, "neo/" + this.getId(), "New NEOEncoder created with motor id: " + spark.getTrueRawMotor().getDeviceId());
+        Logger.append(Logger.LogType.HardwareEncoder, "neo/" + this.getId(), "New NEOEncoder created with motor id: " + spark.getId());
     }
     @Override
     public double getUnitsRadians() {

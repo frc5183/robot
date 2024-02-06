@@ -17,6 +17,8 @@ public class TalonFXEncoder extends Encoder {
 
         Logger.append(Logger.LogType.HardwareEncoder, "/talonFX/" + this.getId() + "/motor", this.motor.getDeviceID());
         Logger.append(Logger.LogType.HardwareEncoder, "/talonFX/" + this.getId() + "/signal", this.signal.getValue());
+
+        Logger.append(Logger.LogType.HardwareEncoder, "/talonFX/" + this.getId(), "New TalonFXEncoder created with motor id: " + this.motor.getDeviceID());
     }
     @Override
     public double getUnitsRadians() {
