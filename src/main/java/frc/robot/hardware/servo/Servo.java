@@ -6,7 +6,6 @@ package frc.robot.hardware.servo;
  */
 public class Servo {
     private final edu.wpi.first.wpilibj.Servo servo;
-    private boolean inverted = false;
 
     /**
      * @param port the PWM port the servo is connected to
@@ -16,25 +15,12 @@ public class Servo {
     }
 
     /**
-     * Sets the speed of the servo.
-     * If the servo is inverted, the speed will be set to 1 - speed.
-     * @param speed the speed to set the servo to
+     * Sets the position of the servo.
+     * @param position the speed to set the servo to, should be between 0 and 1
+     * @see edu.wpi.first.wpilibj.Servo#set(double)
      */
-    public void set(double speed) {
-        if (inverted) {
-            servo.set(1 - speed);
-        } else {
-            servo.set(speed);
-        }
-    }
-
-    /**
-     * Sets the angle of the servo.
-     * @param angle the angle to set the servo to
-     * @see edu.wpi.first.wpilibj.Servo#setAngle(double)
-     */
-    public void setAngle(double angle) {
-        servo.setAngle(angle);
+    public void set(double position) {
+        servo.set(Math.max(0, Math.min(1, position)));
     }
 
     /**
@@ -46,6 +32,15 @@ public class Servo {
     }
 
     /**
+     * Sets the angle of the servo.
+     * @param angle the angle to set the servo to, should be between 0 and 180
+     * @see edu.wpi.first.wpilibj.Servo#setAngle(double)
+     */
+    public void setAngle(double angle) {
+        servo.setAngle(Math.max(0, Math.min(180, angle)));
+    }
+
+    /**
      * @return the angle of the servo
      * @see edu.wpi.first.wpilibj.Servo#getAngle()
      */
@@ -54,25 +49,10 @@ public class Servo {
     }
 
     /**
-     * Sets the servo to be inverted or not.
-     * @param inverted true if the servo should be inverted, false otherwise
-     */
-    public void setInverted(boolean inverted) {
-        this.inverted = inverted;
-    }
-
-    /**
-     * @return the inversion state
-     */
-    public boolean getInverted() {
-        return this.inverted;
-    }
-
-    /**
-     * Toggles the servo enabled status.
+     * Disables the servo until the next set() call.
      * @see edu.wpi.first.wpilibj.Servo#setDisabled()
      */
-    public void toggle() {
+    public void disable() {
         servo.setDisabled();
     }
 
