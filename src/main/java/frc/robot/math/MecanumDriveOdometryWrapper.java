@@ -1,13 +1,12 @@
 package frc.robot.math;
 
+import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
-import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.EncodedMotor;
-import frc.robot.hardware.motor.Motor;
 import frc.robot.subsystem.GenericMecanumDrive;
 
 public class MecanumDriveOdometryWrapper {
@@ -30,8 +29,8 @@ public class MecanumDriveOdometryWrapper {
     private final EncodedMotor rightRear;
     private final SingleAxisGyroscope gyroscope;
     private final MecanumDriveKinematics kinematics;
-    private final MecanumDriveOdometry odometry;
-    public MecanumDriveOdometryWrapper(EncodedMotor leftRear, EncodedMotor leftFront, EncodedMotor rightFront, EncodedMotor rightRear, SingleAxisGyroscope gyroscope, GenericMecanumDrive.MecanumMode mode, MecanumWheelPositions wheelPositions) {
+    private final MecanumDrivePoseEstimator odometry;
+    public MecanumDriveOdometryWrapper(EncodedMotor leftRear, EncodedMotor leftFront, EncodedMotor rightFront, EncodedMotor rightRear, SingleAxisGyroscope gyroscope, GenericMecanumDrive.MecanumMode mode, MecanumWheelPositions wheelPositions, Pose2d start) {
         this.leftRear = leftRear;
         this.leftFront = leftFront;
         this.rightFront = rightFront;
@@ -39,18 +38,21 @@ public class MecanumDriveOdometryWrapper {
         this.gyroscope = gyroscope;
         this.mode = mode;
         kinematics = new MecanumDriveKinematics(wheelPositions.frontLeft, wheelPositions.frontRight, wheelPositions.rearLeft, wheelPositions.rearRight);
-        odometry = new MecanumDriveOdometry(kinematics, gyroscope.getRotation2D(), getWheelPositions());
+        odometry = new MecanumDrivePoseEstimator(kinematics, gyroscope.getRotation2D(), getWheelPositions(), start);
     }
     public MecanumDriveWheelPositions getWheelPositions() {
         return new MecanumDriveWheelPositions(leftFront.getEncoder().getUnitsRotations(), rightFront.getEncoder().getUnitsRotations(), leftRear.getEncoder().getUnitsRotations(), rightRear.getEncoder().getUnitsRotations());
     }
     public Pose2d getPose() {
-        return odometry.getPoseMeters();
+        return odometry.getEstimatedPosition();
     }
     public void periodic() {
         odometry.update(gyroscope.getRotation2D(), getWheelPositions());
     }
     public void resetPose(Pose2d pose) {
         odometry.resetPosition(gyroscope.getRotation2D(), getWheelPositions(), pose);
+    }
+    public void addPose(Pose2d pose, double timestamp) {
+        odometry.addVisionMeasurement(pose, timestamp);
     }
 }

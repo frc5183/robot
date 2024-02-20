@@ -5,14 +5,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
 import frc.robot.control.single.AutonomousSingleControl;
 import frc.robot.control.tuple.AutonomousTupleControl;
 import frc.robot.math.MecanumDriveOdometryWrapper;
 import frc.robot.subsystem.GenericMecanumDrive;
 
-public class DriveMecanumMove extends Command{
+public class RelativeMecanumMove extends Command{
     public static final double precision = 1; // INCHES
     public static final double speed = 1; // SPEED
     private final Distance unit;
@@ -25,7 +24,7 @@ public class DriveMecanumMove extends Command{
     private final double tX;
     private final double tY;
     private final double tTheta;
-    public DriveMecanumMove(GenericMecanumDrive drive, MecanumDriveOdometryWrapper wrapper, Distance unit, double tX, double tY, double tTheta) {
+    public RelativeMecanumMove(GenericMecanumDrive drive, MecanumDriveOdometryWrapper wrapper, Distance unit, double tX, double tY, double tTheta) {
         this.drive=drive;
         this.odometry=wrapper;
         this.unit=unit;
