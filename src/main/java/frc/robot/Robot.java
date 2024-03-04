@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.Scheduler;
 import frc.robot.control.command.TeleopMecanum;
 import frc.robot.control.command.TeleopSpinner;
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot
     private GenericSpinner elevator;
     private GenericSpinner floor;
     private SingleAxisGyroscope gyro;
+    private AutonomousButtonMapper shoot, highIntake;
     public static final Scheduler scheduler = new Scheduler();
 
     @Override
@@ -83,6 +85,8 @@ public class Robot extends TimedRobot
         scheduler.scheduleCommand(teleopElevator);
         TeleopSpinner teleopFloor = new TeleopSpinner(floor, Config.botFloor);
         scheduler.scheduleCommand(teleopFloor);
+        shoot = Config.shootButton(shooter, intake);
+        highIntake = Config.highIntakeButton(shooter, intake);
     }
 
     @Override
@@ -90,6 +94,8 @@ public class Robot extends TimedRobot
     {
 
         scheduler.run();
+        shoot.periodic();
+        highIntake.periodic();
     }
     @Override
     public void autonomousInit() {
