@@ -19,8 +19,11 @@ public enum StickMode {
     /**
      * Represents an adaptation of the DPAD/HAT's up and down buttons to become a digital axis
      */
-    HATY;
-
+    HATY,
+    /**
+     * Represents a combination of the two triggers on the XBOX 360 Controller
+     */
+    TRIGGER;
     /**
      * Used to get the value of a StickMode using an XboxController
      * @param mode the StickMode to be evaluated
@@ -55,6 +58,8 @@ public enum StickMode {
                 } else {
                     return 0;
                 }
+            case TRIGGER:
+                return xbox.getLeftTriggerAxis() - xbox.getRightTriggerAxis();
             default:
                 return 0;
         }

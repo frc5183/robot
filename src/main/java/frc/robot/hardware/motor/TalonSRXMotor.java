@@ -1,36 +1,32 @@
 package frc.robot.hardware.motor;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import frc.robot.hardware.encoder.NEOEncoder;
 
-/**
- * A wrapper class around CANSparkMax to make it compatible with other motor types
- */
-public class SparkMaxMotor extends Motor {
-    private final CANSparkMax motor;
-
-    public SparkMaxMotor(int id, MotorType motortype) {
-        motor = new CANSparkMax(id, motortype);
+public class TalonSRXMotor extends Motor {
+    WPI_TalonSRX motor;
+    public TalonSRXMotor(int port) {
+        motor = new WPI_TalonSRX(port);
     }
-
     @Override
     public void set(double speed) {
-        motor.set(speed);
+        motor.set(TalonSRXControlMode.PercentOutput, speed);
     }
 
     @Override
     public void periodic() {
+        motor.feed();
     }
 
     @Override
     public double get() {
-        return motor.get();
+        return motor.getMotorOutputPercent();
     }
 
     @Override
     public void setSafety(boolean on) {
+        motor.setSafetyEnabled(on);
     }
 
     @Override
@@ -52,16 +48,9 @@ public class SparkMaxMotor extends Motor {
     public void stopMotor() {
         motor.stopMotor();
     }
-    public EncodedMotor getEncodedMotor() {
-        return new EncodedMotor(this, new NEOEncoder(this));
-    }
 
     @Override
     public MotorController getRawMotor() {
-        return motor;
-    }
-
-    public CANSparkMax getTrueRawMotor() {
         return motor;
     }
 }
