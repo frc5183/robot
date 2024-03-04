@@ -1,5 +1,7 @@
 package frc.robot.hardware.gyro;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 /**
  * Represents a Single Axis Gyroscope
  * Implementations connect this with hardware
@@ -29,7 +31,11 @@ public abstract class SingleAxisGyroscope {
      * Resets the gyroscope back to it's 0 state
      */
     public abstract void reset();
-
+    /**
+     * Gets a Rotation2D from the gyro.
+     * @return the rotation2D
+     */
+    public abstract Rotation2d getRotation2D();
     /**
      * Represents the Axis in a 3 axis gyroscope.
      */

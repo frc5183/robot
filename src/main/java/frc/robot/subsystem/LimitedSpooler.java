@@ -37,6 +37,9 @@ public class LimitedSpooler extends Subsystem {
         if (stopMotorIfNeeded(speed)) return;
         spool.set(speed);
     }
+    public double getSpeed() {
+        return spool.get();
+    }
 
     /**
      * @param speed the motor speed needing to be tested
