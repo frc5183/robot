@@ -3,13 +3,13 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.command.*;
+import frc.robot.control.curve.Curve;
 import frc.robot.control.curve.ExponentialCurve;
+import frc.robot.control.curve.LimitedCurve;
 import frc.robot.control.enumeration.Button;
 import frc.robot.control.enumeration.StickMode;
 import frc.robot.control.single.HalfStick;
-import frc.robot.control.single.SingleButton;
 import frc.robot.control.single.SingleControl;
-import frc.robot.control.single.SingleTwoPhaseButton;
 import frc.robot.control.tuple.CombinedTuple;
 import frc.robot.control.tuple.TupleControl;
 import frc.robot.math.MecanumDriveOdometryWrapper;
@@ -33,12 +33,12 @@ public class Config {
     /**
      * Represents the diameter of the wheels in inches.
      */
-    public static final int WheelDiameter = 0;
+    public static final double WheelDiameter = 6.0;
 
     /**
      * Represents the gearbox ratio of the drivetrain.
      */
-    public static final int GearboxRatio = 0;
+    public static final double GearboxRatio = 12.75;
 
 
     /**
@@ -75,17 +75,19 @@ public class Config {
             new Translation2d(10.125, -9),
             new Translation2d(-10.125, -9)
     );
-    public static final ExponentialCurve driveCurve = new ExponentialCurve();
+    public static final ExponentialCurve dCurve = new ExponentialCurve();
+    public static final double maxDriveSpeed = 1.0;
+    public static final Curve driveCurve = new LimitedCurve(dCurve, maxDriveSpeed);
     static {
-        driveCurve.setExaggeration(100);
+        dCurve.setExaggeration(100);
     }
+
     public static final SingleControl botX = new HalfStick(StickMode.LEFTY, driveCurve).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botY = new HalfStick(StickMode.LEFTX, driveCurve).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botTurn = new HalfStick(StickMode.RIGHTX, driveCurve).setXboxController(controllerManager.getFirstController());
     public static final TupleControl translateBot = new CombinedTuple(botX, botY).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botIntake = new HalfStick(StickMode.TRIGGER, driveCurve).setXboxController(controllerManager.getSecondController());
-    public static final SingleControl botElevator = new HalfStick(StickMode.LEFTY, driveCurve).setXboxController(controllerManager.getSecondController());
-    public static final SingleControl botFloor = new HalfStick(StickMode.RIGHTX, driveCurve).setXboxController(controllerManager.getSecondController());
+    public static final SingleControl botElevator = new HalfStick(StickMode.HATY, driveCurve).setXboxController(controllerManager.getSecondController());
 
 
     public static final double revTime = 2.0;
