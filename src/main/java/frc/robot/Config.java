@@ -87,23 +87,40 @@ public class Config {
     public static final SingleControl botElevator = new HalfStick(StickMode.LEFTY, driveCurve).setXboxController(controllerManager.getSecondController());
     public static final SingleControl botFloor = new HalfStick(StickMode.RIGHTX, driveCurve).setXboxController(controllerManager.getSecondController());
 
+
+    public static final double revTime = 2.0;
+    public static final double postRevTime = 2.0;
+
     public static Command shoot(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
-        new RunSpinner(shooter, false, 4),
-        new TimedConsumerCommand(intake, 2),
-        new DelayedCommand(new RunSpinner(intake, false, 2), 2)
+        new RunSpinner(shooter, false, revTime + postRevTime),
+        new TimedConsumerCommand(intake, revTime),
+        new DelayedCommand(new RunSpinner(intake, false, postRevTime), revTime)
         );
     }
+    public static final double highIntakeTime = 3;
     public static Command highIntake(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
-                new RunSpinner(intake, true, 3),
-                new RunSpinner(shooter, true, 3)
+                new RunSpinner(intake, true, highIntakeTime),
+                new RunSpinner(shooter, true, highIntakeTime)
         );
     }
+    public static final double FlipTime = 0.4;
+    public static final double FlipSpeed = 1;
+    public static final double FlipSpacing = 1;
+    public static Command flipIntake(GenericSpinner floor) {
+        return new SwitchSpinner(floor, FlipTime, FlipSpeed, true, FlipSpacing);
+    }
+
     public static AutonomousButtonMapper shootButton(GenericSpinner shooter, GenericSpinner intake) {
         return new AutonomousButtonMapper(() -> shoot(shooter, intake), controllerManager.getSecondController(), Button.A);
     }
     public static AutonomousButtonMapper highIntakeButton(GenericSpinner shooter, GenericSpinner intake) {
         return new AutonomousButtonMapper(() -> highIntake(shooter, intake), controllerManager.getSecondController(), Button.B);
     }
+    public static AutonomousButtonMapper flipIntakeButton(GenericSpinner floor) {
+        return new AutonomousButtonMapper(() -> flipIntake(floor), controllerManager.getSecondController(), Button.RIGHTBUMPER);
+    }
+
+
 }

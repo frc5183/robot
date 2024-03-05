@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.Scheduler;
-import frc.robot.control.command.TeleopMecanum;
-import frc.robot.control.command.TeleopSpinner;
+import frc.robot.control.command.*;
 import frc.robot.hardware.gyro.ADISAxisGyroscope;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.SparkMaxMotor;
@@ -51,7 +51,8 @@ public class Robot extends TimedRobot
     private GenericSpinner elevator;
     private GenericSpinner floor;
     private SingleAxisGyroscope gyro;
-    private AutonomousButtonMapper shoot, highIntake;
+    private AutonomousButtonMapper shoot, highIntake, flip;
+    private SendableChooser<String> autoChooser = new SendableChooser<>();
     public static final Scheduler scheduler = new Scheduler();
 
     @Override
@@ -72,6 +73,15 @@ public class Robot extends TimedRobot
         elevator = new GenericSpinner(elevatorMotor);
         floor = new GenericSpinner(floorMotor);
         gyro = new ADISAxisGyroscope(new ADIS16448_IMU(), SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
+        gyro.calibrate();
+        autoChooser.setDefaultOption("Simple", "S");
+        autoChooser.addOption("Red Left", "RL");
+        autoChooser.addOption("Red Middle" , "RM");
+        autoChooser.addOption("Red Right", "RR");
+        autoChooser.addOption("Blue Left", "BL");
+        autoChooser.addOption("Blue Middle", "BM");
+        autoChooser.addOption("Blue Right", "BR");
+        autoChooser.addOption("Custom", "C");
     }
     @Override
     public void teleopInit()
@@ -87,6 +97,7 @@ public class Robot extends TimedRobot
         scheduler.scheduleCommand(teleopFloor);
         shoot = Config.shootButton(shooter, intake);
         highIntake = Config.highIntakeButton(shooter, intake);
+        flip = Config.flipIntakeButton(floor);
     }
 
     @Override
@@ -96,10 +107,35 @@ public class Robot extends TimedRobot
         scheduler.run();
         shoot.periodic();
         highIntake.periodic();
+        flip.periodic();
     }
     @Override
     public void autonomousInit() {
-        // TODO: Add autonomous code
+        String chosen = autoChooser.getSelected();
+        Command basicShoot = Config.shoot(shooter, intake);
+        Command basic = new CommandGroup(
+                basicShoot,
+                new TimedConsumerCommand(floor, Config.revTime+Config.postRevTime)
+        );
+        switch (chosen) {
+            case "S":
+                scheduler.scheduleCommand(basic);
+                break;
+            case "RL":
+                break;
+            case "RM":
+                break;
+            case "RR":
+                break;
+            case "BL":
+                break;
+            case "BM":
+                break;
+            case "BR":
+                break;
+            case "C":
+                break;
+        }
     }
     @Override
     public void autonomousPeriodic() {
