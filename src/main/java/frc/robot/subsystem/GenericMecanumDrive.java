@@ -24,7 +24,7 @@ public class GenericMecanumDrive extends Subsystem{
     private final Motor rightRear;
     private final SingleAxisGyroscope gyroscope;
     private final MecanumDriveOdometryWrapper wrapper;
-    public GenericMecanumDrive(EncodedMotor leftRear, EncodedMotor leftFront, EncodedMotor rightFront, EncodedMotor rightRear, SingleAxisGyroscope gyroscope, MecanumMode mode, MecanumDriveOdometryWrapper.MecanumWheelPositions wheelPositions, Pose2d start) {
+    public GenericMecanumDrive(EncodedMotor leftRear, EncodedMotor leftFront, EncodedMotor rightFront, EncodedMotor rightRear, double gearboxRatio, double wheelDiameter, SingleAxisGyroscope gyroscope, MecanumMode mode, MecanumDriveOdometryWrapper.MecanumWheelPositions wheelPositions, Pose2d start) {
         this.leftRear = leftRear.getMotor();
         this.leftFront = leftFront.getMotor();
         this.rightFront = rightFront.getMotor();
@@ -32,7 +32,7 @@ public class GenericMecanumDrive extends Subsystem{
         this.gyroscope = gyroscope;
         this.mode = mode;
         this.drive = new MecanumDrive(leftFront.getMotor(), leftRear.getMotor(), rightFront.getMotor(), rightRear.getMotor());
-        this.wrapper= new MecanumDriveOdometryWrapper(leftRear, leftFront, rightFront, rightRear, gyroscope, mode, wheelPositions, start);
+        this.wrapper= new MecanumDriveOdometryWrapper(leftRear, leftFront, rightFront, rightRear, gearboxRatio, wheelDiameter, gyroscope, mode, wheelPositions, start);
     }
     public void periodic() {
         leftRear.periodic();

@@ -30,18 +30,22 @@ public class MecanumDriveOdometryWrapper {
     private final SingleAxisGyroscope gyroscope;
     private final MecanumDriveKinematics kinematics;
     private final MecanumDrivePoseEstimator odometry;
-    public MecanumDriveOdometryWrapper(EncodedMotor leftRear, EncodedMotor leftFront, EncodedMotor rightFront, EncodedMotor rightRear, SingleAxisGyroscope gyroscope, GenericMecanumDrive.MecanumMode mode, MecanumWheelPositions wheelPositions, Pose2d start) {
+    private final double gearboxRatio;
+    private final double wheelDiameter;
+    public MecanumDriveOdometryWrapper(EncodedMotor leftRear, EncodedMotor leftFront, EncodedMotor rightFront, EncodedMotor rightRear, double gearboxRatio, double wheelDiameter, SingleAxisGyroscope gyroscope, GenericMecanumDrive.MecanumMode mode, MecanumWheelPositions wheelPositions, Pose2d start) {
         this.leftRear = leftRear;
         this.leftFront = leftFront;
         this.rightFront = rightFront;
         this.rightRear = rightRear;
         this.gyroscope = gyroscope;
         this.mode = mode;
+        this.gearboxRatio = gearboxRatio;
+        this.wheelDiameter = wheelDiameter;
         kinematics = new MecanumDriveKinematics(wheelPositions.frontLeft, wheelPositions.frontRight, wheelPositions.rearLeft, wheelPositions.rearRight);
         odometry = new MecanumDrivePoseEstimator(kinematics, gyroscope.getRotation2D(), getWheelPositions(), start);
     }
     public MecanumDriveWheelPositions getWheelPositions() {
-        return new MecanumDriveWheelPositions(leftFront.getEncoder().getUnitsRotations(), rightFront.getEncoder().getUnitsRotations(), leftRear.getEncoder().getUnitsRotations(), rightRear.getEncoder().getUnitsRotations());
+        return new MecanumDriveWheelPositions(leftFront.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio, rightFront.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio, leftRear.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio, rightRear.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio);
     }
     public Pose2d getPose() {
         return odometry.getEstimatedPosition();
