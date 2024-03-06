@@ -7,27 +7,32 @@ public class DelayedCommand extends Command{
     private Command command;
     private double delay;
     private boolean finished;
-    private double start;
-    public DelayedCommand(Command command, double delay) {
+    private boolean interrupt;
+    private Timer timer = new Timer();
+    public DelayedCommand(Command command, double delay, boolean interrupt) {
         this.command = command;
         this.delay = delay;
+        this.interrupt=interrupt;
     }
     @Override
     public void start() {
-        start = Timer.getFPGATimestamp();
+        timer.start();
     }
 
     @Override
     public void run() {
-        if (Timer.getFPGATimestamp() - start > delay) {
-            Robot.scheduler.scheduleCommand(command);
+        if (timer.hasElapsed(delay)) {
+            if (interrupt) {
+                Robot.scheduler.interrupt(command);
+            } else {
+                Robot.scheduler.scheduleCommand(command);
+            }
             finished = true;
         }
     }
 
     @Override
     public void clean() {
-
     }
 
     @Override

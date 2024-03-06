@@ -6,11 +6,14 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.REVPhysicsSim;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.Scheduler;
 import frc.robot.control.command.*;
@@ -32,6 +35,7 @@ import frc.robot.subsystem.GenericSpinner;
  */
 public class Robot extends TimedRobot
 {
+    private REVPhysicsSim sim;
     private SparkMaxMotor leftRear;
     private SparkMaxMotor rightRear;
     private SparkMaxMotor leftFront;
@@ -47,7 +51,7 @@ public class Robot extends TimedRobot
     private GenericSpinner elevator;
     private GenericSpinner floor;
     private SingleAxisGyroscope gyro;
-    private AutonomousButtonMapper shoot, highIntake, flip;
+    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
     public static final Scheduler scheduler = new Scheduler();
 
@@ -58,6 +62,12 @@ public class Robot extends TimedRobot
         rightRear=new SparkMaxMotor(Config.rearRightMotorID, CANSparkLowLevel.MotorType.kBrushless);
         leftFront=new SparkMaxMotor(Config.frontLeftMotorID, CANSparkLowLevel.MotorType.kBrushless);
         rightFront=new SparkMaxMotor(Config.frontRightMotorID, CANSparkLowLevel.MotorType.kBrushless);
+        rightFront.setInverted(true);
+        leftFront.setInverted(false);
+        rightRear.setInverted(true);
+        leftRear.setInverted(false);
+        gyro = new ADISAxisGyroscope(new ADIS16448_IMU(), SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
+        gyro.calibrate();
         GenericMecanumDrive.MecanumMode mode = Config.mecanumMode;
         drive = new GenericMecanumDrive(leftRear.getEncodedMotor(), leftFront.getEncodedMotor(), rightFront.getEncodedMotor(), rightRear.getEncodedMotor(), Config.GearboxRatio, Config.WheelDiameter, gyro, mode, Config.mecanumWheels, new Pose2d()) ;
         floorMotor = new SparkMaxMotor(Config.floorMotor, CANSparkLowLevel.MotorType.kBrushless);
@@ -68,8 +78,6 @@ public class Robot extends TimedRobot
         intake = new GenericSpinner(intakeMotor);
         elevator = new GenericSpinner(elevatorMotor);
         floor = new GenericSpinner(floorMotor);
-        gyro = new ADISAxisGyroscope(new ADIS16448_IMU(), SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
-        gyro.calibrate();
         autoChooser.setDefaultOption("Simple", "S");
         autoChooser.addOption("Red Left", "RL");
         autoChooser.addOption("Red Middle" , "RM");
@@ -78,6 +86,7 @@ public class Robot extends TimedRobot
         autoChooser.addOption("Blue Middle", "BM");
         autoChooser.addOption("Blue Right", "BR");
         autoChooser.addOption("Custom", "C");
+        SmartDashboard.putData("Autonomous Program", autoChooser);
     }
     @Override
     public void teleopInit()
@@ -85,13 +94,14 @@ public class Robot extends TimedRobot
         scheduler.forceEnd();
         TeleopMecanum teleopMecanum = new TeleopMecanum(drive);
         scheduler.scheduleCommand(teleopMecanum);
-        TeleopSpinner teleopIntake = new TeleopSpinner(intake, Config.botIntake);
-        scheduler.scheduleCommand(teleopIntake);
+        //TeleopSpinner teleopIntake = new TeleopSpinner(intake, Config.botIntake);
+        //scheduler.scheduleCommand(teleopIntake);
         TeleopSpinner teleopElevator = new TeleopSpinner(elevator, Config.botElevator);
         scheduler.scheduleCommand(teleopElevator);
         shoot = Config.shootButton(shooter, intake);
         highIntake = Config.highIntakeButton(shooter, intake);
         flip = Config.flipIntakeButton(floor);
+        lowIntake = Config.lowIntakeButton(intake);
     }
 
     @Override
@@ -102,6 +112,7 @@ public class Robot extends TimedRobot
         shoot.periodic();
         highIntake.periodic();
         flip.periodic();
+        lowIntake.periodic();
     }
     @Override
     public void autonomousInit() {
@@ -113,7 +124,7 @@ public class Robot extends TimedRobot
         );
         switch (chosen) {
             case "S":
-                scheduler.scheduleCommand(basic);
+              //  scheduler.scheduleCommand(basic);
                 break;
             case "RL":
                 break;
@@ -130,6 +141,7 @@ public class Robot extends TimedRobot
             case "C":
                 break;
         }
+        scheduler.scheduleCommand(new ShutUpWatchdog(drive));
     }
     @Override
     public void autonomousPeriodic() {
@@ -141,5 +153,16 @@ public class Robot extends TimedRobot
         intake.periodic();
         elevator.periodic();
         floor.periodic();
+    }
+    public void simulationInit() {
+        sim = REVPhysicsSim.getInstance();
+        sim.addSparkMax(leftFront.getTrueRawMotor(), DCMotor.getNEO(1));
+        sim.addSparkMax(rightFront.getTrueRawMotor(), DCMotor.getNEO(1));
+        sim.addSparkMax(leftRear.getTrueRawMotor(), DCMotor.getNEO(1));
+        sim.addSparkMax(rightRear.getTrueRawMotor(), DCMotor.getNEO(1));
+        sim.addSparkMax(floorMotor.getTrueRawMotor(), DCMotor.getNEO(1));
+    }
+    public void simulationPeriodic() {
+        sim.run();
     }
 }

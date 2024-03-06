@@ -30,6 +30,7 @@ public class Scheduler {
      * A list to hold all the currently active Commands
      */
     private final ArrayList<Command> activeCommands = new ArrayList<>();
+    private final ArrayList<Command> interruptQueue = new ArrayList<>();
 
     /**
      * Adds a command to the end of the queue.
@@ -67,6 +68,7 @@ public class Scheduler {
         for (Command c : temp) {
             activeCommands.remove(c);
         }
+        internal_interrupt();
         // Clear temp again
         temp.clear();
         // Iterate over every command in the queue
@@ -111,12 +113,18 @@ public class Scheduler {
      * The current active commands and pushed back to the front of the queue.
      * @param command the command to skip the que with
      */
-    public void interrupt(Command command) {
-        for (Command c: activeCommands) {
-            commandQueue.add(0, c);
+    private void internal_interrupt() {
+        for (Command command : interruptQueue) {
+            for (Command c : activeCommands) {
+                commandQueue.add(0, c);
+            }
+            activeCommands.clear();
+            commandQueue.add(0, command);
         }
-        activeCommands.clear();
-        commandQueue.add(0, command);
+        interruptQueue.clear();
+    }
+    public void interrupt(Command c) {
+        interruptQueue.add(c);
     }
 
     /**

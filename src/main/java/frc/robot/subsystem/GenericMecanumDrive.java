@@ -40,12 +40,14 @@ public class GenericMecanumDrive extends Subsystem{
         rightFront.periodic();
         rightRear.periodic();
         this.wrapper.periodic();
+        drive.feedWatchdog();
+        drive.feed();
     }
     public void drive(TupleControl translate, SingleControl rotate) {
         if (mode == MecanumMode.RELATIVE) {
-            drive.driveCartesian(-translate.getValue().getVal1(), -translate.getValue().getVal2(), -rotate.getValue());
+            drive.driveCartesian(-translate.getValue().getVal1(), translate.getValue().getVal2(), rotate.getValue());
         } else {
-            drive.driveCartesian(-translate.getValue().getVal1(), -translate.getValue().getVal2(), -rotate.getValue(), gyroscope.getRotation2D());
+            drive.driveCartesian(-translate.getValue().getVal1(), translate.getValue().getVal2(), rotate.getValue(), gyroscope.getRotation2D().unaryMinus());
         }
     }
     public MecanumDriveOdometryWrapper getOdometry() {

@@ -1,7 +1,7 @@
 package frc.robot.control.single;
 
-import frc.robot.control.curve.Curve;
-import frc.robot.control.curve.LinearCurve;
+import frc.robot.math.curve.Curve;
+import frc.robot.math.curve.LinearCurve;
 import frc.robot.control.enumeration.StickMode;
 
 /**

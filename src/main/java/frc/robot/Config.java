@@ -3,9 +3,9 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.command.*;
-import frc.robot.control.curve.Curve;
-import frc.robot.control.curve.ExponentialCurve;
-import frc.robot.control.curve.LimitedCurve;
+import frc.robot.math.curve.Curve;
+import frc.robot.math.curve.ExponentialCurve;
+import frc.robot.math.curve.LimitedCurve;
 import frc.robot.control.enumeration.Button;
 import frc.robot.control.enumeration.StickMode;
 import frc.robot.control.single.HalfStick;
@@ -44,27 +44,27 @@ public class Config {
     /**
      * Represent the IDs of the main drive motors
      */
-    public static final int frontLeftMotorID = 0;
-    public static final int rearLeftMotorID = 0;
-    public static final int frontRightMotorID = 0;
-    public static final int rearRightMotorID = 0;
+    public static final int frontLeftMotorID = 3;
+    public static final int rearLeftMotorID = 2;
+    public static final int frontRightMotorID = 4;
+    public static final int rearRightMotorID = 1;
 
     /**
      * Represents the ID of the Shooter launch Motor
      */
-    public static final int shooterMotor = 0;
+    public static final int shooterMotor = 5;
     /**
      * Represents the ID of the Floor Motor
      */
-    public static final int floorMotor = 0;
+    public static final int floorMotor = 9;
     /**
      * Represents the ID of the Intake Motor
      */
-    public static final int intakeMotor = 0;
+    public static final int intakeMotor = 10;
     /**
      * Represents the ID of the Elevator Motor
      */
-    public static final int elevatorMotor = 0;
+    public static final int elevatorMotor = 7;
     /**
      * Mecanum Settings
      */
@@ -91,13 +91,12 @@ public class Config {
 
 
     public static final double revTime = 2.0;
-    public static final double postRevTime = 2.0;
+    public static final double postRevTime = 0.2;
 
     public static Command shoot(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
         new RunSpinner(shooter, false, revTime + postRevTime),
-        new TimedConsumerCommand(intake, revTime),
-        new DelayedCommand(new RunSpinner(intake, false, postRevTime), revTime)
+        new DelayedCommand(new RunSpinner(intake, true, postRevTime), revTime, true)
         );
     }
     public static final double highIntakeTime = 3;
@@ -107,21 +106,29 @@ public class Config {
                 new RunSpinner(shooter, true, highIntakeTime)
         );
     }
-    public static final double FlipTime = 0.4;
+    public static final double FlipTime = 0.3;
     public static final double FlipSpeed = 1;
     public static final double FlipSpacing = 1;
     public static Command flipIntake(GenericSpinner floor) {
-        return new SwitchSpinner(floor, FlipTime, FlipSpeed, true, FlipSpacing);
+        return new SwitchSpinner(floor, FlipTime, FlipSpeed, true);
+    }
+    public static final double LowIntakeTime = 1.5;
+    public static Command lowIntake(GenericSpinner intake) {
+        return new RunSpinner(intake, false, LowIntakeTime);
     }
 
     public static AutonomousButtonMapper shootButton(GenericSpinner shooter, GenericSpinner intake) {
-        return new AutonomousButtonMapper(() -> shoot(shooter, intake), controllerManager.getSecondController(), Button.A);
+        return new AutonomousButtonMapper(() -> shoot(shooter, intake), controllerManager.getSecondController(), Button.A, 0);
     }
     public static AutonomousButtonMapper highIntakeButton(GenericSpinner shooter, GenericSpinner intake) {
-        return new AutonomousButtonMapper(() -> highIntake(shooter, intake), controllerManager.getSecondController(), Button.B);
+        return new AutonomousButtonMapper(() -> highIntake(shooter, intake), controllerManager.getSecondController(), Button.B, 0);
     }
     public static AutonomousButtonMapper flipIntakeButton(GenericSpinner floor) {
-        return new AutonomousButtonMapper(() -> flipIntake(floor), controllerManager.getSecondController(), Button.RIGHTBUMPER);
+        return new AutonomousButtonMapper(() -> flipIntake(floor), controllerManager.getSecondController(), Button.RIGHTBUMPER, FlipSpacing+FlipTime);
+    }
+
+    public static AutonomousButtonMapper lowIntakeButton(GenericSpinner intake) {
+        return new AutonomousButtonMapper(() -> lowIntake(intake), controllerManager.getSecondController(), Button.LEFTBUMPER, FlipSpacing);
     }
 
 
