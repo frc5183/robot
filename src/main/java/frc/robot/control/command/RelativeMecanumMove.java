@@ -44,6 +44,12 @@ public class RelativeMecanumMove extends Command{
     private double curve(double x) {
         return (x/Math.abs(x))*(Math.sqrt(1-(0.95*Math.abs(x))));
     }
+
+    @Override
+    public String getName() {
+        return "Relative Mecanum Move";
+    }
+
     @Override
     public void start() {
         Pose2d startPoseMetric = odometry.getPose();

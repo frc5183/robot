@@ -1,5 +1,6 @@
 package frc.robot.hardware.motor;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -18,6 +19,9 @@ public class SparkMaxMotor extends Motor {
     @Override
     public void set(double speed) {
         motor.set(speed);
+        if (RobotBase.isSimulation()) {
+            motor.setVoltage(speed);
+        }
     }
 
     @Override

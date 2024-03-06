@@ -17,6 +17,12 @@ public class RunSpinner extends Command{
         this.inverted = inverted;
         this.seconds=seconds;
     }
+
+    @Override
+    public String getName() {
+        return "Run Spinner: " + spinner.getName();
+    }
+
     @Override
     public void start() {
         timer.start();

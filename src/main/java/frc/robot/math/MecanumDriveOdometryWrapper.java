@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.EncodedMotor;
 import frc.robot.subsystem.GenericMecanumDrive;
@@ -43,6 +44,7 @@ public class MecanumDriveOdometryWrapper {
         this.wheelDiameter = wheelDiameter;
         kinematics = new MecanumDriveKinematics(wheelPositions.frontLeft, wheelPositions.frontRight, wheelPositions.rearLeft, wheelPositions.rearRight);
         odometry = new MecanumDrivePoseEstimator(kinematics, gyroscope.getRotation2D(), getWheelPositions(), start);
+
     }
     public MecanumDriveWheelPositions getWheelPositions() {
         return new MecanumDriveWheelPositions(leftFront.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio, rightFront.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio, leftRear.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio, rightRear.getEncoder().getUnitsRadians()*wheelDiameter/gearboxRatio);

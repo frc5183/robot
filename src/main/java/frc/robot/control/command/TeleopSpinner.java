@@ -11,6 +11,12 @@ public class TeleopSpinner extends Command{
         this.control=control;
         require(spinner);
     }
+
+    @Override
+    public String getName() {
+        return "Teleop Spinner" + spinner.getName();
+    }
+
     @Override
     public void start() {
 

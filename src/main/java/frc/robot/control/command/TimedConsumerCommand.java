@@ -19,6 +19,12 @@ public class TimedConsumerCommand extends Command{
         require(subsystem);
         this.time = time;
     }
+
+    @Override
+    public String getName() {
+        return "Timed Consumer";
+    }
+
     @Override
     public void start() {
         start = Timer.getFPGATimestamp();

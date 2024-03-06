@@ -21,6 +21,12 @@ public class SwitchSpinner extends Command{
         this.speed = speed;
         r = reverse;
     }
+
+    @Override
+    public String getName() {
+        return "Switch Spinner" + spinner.getName();
+    }
+
     @Override
     public void start() {
         if (last == null) {

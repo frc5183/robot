@@ -14,6 +14,12 @@ public class DelayedCommand extends Command{
         this.delay = delay;
         this.interrupt=interrupt;
     }
+
+    @Override
+    public String getName() {
+        return "Delayed Command " + command.getName();
+    }
+
     @Override
     public void start() {
         timer.start();

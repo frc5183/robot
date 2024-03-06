@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.command.*;
 import frc.robot.math.curve.Curve;
@@ -33,7 +34,7 @@ public class Config {
     /**
      * Represents the diameter of the wheels in inches.
      */
-    public static final double WheelDiameter = 6.0;
+    public static final double WheelDiameter = Units.inchesToMeters(6.0);
 
     /**
      * Represents the gearbox ratio of the drivetrain.
@@ -71,8 +72,8 @@ public class Config {
     public static final GenericMecanumDrive.MecanumMode mecanumMode = GenericMecanumDrive.MecanumMode.ABSOLUTE;
     public static final MecanumDriveOdometryWrapper.MecanumWheelPositions mecanumWheels = new MecanumDriveOdometryWrapper.MecanumWheelPositions(
             new Translation2d(10.125, 9),
-            new Translation2d(-10.125, 9),
             new Translation2d(10.125, -9),
+            new Translation2d(-10.125, 9),
             new Translation2d(-10.125, -9)
     );
     public static final ExponentialCurve dCurve = new ExponentialCurve();
@@ -118,10 +119,10 @@ public class Config {
     }
 
     public static AutonomousButtonMapper shootButton(GenericSpinner shooter, GenericSpinner intake) {
-        return new AutonomousButtonMapper(() -> shoot(shooter, intake), controllerManager.getSecondController(), Button.A, 0);
+        return new AutonomousButtonMapper(() -> shoot(shooter, intake), controllerManager.getSecondController(), Button.A, 2.0);
     }
     public static AutonomousButtonMapper highIntakeButton(GenericSpinner shooter, GenericSpinner intake) {
-        return new AutonomousButtonMapper(() -> highIntake(shooter, intake), controllerManager.getSecondController(), Button.B, 0);
+        return new AutonomousButtonMapper(() -> highIntake(shooter, intake), controllerManager.getSecondController(), Button.B, 2.0);
     }
     public static AutonomousButtonMapper flipIntakeButton(GenericSpinner floor) {
         return new AutonomousButtonMapper(() -> flipIntake(floor), controllerManager.getSecondController(), Button.RIGHTBUMPER, FlipSpacing+FlipTime);

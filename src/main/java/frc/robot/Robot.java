@@ -9,9 +9,13 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.REVPhysicsSim;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.ADIS16448_IMUSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.control.AutonomousButtonMapper;
@@ -25,6 +29,8 @@ import frc.robot.hardware.motor.TalonSRXMotor;
 import frc.robot.hardware.motor.VictorSPXMotor;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
+
+import java.sql.SQLOutput;
 
 
 /**
@@ -40,6 +46,7 @@ public class Robot extends TimedRobot
     private SparkMaxMotor rightRear;
     private SparkMaxMotor leftFront;
     private SparkMaxMotor rightFront;
+    private int count = 0;
     private final XboxController controller = new XboxController(0);
     private GenericMecanumDrive drive;
     private SparkMaxMotor floorMotor;
@@ -51,8 +58,11 @@ public class Robot extends TimedRobot
     private GenericSpinner elevator;
     private GenericSpinner floor;
     private SingleAxisGyroscope gyro;
+    private final ADIS16448_IMU imu = new ADIS16448_IMU();
+    private ADIS16448_IMUSim imuSim;
     private AutonomousButtonMapper shoot, highIntake, flip, lowIntake;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
+    private final Timer timer = new Timer();
     public static final Scheduler scheduler = new Scheduler();
 
     @Override
@@ -66,18 +76,19 @@ public class Robot extends TimedRobot
         leftFront.setInverted(false);
         rightRear.setInverted(true);
         leftRear.setInverted(false);
-        gyro = new ADISAxisGyroscope(new ADIS16448_IMU(), SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
+        gyro = new ADISAxisGyroscope(imu, SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
         gyro.calibrate();
+
         GenericMecanumDrive.MecanumMode mode = Config.mecanumMode;
         drive = new GenericMecanumDrive(leftRear.getEncodedMotor(), leftFront.getEncodedMotor(), rightFront.getEncodedMotor(), rightRear.getEncodedMotor(), Config.GearboxRatio, Config.WheelDiameter, gyro, mode, Config.mecanumWheels, new Pose2d()) ;
         floorMotor = new SparkMaxMotor(Config.floorMotor, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor = new TalonSRXMotor(Config.intakeMotor);
         shooterMotor = new TalonSRXMotor(Config.shooterMotor);
         elevatorMotor = new TalonFXMotor(Config.elevatorMotor);
-        shooter = new GenericSpinner(shooterMotor);
-        intake = new GenericSpinner(intakeMotor);
-        elevator = new GenericSpinner(elevatorMotor);
-        floor = new GenericSpinner(floorMotor);
+        shooter = new GenericSpinner(shooterMotor, "Shooter");
+        intake = new GenericSpinner(intakeMotor, "Intake");
+        elevator = new GenericSpinner(elevatorMotor, "Elevator");
+        floor = new GenericSpinner(floorMotor, "Floor");
         autoChooser.setDefaultOption("Simple", "S");
         autoChooser.addOption("Red Left", "RL");
         autoChooser.addOption("Red Middle" , "RM");
@@ -86,7 +97,33 @@ public class Robot extends TimedRobot
         autoChooser.addOption("Blue Middle", "BM");
         autoChooser.addOption("Blue Right", "BR");
         autoChooser.addOption("Custom", "C");
+        Sendable motors = new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.addDoubleProperty("Left Rear", leftRear::get, null);
+                builder.addDoubleProperty("Right Rear", rightRear::get, null);
+                builder.addDoubleProperty("Left Front", leftFront::get, null);
+                builder.addDoubleProperty("Right Front", rightFront::get, null);
+                builder.addDoubleProperty("Floor", floorMotor::get, null);
+                builder.addDoubleProperty("Intake", intakeMotor::get, null);
+                builder.addDoubleProperty("Shooter", shooterMotor::get, null);
+                builder.addDoubleProperty("Elevator", elevatorMotor::get, null);
+            }
+        };
+        Sendable pos = new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.addDoubleProperty("Estimated X", () -> drive.getOdometry().getPose().getX(), null);
+                builder.addDoubleProperty("Estimated Y", () -> drive.getOdometry().getPose().getY(), null);
+                builder.addDoubleProperty("Estimated Heading", () -> drive.getOdometry().getPose().getRotation().getDegrees(), null);
+            }
+        };
         SmartDashboard.putData("Autonomous Program", autoChooser);
+        SmartDashboard.putData("SchedulerBasic", scheduler.getBasicSendable());
+        SmartDashboard.putData("SchedulerAdvanced", scheduler.getQueueSendable());
+        SmartDashboard.putData("SchedulerActive", scheduler.getActiveSendable());
+        SmartDashboard.putData("Motors", motors);
+        SmartDashboard.putData("Position", pos);
     }
     @Override
     public void teleopInit()
@@ -156,6 +193,7 @@ public class Robot extends TimedRobot
     }
     public void simulationInit() {
         sim = REVPhysicsSim.getInstance();
+        imuSim = new ADIS16448_IMUSim(imu);
         sim.addSparkMax(leftFront.getTrueRawMotor(), DCMotor.getNEO(1));
         sim.addSparkMax(rightFront.getTrueRawMotor(), DCMotor.getNEO(1));
         sim.addSparkMax(leftRear.getTrueRawMotor(), DCMotor.getNEO(1));
@@ -164,5 +202,7 @@ public class Robot extends TimedRobot
     }
     public void simulationPeriodic() {
         sim.run();
+        Pose2d pose = drive.getOdometry().getPose();
+        drive.periodic();
     }
 }

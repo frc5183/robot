@@ -14,6 +14,12 @@ public class ConsumerCommand extends Command
     public ConsumerCommand(Subsystem subsystem) {
         require(subsystem);
     }
+
+    @Override
+    public String getName() {
+        return "Consumer Command";
+    }
+
     @Override
     public void start() {
     }

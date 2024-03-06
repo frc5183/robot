@@ -11,6 +11,12 @@ public class ShutUpWatchdog extends Command {
     public ShutUpWatchdog(GenericMecanumDrive drive) {
         this.drive=drive;
     }
+
+    @Override
+    public String getName() {
+        return "Shut Up Watchdog";
+    }
+
     @Override
     public void start() {
 

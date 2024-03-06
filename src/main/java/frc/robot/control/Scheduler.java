@@ -1,5 +1,7 @@
 package frc.robot.control;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.control.command.Command;
 import frc.robot.subsystem.Subsystem;
 
@@ -50,6 +52,7 @@ public class Scheduler {
         // Iterate over every Active Command
         // Run it; If it's finished, End it, Mark it for removal by adding to temp
         // Else count its used subsystems into activeSubsystems
+        internal_interrupt();
         for (Command c : activeCommands) {
             c.run();
             if (c.isFinished()) {
@@ -68,7 +71,6 @@ public class Scheduler {
         for (Command c : temp) {
             activeCommands.remove(c);
         }
-        internal_interrupt();
         // Clear temp again
         temp.clear();
         // Iterate over every command in the queue
@@ -89,7 +91,11 @@ public class Scheduler {
         for (Command c: temp) {
             commandQueue.remove(c);
             activeCommands.add(c);
-            c.start();
+            if (!c.started) {
+                c.start();
+                c.started = true;
+            }
+
         }
     }
 
@@ -116,7 +122,9 @@ public class Scheduler {
     private void internal_interrupt() {
         for (Command command : interruptQueue) {
             for (Command c : activeCommands) {
-                commandQueue.add(0, c);
+                if (c != command) {
+                    commandQueue.add(0, c);
+                }
             }
             activeCommands.clear();
             commandQueue.add(0, command);
@@ -135,5 +143,46 @@ public class Scheduler {
     public void override(Command command) {
         forceEnd();
         commandQueue.add(command);
+    }
+
+    public Sendable getBasicSendable() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("Scheduler");
+                builder.addBooleanProperty("isRunning", () -> !activeCommands.isEmpty(), null);
+                builder.addBooleanProperty("isQueued", () -> !commandQueue.isEmpty(), null);
+            }
+        };
+    }
+    public Sendable getQueueSendable() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("Scheduler");
+                builder.addStringProperty("Queue", () -> {
+                    String out = "";
+                    for (int i = 0; i < commandQueue.size(); i++) {
+                        out += commandQueue.get(i).getName() + ",\n";
+                    }
+                    return out;
+                }, null);
+            }
+        };
+    }
+    public Sendable getActiveSendable() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("Scheduler");
+                builder.addStringProperty("Active", () -> {
+                        String out = "";
+                        for (int i=0; i<activeCommands.size(); i++) {
+                            out+= activeCommands.get(i).getName() + ",\n";
+                        }
+                    return out;
+                }, null);
+            }
+        };
     }
 }

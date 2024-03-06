@@ -9,6 +9,12 @@ public class TeleopMecanum extends Command{
         this.drive=drive;
         require(drive);
     }
+
+    @Override
+    public String getName() {
+        return "Teleop Mecanum Drive";
+    }
+
     @Override
     public void start() {
 

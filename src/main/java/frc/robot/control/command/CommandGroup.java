@@ -14,6 +14,16 @@ public class CommandGroup extends Command{
             }
         }
     }
+
+    @Override
+    public String getName() {
+        String s = "Command Group: ";
+        for (Command c : commands) {
+            s += c.getName() + ", ";
+        }
+        return s;
+    }
+
     @Override
     public void start() {
         for (Command c : commands) {

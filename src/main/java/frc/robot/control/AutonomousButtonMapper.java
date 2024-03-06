@@ -10,7 +10,6 @@ public class AutonomousButtonMapper {
     public interface CommandSource {
         Command getCommand();
     }
-    private static Timer spacer = new Timer();
     private Timer timer = new Timer();
     private CommandSource commandSource;
     private Button button;
@@ -24,12 +23,13 @@ public class AutonomousButtonMapper {
         this.xbox = xbox;
         this.button = button;
         this.spacing=spacing;
+        timer.start();
     }
     public void periodic() {
-        if (Button.getButtonValue(button, xbox) && !state && (spacer.hasElapsed(spacing))) {
+        if (Button.getButtonValue(button, xbox) && !state && (timer.hasElapsed(spacing))) {
             Robot.scheduler.interrupt(commandSource.getCommand());
             state = true;
-            spacer.restart();
+            timer.restart();
         }
         state = Button.getButtonValue(button, xbox);
     }
