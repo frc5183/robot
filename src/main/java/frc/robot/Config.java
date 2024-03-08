@@ -14,6 +14,7 @@ import frc.robot.control.single.SingleControl;
 import frc.robot.control.tuple.CombinedTuple;
 import frc.robot.control.tuple.TupleControl;
 import frc.robot.math.MecanumDriveOdometryWrapper;
+import frc.robot.math.curve.TimedCurve;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
 
@@ -39,7 +40,7 @@ public class Config {
     /**
      * Represents the gearbox ratio of the drivetrain.
      */
-    public static final double GearboxRatio = 12.75;
+    public static final double GearboxRatio = 12.75 * 6;
 
 
     /**
@@ -70,29 +71,32 @@ public class Config {
      * Mecanum Settings
      */
     public static final GenericMecanumDrive.MecanumMode mecanumMode = GenericMecanumDrive.MecanumMode.ABSOLUTE;
+    public static final double maxAutonDriveSpeed = 0.5;
     public static final MecanumDriveOdometryWrapper.MecanumWheelPositions mecanumWheels = new MecanumDriveOdometryWrapper.MecanumWheelPositions(
             new Translation2d(10.125, 9),
-            new Translation2d(10.125, -9),
             new Translation2d(-10.125, 9),
+            new Translation2d(10.125, -9),
             new Translation2d(-10.125, -9)
     );
     public static final ExponentialCurve dCurve = new ExponentialCurve();
     public static final double maxDriveSpeed = 1.0;
     public static final Curve driveCurve = new LimitedCurve(dCurve, maxDriveSpeed);
     static {
-        dCurve.setExaggeration(100);
+        dCurve.setExaggeration(300);
     }
+
+    public static final Curve elevatorCurve = new TimedCurve(.2, .4);
 
     public static final SingleControl botX = new HalfStick(StickMode.LEFTY, driveCurve).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botY = new HalfStick(StickMode.LEFTX, driveCurve).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botTurn = new HalfStick(StickMode.RIGHTX, driveCurve).setXboxController(controllerManager.getFirstController());
     public static final TupleControl translateBot = new CombinedTuple(botX, botY).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botIntake = new HalfStick(StickMode.TRIGGER, driveCurve).setXboxController(controllerManager.getSecondController());
-    public static final SingleControl botElevator = new HalfStick(StickMode.HATY, driveCurve).setXboxController(controllerManager.getSecondController());
+    public static final SingleControl botElevator = new HalfStick(StickMode.HATY, elevatorCurve).setXboxController(controllerManager.getSecondController());
 
 
     public static final double revTime = 2.0;
-    public static final double postRevTime = 0.2;
+    public static final double postRevTime = 0.4;
 
     public static Command shoot(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
@@ -100,15 +104,15 @@ public class Config {
         new DelayedCommand(new RunSpinner(intake, true, postRevTime), revTime, true)
         );
     }
-    public static final double highIntakeTime = 3;
+    public static final double highIntakeTime = 0.6;
     public static Command highIntake(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
-                new RunSpinner(intake, true, highIntakeTime),
+                new RunSpinner(intake, false, highIntakeTime),
                 new RunSpinner(shooter, true, highIntakeTime)
         );
     }
     public static final double FlipTime = 0.3;
-    public static final double FlipSpeed = 1;
+    public static final double FlipSpeed = 0.7;
     public static final double FlipSpacing = 1;
     public static Command flipIntake(GenericSpinner floor) {
         return new SwitchSpinner(floor, FlipTime, FlipSpeed, true);

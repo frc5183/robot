@@ -43,7 +43,7 @@ public class MecanumDriveOdometryWrapper {
         this.gearboxRatio = gearboxRatio;
         this.wheelDiameter = wheelDiameter;
         kinematics = new MecanumDriveKinematics(wheelPositions.frontLeft, wheelPositions.frontRight, wheelPositions.rearLeft, wheelPositions.rearRight);
-        odometry = new MecanumDrivePoseEstimator(kinematics, gyroscope.getRotation2D(), getWheelPositions(), start);
+        odometry = new MecanumDrivePoseEstimator(kinematics, gyroscope.getRotation2D().unaryMinus(), getWheelPositions(), start);
 
     }
     public MecanumDriveWheelPositions getWheelPositions() {
@@ -53,10 +53,10 @@ public class MecanumDriveOdometryWrapper {
         return odometry.getEstimatedPosition();
     }
     public void periodic() {
-        odometry.update(gyroscope.getRotation2D(), getWheelPositions());
+        odometry.update(gyroscope.getRotation2D().unaryMinus(), getWheelPositions());
     }
     public void resetPose(Pose2d pose) {
-        odometry.resetPosition(gyroscope.getRotation2D(), getWheelPositions(), pose);
+        odometry.resetPosition(gyroscope.getRotation2D().unaryMinus(), getWheelPositions(), pose);
     }
     public void addPose(Pose2d pose, double timestamp) {
         odometry.addVisionMeasurement(pose, timestamp);

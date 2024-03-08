@@ -19,7 +19,7 @@ public class SwitchSpinner extends Command{
         require(spinner);
         this.time = time;
         this.speed = speed;
-        r = reverse;
+        r = !reverse;
     }
 
     @Override

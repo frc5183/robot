@@ -18,11 +18,11 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     public double getDegrees() {
         switch (axis) {
             case YAW:
-                return gyro.getGyroAngleZ();
+                return -gyro.getGyroAngleZ();
             case PITCH:
-                return gyro.getGyroAngleY();
+                return -gyro.getGyroAngleY();
             case ROLL:
-                return gyro.getGyroAngleX();
+                return -gyro.getGyroAngleX();
             default:
                 return 0;
         }

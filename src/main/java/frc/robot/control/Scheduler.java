@@ -81,11 +81,15 @@ public class Scheduler {
             for (Subsystem s : c.getRequiredSubsystems()) {
                 if (activeSubsystems.contains(s)) {
                     okay = false;
-                    activeSubsystems.add(s);
                 }
             }
             if (okay) {
                 temp.add(c);
+                for (Subsystem s : c.getRequiredSubsystems()) {
+                    if (!activeSubsystems.contains(s)) {
+                        activeSubsystems.add(s);
+                    }
+                }
             }
         }
         for (Command c: temp) {

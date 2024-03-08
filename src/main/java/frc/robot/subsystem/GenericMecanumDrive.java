@@ -45,9 +45,9 @@ public class GenericMecanumDrive extends Subsystem{
     }
     public void drive(TupleControl translate, SingleControl rotate) {
         if (mode == MecanumMode.RELATIVE) {
-            drive.driveCartesian(-translate.getValue().getVal1(), translate.getValue().getVal2(), rotate.getValue());
+            drive.driveCartesian(translate.getValue().getVal1(), -translate.getValue().getVal2(), rotate.getValue());
         } else {
-            drive.driveCartesian(-translate.getValue().getVal1(), translate.getValue().getVal2(), rotate.getValue(), gyroscope.getRotation2D().unaryMinus());
+            drive.driveCartesian(translate.getValue().getVal1(), -translate.getValue().getVal2(), rotate.getValue(), gyroscope.getRotation2D());
         }
     }
     public MecanumDriveOdometryWrapper getOdometry() {

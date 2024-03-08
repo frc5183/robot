@@ -6,10 +6,13 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import frc.robot.Config;
 import frc.robot.control.single.AutonomousSingleControl;
 import frc.robot.control.tuple.AutonomousTupleControl;
 import frc.robot.math.MecanumDriveOdometryWrapper;
 import frc.robot.subsystem.GenericMecanumDrive;
+
+import static java.lang.Double.NaN;
 
 public class RelativeMecanumMove extends Command{
     public static final double precision = 1; // INCHES
@@ -42,7 +45,7 @@ public class RelativeMecanumMove extends Command{
         require(drive);
     }
     private double curve(double x) {
-        return (x/Math.abs(x))*(Math.sqrt(1-(0.95*Math.abs(x))));
+        return (x/Math.abs(x))*(Math.sqrt(1-(Math.abs(x))));
     }
 
     @Override
@@ -52,6 +55,7 @@ public class RelativeMecanumMove extends Command{
 
     @Override
     public void start() {
+        System.out.println("STARTING");
         Pose2d startPoseMetric = odometry.getPose();
         startPose = Convert(startPoseMetric);
     }
@@ -79,16 +83,15 @@ public class RelativeMecanumMove extends Command{
     @Override
     public void run() {
         Pose2d currentPose = Convert(odometry.getPose());
-        System.out.println(currentPose.toString());
         Transform2d deltaPose = currentPose.minus(startPose); // Change in position
-        double x = precision(deltaPose.getX());
-        double y = precision(deltaPose.getY());
-        double theta = precision(deltaPose.getRotation().getDegrees()); // Individual Components
+        double x = -precision(deltaPose.getX());
+        double y = -precision(deltaPose.getY());
+        double theta = precision(deltaPose.getRotation().unaryMinus().getDegrees()); // Individual Components
         if (x==0) {
             x=0.0001; // Avoid division by zero
         }
         if (y==0) {
-            y=0.0001; // Avoid division by zero
+            y = 0.0001; // Avoid division by zero
         }
         if (theta<0) {
             theta+=360; // Normalize
@@ -96,8 +99,8 @@ public class RelativeMecanumMove extends Command{
         if (theta==0) {
             theta=0.001; // Avoid division by zero
         }
-        double xSpeed=Math.abs(curve(x/tX)); // Get curved speed
-        double ySpeed=Math.abs(curve(y/tY));
+        double xSpeed=Math.abs(curve(x/tX)* Config.maxAutonDriveSpeed); // Get curved speed
+        double ySpeed=Math.abs(curve(y/tY) * Config.maxAutonDriveSpeed);
         if (tX < 0) {
             xSpeed*=-1; // Reverse direction
         }
@@ -105,9 +108,9 @@ public class RelativeMecanumMove extends Command{
             ySpeed*=-1; // Reverse direction
         }
         if (tX >= tY) {
-            ySpeed*=(tY/tX); // Adjust speed accordingly
+            ySpeed*=Math.abs(tY/tX); // Adjust speed accordingly
         } else {
-            xSpeed*=(tX/tY);
+            xSpeed*=Math.abs((tX/tY));
         }
         if (tX == 0) {
             xSpeed=0; // No required movement check
@@ -115,16 +118,19 @@ public class RelativeMecanumMove extends Command{
         if (tY == 0) {
             ySpeed=0; // No required movement check
         }
-        if (x > tX) {
+        if ((x > tX && tX > 0) || (x<tX && tX <0)) {
             xSpeed=0; // Check if movement is complete
         }
-        if (y > tY) {
+        if ((y > tY && tY > 0) || (y<tY && tY<0)) {
             ySpeed=0; // Check if movement is complete
         }
         if (theta>180) {
             theta=360-theta; // Shortest path
         }
         double thetaSpeed = Math.abs(curve(theta/tTheta));
+        if (theta/tTheta > 0.38) {
+            thetaSpeed=0;
+        }
         if (tTheta < 0) {
             thetaSpeed*=-1; // Reverse direction
         }
@@ -134,10 +140,9 @@ public class RelativeMecanumMove extends Command{
         if (Math.abs(theta) > Math.abs(tTheta)) {
             thetaSpeed=0; // Check if movement is complete
         }
-        if (xSpeed==0 && ySpeed==0 && thetaSpeed==0) {
+        if ((xSpeed==0 || Double.isNaN(xSpeed)) && (ySpeed == 0 || Double.isNaN(ySpeed)) && (thetaSpeed==0 || Double.isNaN(thetaSpeed))) {
             isFinished=true; // Check if movement is complete
         }
-        System.out.println("X: " + xSpeed + " Y: " + ySpeed + " Theta: " + thetaSpeed);
         translate.updateValue1(xSpeed);
         translate.updateValue2(ySpeed);
         rotate.setValue(thetaSpeed);
@@ -146,6 +151,7 @@ public class RelativeMecanumMove extends Command{
 
     @Override
     public void clean() {
+        System.out.println("Finishing");
         translate.updateValue(0, 0);
         rotate.setValue(0);
         drive.drive(translate, rotate);

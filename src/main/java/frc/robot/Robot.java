@@ -7,8 +7,11 @@ package frc.robot;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.REVPhysicsSim;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
@@ -27,6 +30,7 @@ import frc.robot.hardware.motor.SparkMaxMotor;
 import frc.robot.hardware.motor.TalonFXMotor;
 import frc.robot.hardware.motor.TalonSRXMotor;
 import frc.robot.hardware.motor.VictorSPXMotor;
+import frc.robot.math.MecanumPoseGenerator;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
 
@@ -79,6 +83,9 @@ public class Robot extends TimedRobot
         gyro = new ADISAxisGyroscope(imu, SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
         gyro.calibrate();
 
+        CameraServer.startAutomaticCapture(0);
+        CameraServer.startAutomaticCapture(1);
+
         GenericMecanumDrive.MecanumMode mode = Config.mecanumMode;
         drive = new GenericMecanumDrive(leftRear.getEncodedMotor(), leftFront.getEncodedMotor(), rightFront.getEncodedMotor(), rightRear.getEncodedMotor(), Config.GearboxRatio, Config.WheelDiameter, gyro, mode, Config.mecanumWheels, new Pose2d()) ;
         floorMotor = new SparkMaxMotor(Config.floorMotor, CANSparkLowLevel.MotorType.kBrushless);
@@ -89,26 +96,23 @@ public class Robot extends TimedRobot
         intake = new GenericSpinner(intakeMotor, "Intake");
         elevator = new GenericSpinner(elevatorMotor, "Elevator");
         floor = new GenericSpinner(floorMotor, "Floor");
-        autoChooser.setDefaultOption("Simple", "S");
+        autoChooser.setDefaultOption("Custom", "C");
         autoChooser.addOption("Red Left", "RL");
         autoChooser.addOption("Red Middle" , "RM");
         autoChooser.addOption("Red Right", "RR");
         autoChooser.addOption("Blue Left", "BL");
         autoChooser.addOption("Blue Middle", "BM");
         autoChooser.addOption("Blue Right", "BR");
-        autoChooser.addOption("Custom", "C");
-        Sendable motors = new Sendable() {
-            @Override
-            public void initSendable(SendableBuilder builder) {
-                builder.addDoubleProperty("Left Rear", leftRear::get, null);
-                builder.addDoubleProperty("Right Rear", rightRear::get, null);
-                builder.addDoubleProperty("Left Front", leftFront::get, null);
-                builder.addDoubleProperty("Right Front", rightFront::get, null);
-                builder.addDoubleProperty("Floor", floorMotor::get, null);
-                builder.addDoubleProperty("Intake", intakeMotor::get, null);
-                builder.addDoubleProperty("Shooter", shooterMotor::get, null);
-                builder.addDoubleProperty("Elevator", elevatorMotor::get, null);
-            }
+        autoChooser.addOption("Simple", "C");
+        Sendable motors = builder -> {
+            builder.addDoubleProperty("Left Rear", leftRear::get, null);
+            builder.addDoubleProperty("Right Rear", rightRear::get, null);
+            builder.addDoubleProperty("Left Front", leftFront::get, null);
+            builder.addDoubleProperty("Right Front", rightFront::get, null);
+            builder.addDoubleProperty("Floor", floorMotor::get, null);
+            builder.addDoubleProperty("Intake", intakeMotor::get, null);
+            builder.addDoubleProperty("Shooter", shooterMotor::get, null);
+            builder.addDoubleProperty("Elevator", elevatorMotor::get, null);
         };
         Sendable pos = new Sendable() {
             @Override
@@ -153,6 +157,7 @@ public class Robot extends TimedRobot
     }
     @Override
     public void autonomousInit() {
+        scheduler.forceEnd();
         String chosen = autoChooser.getSelected();
         Command basicShoot = Config.shoot(shooter, intake);
         Command basic = new CommandGroup(
@@ -161,9 +166,16 @@ public class Robot extends TimedRobot
         );
         switch (chosen) {
             case "S":
-              //  scheduler.scheduleCommand(basic);
+                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
-            case "RL":
+            case "C":
+                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+                scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RelativeMecanumMove(drive, drive.getOdometry(), Units.Inches, 18, 0, 0), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RelativeMecanumMove(drive, drive.getOdometry(), Units.Inches, -18, 0, 0), new ConsumerCommand(floor), new ConsumerCommand(shooter), new ConsumerCommand(intake)));
+                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
             case "RM":
                 break;
@@ -175,16 +187,16 @@ public class Robot extends TimedRobot
                 break;
             case "BR":
                 break;
-            case "C":
+            case "RL":
                 break;
         }
-        scheduler.scheduleCommand(new ShutUpWatchdog(drive));
+        //scheduler.scheduleCommand(new ShutUpWatchdog(drive));
     }
     @Override
     public void autonomousPeriodic() {
         scheduler.run();
     }
-    public void periodic() {
+    public void robotPeriodic() {
         drive.periodic();
         shooter.periodic();
         intake.periodic();
