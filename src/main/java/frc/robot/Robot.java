@@ -64,7 +64,7 @@ public class Robot extends TimedRobot
     private SingleAxisGyroscope gyro;
     private final ADIS16448_IMU imu = new ADIS16448_IMU();
     private ADIS16448_IMUSim imuSim;
-    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake;
+    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
     private final Timer timer = new Timer();
     public static final Scheduler scheduler = new Scheduler();
@@ -96,14 +96,12 @@ public class Robot extends TimedRobot
         intake = new GenericSpinner(intakeMotor, "Intake");
         elevator = new GenericSpinner(elevatorMotor, "Elevator");
         floor = new GenericSpinner(floorMotor, "Floor");
-        autoChooser.setDefaultOption("Custom", "C");
-        autoChooser.addOption("Red Left", "RL");
-        autoChooser.addOption("Red Middle" , "RM");
-        autoChooser.addOption("Red Right", "RR");
-        autoChooser.addOption("Blue Left", "BL");
-        autoChooser.addOption("Blue Middle", "BM");
-        autoChooser.addOption("Blue Right", "BR");
-        autoChooser.addOption("Simple", "C");
+        autoChooser.setDefaultOption("Middle Full", "MF");
+        autoChooser.addOption("Left Full", "LF");
+        autoChooser.addOption("Right Full", "RF");
+        autoChooser.addOption("Left Simple", "LS");
+        autoChooser.addOption("Middle Simple", "MS");
+        autoChooser.addOption("Right Simple", "RS");
         Sendable motors = builder -> {
             builder.addDoubleProperty("Left Rear", leftRear::get, null);
             builder.addDoubleProperty("Right Rear", rightRear::get, null);
@@ -143,6 +141,7 @@ public class Robot extends TimedRobot
         highIntake = Config.highIntakeButton(shooter, intake);
         flip = Config.flipIntakeButton(floor);
         lowIntake = Config.lowIntakeButton(intake);
+        lowOuttake = Config.lowOuttakeButton(intake);
     }
 
     @Override
@@ -154,6 +153,7 @@ public class Robot extends TimedRobot
         highIntake.periodic();
         flip.periodic();
         lowIntake.periodic();
+        lowOuttake.periodic();
     }
     @Override
     public void autonomousInit() {
@@ -165,29 +165,37 @@ public class Robot extends TimedRobot
                 new TimedConsumerCommand(floor, Config.revTime+Config.postRevTime)
         );
         switch (chosen) {
-            case "S":
+            case "LS":
+                gyro.setOffset(-45);
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
-            case "C":
+            case "MS":
+                gyro.setOffset(0);
+                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+                break;
+            case "RS":
+                gyro.setOffset(45);
+                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+                break;
+            case "LF":
+                gyro.setOffset(-45);
+                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+                break;
+            case "MF":
+                gyro.setOffset(0);
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new RelativeMecanumMove(drive, drive.getOdometry(), Units.Inches, 18, 0, 0), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new RelativeMecanumMove(drive, drive.getOdometry(), Units.Inches, -18, 0, 0), new ConsumerCommand(floor), new ConsumerCommand(shooter), new ConsumerCommand(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, true, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), new ConsumerCommand(intake)));
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
-            case "RM":
-                break;
-            case "RR":
-                break;
-            case "BL":
-                break;
-            case "BM":
-                break;
-            case "BR":
-                break;
-            case "RL":
+            case "RF":
+                gyro.setOffset(45);
+                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 break;
         }
         //scheduler.scheduleCommand(new ShutUpWatchdog(drive));
@@ -202,6 +210,7 @@ public class Robot extends TimedRobot
         intake.periodic();
         elevator.periodic();
         floor.periodic();
+        System.out.println(gyro.getDegrees());
     }
     public void simulationInit() {
         sim = REVPhysicsSim.getInstance();

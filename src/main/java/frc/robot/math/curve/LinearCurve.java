@@ -16,15 +16,17 @@ public class LinearCurve extends Curve{
      * Sets the slope of the linear equation
      * @param slope the new slope
      */
-    public void setSlope(double slope) {
+    public LinearCurve setSlope(double slope) {
         this.slope = slope;
+        return this;
     }
 
     /**
      * Sets the Y-Intercept of the linear equation
      * @param intercept the new intercept
      */
-    public void setIntercept(double intercept) {
+    public LinearCurve setIntercept(double intercept) {
         this.intercept = intercept;
+        return this;
     }
 }
