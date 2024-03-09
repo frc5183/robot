@@ -21,4 +21,7 @@ public class GenericSpinner extends Subsystem {
         return name;
     }
 
+    public Motor getMotor() {
+        return motor;
+    }
 }

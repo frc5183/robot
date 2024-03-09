@@ -1,7 +1,7 @@
 package frc.robot.control.command;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Tuple2;
+import frc.robot.Config;
 import frc.robot.control.single.AutonomousSingleControl;
 import frc.robot.control.tuple.AutonomousTupleControl;
 import frc.robot.subsystem.GenericMecanumDrive;
@@ -41,7 +41,7 @@ public class RunMecanum extends Command {
             return;
         }
 
-        control.updateValue1(forwards ? 1 : -1);
+        control.updateValue1(forwards ? Config.maxAutonDriveSpeed : -Config.maxAutonDriveSpeed);
         drive.drive(control, rotation);
     }
 

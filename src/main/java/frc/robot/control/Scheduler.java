@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Scheduler {
-
+    public interface SubsystemRemover {
+        abstract boolean remove(Subsystem s);
+    }
     /**
      * Simply a list used to prevent ConcurrentModificationExceptions
      */
@@ -118,11 +120,6 @@ public class Scheduler {
         activeCommands.clear();
     }
 
-    /**
-     * Interrupts the current queue with a single command.
-     * The current active commands and pushed back to the front of the queue.
-     * @param command the command to skip the que with
-     */
     private void internal_interrupt() {
         for (Command command : interruptQueue) {
             for (Command c : activeCommands) {
@@ -135,8 +132,14 @@ public class Scheduler {
         }
         interruptQueue.clear();
     }
-    public void interrupt(Command c) {
-        interruptQueue.add(c);
+
+    /**
+     * Interrupts the current queue with a single command.
+     * The current active commands and pushed back to the front of the queue.
+     * @param command the command to skip the que with
+     */
+    public void interrupt(Command command) {
+        interruptQueue.add(command);
     }
 
     /**
@@ -188,5 +191,12 @@ public class Scheduler {
                 }, null);
             }
         };
+    }
+    public void runClear(SubsystemRemover remover) {
+        for (Subsystem s : activeSubsystems) {
+            if (remover.remove(s)) {
+                activeSubsystems.remove(s);
+            }
+        }
     }
 }
