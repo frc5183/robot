@@ -8,10 +8,8 @@ package frc.robot;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.REVPhysicsSim;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
@@ -29,12 +27,8 @@ import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.SparkMaxMotor;
 import frc.robot.hardware.motor.TalonFXMotor;
 import frc.robot.hardware.motor.TalonSRXMotor;
-import frc.robot.hardware.motor.VictorSPXMotor;
-import frc.robot.math.MecanumPoseGenerator;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
-
-import java.sql.SQLOutput;
 
 
 /**
@@ -65,6 +59,7 @@ public class Robot extends TimedRobot
     private final ADIS16448_IMU imu = new ADIS16448_IMU();
     private ADIS16448_IMUSim imuSim;
     private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake;
+    private Command cancelShoot;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
     private final Timer timer = new Timer();
     public static final Scheduler scheduler = new Scheduler();
@@ -142,6 +137,7 @@ public class Robot extends TimedRobot
         flip = Config.flipIntakeButton(floor);
         lowIntake = Config.lowIntakeButton(intake);
         lowOuttake = Config.lowOuttakeButton(intake);
+        cancelShoot = Config.cancelShoot(intake, shooter);
     }
 
     @Override
@@ -154,6 +150,7 @@ public class Robot extends TimedRobot
         flip.periodic();
         lowIntake.periodic();
         lowOuttake.periodic();
+        cancelShoot.periodic();
     }
     @Override
     public void autonomousInit() {
@@ -180,22 +177,22 @@ public class Robot extends TimedRobot
             case "LF":
                 gyro.setOffset(-45);
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 break;
             case "MF":
                 gyro.setOffset(0);
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, true, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), new ConsumerCommand(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, true, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), new ConsumerCommand(intake)));
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
             case "RF":
                 gyro.setOffset(45);
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 1), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 break;
         }
         //scheduler.scheduleCommand(new ShutUpWatchdog(drive));

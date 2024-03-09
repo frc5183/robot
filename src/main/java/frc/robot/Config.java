@@ -4,16 +4,21 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.command.*;
-import frc.robot.math.curve.*;
 import frc.robot.control.enumeration.Button;
 import frc.robot.control.enumeration.StickMode;
 import frc.robot.control.single.HalfStick;
 import frc.robot.control.single.SingleControl;
 import frc.robot.control.tuple.CombinedTuple;
 import frc.robot.control.tuple.TupleControl;
+import frc.robot.hardware.motor.VictorSPXMotor;
 import frc.robot.math.MecanumDriveOdometryWrapper;
+import frc.robot.math.curve.Curve;
+import frc.robot.math.curve.ExponentialCurve;
+import frc.robot.math.curve.LimitedCurve;
+import frc.robot.math.curve.TimedCurve;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
+import frc.robot.subsystem.Subsystem;
 
 /**
  * A class made simply to hold configuration for the robot.
@@ -114,6 +119,13 @@ public class Config {
     public static Command flipIntake(GenericSpinner floor) {
         return new SwitchSpinner(floor, FlipTime, FlipSpeed, true);
     }
+    public static Command cancelShoot(GenericSpinner intake, GenericSpinner shooter) {
+        Robot.scheduler.runClear((Subsystem s) ->(s.getClass() == GenericSpinner.class && ((GenericSpinner) s).getMotor().getClass() == VictorSPXMotor.class));
+        return new CommandGroup(
+                new ConsumerCommand(intake),
+                new ConsumerCommand(shooter)
+        );
+    }
     public static final double LowIntakeTime = 1.5;
     public static Command lowIntake(GenericSpinner intake) {
         return new RunSpinner(intake, false, LowIntakeTime);
@@ -136,6 +148,8 @@ public class Config {
     public static AutonomousButtonMapper lowOuttakeButton(GenericSpinner intake) {
         return new AutonomousButtonMapper(() -> lowOuttake(intake), controllerManager.getSecondController(), Button.SELECT, FlipSpacing);
     }
-
+    public static AutonomousButtonMapper cancelShootButton(GenericSpinner intake, GenericSpinner shooter) {
+        return new AutonomousButtonMapper(() -> cancelShoot(intake, shooter), controllerManager.getSecondController(), Button.X, 2.0);
+    }
 
 }
