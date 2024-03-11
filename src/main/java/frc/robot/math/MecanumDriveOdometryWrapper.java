@@ -3,9 +3,10 @@ package frc.robot.math;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
-import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.EncodedMotor;
 import frc.robot.subsystem.GenericMecanumDrive;
@@ -58,7 +59,18 @@ public class MecanumDriveOdometryWrapper {
     public void resetPose(Pose2d pose) {
         odometry.resetPosition(gyroscope.getRotation2D().unaryMinus(), getWheelPositions(), pose);
     }
+    public ChassisSpeeds getRobotChassisSpeeds() {
+        MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds(leftFront.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio), rightFront.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio), leftRear.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio), rightRear.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio));
+        return kinematics.toChassisSpeeds(wheelSpeeds);
+    }
+    public MecanumDriveWheelSpeeds getWheelSpeeds(ChassisSpeeds speeds) {
+        return kinematics.toWheelSpeeds(speeds);
+    }
     public void addPose(Pose2d pose, double timestamp) {
         odometry.addVisionMeasurement(pose, timestamp);
+    }
+
+    public MecanumDriveKinematics getKinematics() {
+        return kinematics;
     }
 }

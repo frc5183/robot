@@ -28,6 +28,11 @@ public class NEOEncoder extends Encoder {
     }
 
     @Override
+    public double getVelocity() {
+        return encoder.getVelocity();
+    }
+
+    @Override
     public void reset() {
     }
 }

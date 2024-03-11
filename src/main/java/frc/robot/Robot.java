@@ -58,8 +58,7 @@ public class Robot extends TimedRobot
     private SingleAxisGyroscope gyro;
     private final ADIS16448_IMU imu = new ADIS16448_IMU();
     private ADIS16448_IMUSim imuSim;
-    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake;
-    private Command cancelShoot;
+    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake, cancelShoot;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
     private final Timer timer = new Timer();
     public static final Scheduler scheduler = new Scheduler();
@@ -137,7 +136,7 @@ public class Robot extends TimedRobot
         flip = Config.flipIntakeButton(floor);
         lowIntake = Config.lowIntakeButton(intake);
         lowOuttake = Config.lowOuttakeButton(intake);
-        cancelShoot = Config.cancelShoot(intake, shooter);
+        cancelShoot = Config.cancelShootButton(intake, shooter);
     }
 
     @Override

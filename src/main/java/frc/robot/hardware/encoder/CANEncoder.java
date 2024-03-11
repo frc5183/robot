@@ -33,4 +33,9 @@ public class CANEncoder extends Encoder {
     public void reset() {
         encoder.setPosition(0);
     }
+
+    @Override
+    public double getVelocity() {
+        return encoder.getVelocity().getValue();
+    }
 }

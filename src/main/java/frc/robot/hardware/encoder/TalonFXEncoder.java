@@ -32,4 +32,9 @@ public class TalonFXEncoder extends Encoder {
     public void reset() {
         motor.setPosition(0);
     }
+
+    @Override
+    public double getVelocity() {
+        return motor.getVelocity().getValue();
+    }
 }
