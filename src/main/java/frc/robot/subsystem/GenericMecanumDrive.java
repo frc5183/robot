@@ -1,6 +1,12 @@
 package frc.robot.subsystem;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,7 +22,7 @@ import frc.robot.hardware.motor.Motor;
 import frc.robot.math.AccelerationLimiter;
 import frc.robot.math.MecanumDriveOdometryWrapper;
 
-public class GenericMecanumDrive extends Subsystem{
+public class GenericMecanumDrive extends Subsystem {
 
     public enum MecanumMode {
         RELATIVE, ABSOLUTE, POLAR
@@ -40,6 +46,27 @@ public class GenericMecanumDrive extends Subsystem{
         this.drive = new MecanumDrive(leftFront.getMotor(), leftRear.getMotor(), rightFront.getMotor(), rightRear.getMotor());
         this.wrapper= new MecanumDriveOdometryWrapper(leftRear, leftFront, rightFront, rightRear, gearboxRatio, wheelDiameter, gyroscope, mode, wheelPositions, start);
        // drive.setDeadband(0.08);
+
+        AutoBuilder.configureHolonomic(
+                this.getOdometry()::getPose,
+                this.getOdometry()::resetPose,
+                this.getOdometry()::getRobotChassisSpeeds,
+                this::drive,
+                new HolonomicPathFollowerConfig(
+                        //todo
+                        new PIDConstants(5.0, 0.0, 0.0),
+                        new PIDConstants(5.0, 0.0, 0.0),
+                        4.5,
+                        0.4,
+                        new ReplanningConfig()
+                ),
+                () -> {
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) return alliance.get() == DriverStation.Alliance.Red;
+                    return false;
+                },
+                this
+        );
     }
     public void periodic() {
         leftRear.periodic();
@@ -63,6 +90,9 @@ public class GenericMecanumDrive extends Subsystem{
             drive.driveCartesian(-magnitude * Math.cos(angle), -magnitude * Math.sin(angle), rotate.getValue(), gyroscope.getRotation2D());
         }
     }
+    public void drive(ChassisSpeeds speeds) {
+        //todo
+    }
     public MecanumDriveOdometryWrapper getOdometry() {
         return wrapper;
     }
@@ -73,4 +103,3 @@ public class GenericMecanumDrive extends Subsystem{
         this.mode=mode;
     }
 }
-;

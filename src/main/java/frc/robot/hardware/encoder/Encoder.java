@@ -23,7 +23,12 @@ public abstract class Encoder {
     public abstract double getVelocityDegrees();
 
     /**
-     * Resets the enocder to it's 0 state
+     * @return the velocity in RPM
+     */
+    public abstract double getVelocity();
+
+    /**
+     * Resets the encoder to it's 0 state
      */
     public abstract void reset();
 }
