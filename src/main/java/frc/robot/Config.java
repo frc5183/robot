@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.command.*;
 import frc.robot.control.enumeration.Button;
@@ -9,13 +10,11 @@ import frc.robot.control.enumeration.StickMode;
 import frc.robot.control.single.HalfStick;
 import frc.robot.control.single.SingleControl;
 import frc.robot.control.tuple.CombinedTuple;
+import frc.robot.control.tuple.JoystickTuple;
 import frc.robot.control.tuple.TupleControl;
 import frc.robot.hardware.motor.VictorSPXMotor;
 import frc.robot.math.MecanumDriveOdometryWrapper;
-import frc.robot.math.curve.Curve;
-import frc.robot.math.curve.ExponentialCurve;
-import frc.robot.math.curve.LimitedCurve;
-import frc.robot.math.curve.TimedCurve;
+import frc.robot.math.curve.*;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
 import frc.robot.subsystem.Subsystem;
@@ -72,8 +71,8 @@ public class Config {
     /**
      * Mecanum Settings
      */
-    public static final GenericMecanumDrive.MecanumMode mecanumMode = GenericMecanumDrive.MecanumMode.ABSOLUTE;
-    public static final double maxAutonDriveSpeed = 0.5;
+    public static final GenericMecanumDrive.MecanumMode mecanumMode = GenericMecanumDrive.MecanumMode.POLAR;
+    public static final double maxAutonDriveSpeed = 0.42;
     public static final MecanumDriveOdometryWrapper.MecanumWheelPositions mecanumWheels = new MecanumDriveOdometryWrapper.MecanumWheelPositions(
             new Translation2d(10.125, 9),
             new Translation2d(-10.125, 9),
@@ -81,18 +80,20 @@ public class Config {
             new Translation2d(-10.125, -9)
     );
     public static final ExponentialCurve dCurve = new ExponentialCurve();
+    public static final LinearCurve dLinear = new LinearCurve().setIntercept(0).setSlope(1);
     public static final double maxDriveSpeed = 1.0;
     public static final Curve driveCurve = new LimitedCurve(dCurve, maxDriveSpeed);
     static {
-        dCurve.setExaggeration(300);
+        dCurve.setExaggeration(50);
     }
 
     public static final Curve elevatorCurve = new TimedCurve(.2, .4);
 
-    public static final SingleControl botX = new HalfStick(StickMode.LEFTY, driveCurve).setXboxController(controllerManager.getFirstController());
-    public static final SingleControl botY = new HalfStick(StickMode.LEFTX, driveCurve).setXboxController(controllerManager.getFirstController());
+    public static final SingleControl botX = new HalfStick(StickMode.LEFTY, dLinear).setXboxController(controllerManager.getFirstController());
+    public static final SingleControl botY = new HalfStick(StickMode.LEFTX, dLinear).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botTurn = new HalfStick(StickMode.RIGHTX, driveCurve).setXboxController(controllerManager.getFirstController());
-    public static final TupleControl translateBot = new CombinedTuple(botX, botY).setXboxController(controllerManager.getFirstController());
+    //public static final TupleControl translateBot = new CombinedTuple(botX, botY).setXboxController(controllerManager.getFirstController());
+    public static final TupleControl translateBot = new JoystickTuple(new Joystick(0)).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botIntake = new HalfStick(StickMode.TRIGGER, driveCurve).setXboxController(controllerManager.getSecondController());
     public static final SingleControl botElevator = new HalfStick(StickMode.HATY, elevatorCurve).setXboxController(controllerManager.getSecondController());
 
@@ -103,10 +104,11 @@ public class Config {
     public static Command shoot(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
         new RunSpinner(shooter, false, revTime + postRevTime),
-        new DelayedCommand(new RunSpinner(intake, true, postRevTime), revTime, true)
+        new DelayedCommand(new RunSpinner(intake, true, postRevTime), revTime, true),
+                new ConsumerCommand(intake)
         );
     }
-    public static final double highIntakeTime = 0.6;
+    public static final double highIntakeTime = 1.0;
     public static Command highIntake(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
                 new RunSpinner(intake, false, highIntakeTime),

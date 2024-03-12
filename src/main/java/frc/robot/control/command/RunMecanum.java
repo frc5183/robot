@@ -26,9 +26,11 @@ public class RunMecanum extends Command {
     public String getName() {
         return "RunMecanum";
     }
-
+    private GenericMecanumDrive.MecanumMode mode;
     @Override
     public void start() {
+        mode = drive.getMode();
+        drive.setMode(GenericMecanumDrive.MecanumMode.ABSOLUTE);
         timer.start();
     }
 
@@ -47,6 +49,7 @@ public class RunMecanum extends Command {
 
     @Override
     public void clean() {
+        drive.setMode(mode);
         control.updateValue(0, 0);
         drive.drive(control, rotation);
     }

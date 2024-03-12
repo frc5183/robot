@@ -44,8 +44,6 @@ public class Robot extends TimedRobot
     private SparkMaxMotor rightRear;
     private SparkMaxMotor leftFront;
     private SparkMaxMotor rightFront;
-    private int count = 0;
-    private final XboxController controller = new XboxController(0);
     private GenericMecanumDrive drive;
     private SparkMaxMotor floorMotor;
     private TalonSRXMotor intakeMotor;
@@ -58,10 +56,8 @@ public class Robot extends TimedRobot
     private SingleAxisGyroscope gyro;
     private final ADIS16448_IMU imu = new ADIS16448_IMU();
     private ADIS16448_IMUSim imuSim;
-    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake;
-    private Command cancelShoot;
+    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake, cancelShoot;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
-    private final Timer timer = new Timer();
     public static final Scheduler scheduler = new Scheduler();
 
     @Override
@@ -77,7 +73,10 @@ public class Robot extends TimedRobot
         leftRear.setInverted(false);
         gyro = new ADISAxisGyroscope(imu, SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
         gyro.calibrate();
-
+        leftRear.setRamp(0.1);
+        rightRear.setRamp(0.1);
+        leftFront.setRamp(0.1);
+        rightFront.setRamp(0.1);
         CameraServer.startAutomaticCapture(0);
         CameraServer.startAutomaticCapture(1);
 
@@ -97,6 +96,7 @@ public class Robot extends TimedRobot
         autoChooser.addOption("Left Simple", "LS");
         autoChooser.addOption("Middle Simple", "MS");
         autoChooser.addOption("Right Simple", "RS");
+        //*
         Sendable motors = builder -> {
             builder.addDoubleProperty("Left Rear", leftRear::get, null);
             builder.addDoubleProperty("Right Rear", rightRear::get, null);
@@ -107,6 +107,7 @@ public class Robot extends TimedRobot
             builder.addDoubleProperty("Shooter", shooterMotor::get, null);
             builder.addDoubleProperty("Elevator", elevatorMotor::get, null);
         };
+             //*/
         Sendable pos = new Sendable() {
             @Override
             public void initSendable(SendableBuilder builder) {
@@ -137,7 +138,7 @@ public class Robot extends TimedRobot
         flip = Config.flipIntakeButton(floor);
         lowIntake = Config.lowIntakeButton(intake);
         lowOuttake = Config.lowOuttakeButton(intake);
-        cancelShoot = Config.cancelShoot(intake, shooter);
+        cancelShoot = Config.cancelShootButton(intake, shooter);
     }
 
     @Override
@@ -186,7 +187,7 @@ public class Robot extends TimedRobot
                 scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
                 scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, true, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), new ConsumerCommand(intake)));
+                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, true, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
             case "RF":
@@ -207,7 +208,6 @@ public class Robot extends TimedRobot
         intake.periodic();
         elevator.periodic();
         floor.periodic();
-        System.out.println(gyro.getDegrees());
     }
     public void simulationInit() {
         sim = REVPhysicsSim.getInstance();

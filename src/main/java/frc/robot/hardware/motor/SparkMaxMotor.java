@@ -68,4 +68,8 @@ public class SparkMaxMotor extends Motor {
     public CANSparkMax getTrueRawMotor() {
         return motor;
     }
+    public void setRamp(double ramp) {
+        motor.setOpenLoopRampRate(ramp);
+        motor.setClosedLoopRampRate(ramp);
+    }
 }

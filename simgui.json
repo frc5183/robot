@@ -1,0 +1,47 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [3]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Autonomous Program": "String Chooser",
+      "/SmartDashboard/SchedulerActive": "Scheduler",
+      "/SmartDashboard/SchedulerAdvanced": "Scheduler",
+      "/SmartDashboard/SchedulerBasic": "Scheduler"
+    },
+    "windows": {
+      "/SmartDashboard/Autonomous Program": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        ".recording": {
+          "open": false
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "shuffleboard@1": {
+      "open": false
+    },
+    "visible": true
+  }
+}

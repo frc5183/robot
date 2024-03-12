@@ -10,7 +10,6 @@ public class NEOEncoder extends Encoder {
     private final RelativeEncoder encoder;
     public NEOEncoder(SparkMaxMotor spark) {
         encoder = spark.getTrueRawMotor().getEncoder();
-
     }
     @Override
     public double getUnitsRadians() {
@@ -25,6 +24,21 @@ public class NEOEncoder extends Encoder {
     @Override
     public double getUnitsDegrees() {
         return encoder.getPosition() * 360;
+    }
+
+    @Override
+    public double getVelocityRadians() {
+        return getVelocityRotations()*2*Math.PI;
+    }
+
+    @Override
+    public double getVelocityRotations() {
+        return encoder.getVelocity();
+    }
+
+    @Override
+    public double getVelocityDegrees() {
+        return getVelocityRotations()*360;
     }
 
     @Override

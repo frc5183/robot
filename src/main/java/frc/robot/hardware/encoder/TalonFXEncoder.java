@@ -9,9 +9,11 @@ import com.ctre.phoenix6.StatusSignal;
 public class TalonFXEncoder extends Encoder {
     private final TalonFX motor;
     private final StatusSignal<Double> signal;
+    private final StatusSignal<Double> velocity;
     public TalonFXEncoder(TalonFX tx) {
         signal = tx.getPosition();
         motor = tx;
+        velocity = tx.getVelocity();
     }
     @Override
     public double getUnitsRadians() {
@@ -26,6 +28,21 @@ public class TalonFXEncoder extends Encoder {
     @Override
     public double getUnitsDegrees() {
         signal.refresh();  return signal.getValue() * 360;
+    }
+
+    @Override
+    public double getVelocityRadians() {
+        return getVelocityRotations()*2*Math.PI;
+    }
+
+    @Override
+    public double getVelocityRotations() {
+        velocity.refresh(); return velocity.getValue();
+    }
+
+    @Override
+    public double getVelocityDegrees() {
+        return getVelocityRotations()*360;
     }
 
     @Override

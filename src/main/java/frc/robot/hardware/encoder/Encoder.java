@@ -18,6 +18,9 @@ public abstract class Encoder {
      * @return the angle in Degrees
      */
     public abstract double getUnitsDegrees();
+    public abstract double getVelocityRadians();
+    public abstract double getVelocityRotations();
+    public abstract double getVelocityDegrees();
 
     /**
      * Resets the enocder to it's 0 state
