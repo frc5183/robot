@@ -18,14 +18,10 @@ public abstract class Encoder {
      * @return the angle in Degrees
      */
     public abstract double getUnitsDegrees();
-    public abstract double getVelocityRadians();
-    public abstract double getVelocityRotations();
+    public abstract double getVelocityRadiansPerSecond();
+    public abstract double getVelocityRotationsPerMinute();
+    public abstract double getVelocityRotationsPerSecond();
     public abstract double getVelocityDegrees();
-
-    /**
-     * @return the velocity in RPM
-     */
-    public abstract double getVelocity();
 
     /**
      * Resets the encoder to it's 0 state

@@ -43,6 +43,21 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     }
 
     @Override
+    public double getVelocityRadiansPerSecond() {
+        double conversion = 0.01745;
+        switch (axis) {
+            case YAW:
+                return gyro.getGyroRateZ() * conversion;
+            case PITCH:
+                return gyro.getGyroRateY() * conversion;
+            case ROLL:
+                return gyro.getGyroRateX() * conversion;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
     public void setOffset(double offset) {
         this.offset=offset;
     }

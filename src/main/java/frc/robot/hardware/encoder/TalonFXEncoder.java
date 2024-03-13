@@ -31,27 +31,29 @@ public class TalonFXEncoder extends Encoder {
     }
 
     @Override
-    public double getVelocityRadians() {
-        return getVelocityRotations()*2*Math.PI;
+    public double getVelocityRadiansPerSecond() {
+        return getVelocityRotationsPerSecond()*2*Math.PI;
     }
 
     @Override
-    public double getVelocityRotations() {
-        velocity.refresh(); return velocity.getValue();
+    public double getVelocityRotationsPerMinute() {
+        return getVelocityRotationsPerSecond() * 60;
     }
+
+    @Override
+    public double getVelocityRotationsPerSecond() {
+        velocity.refresh();
+        return velocity.getValue();
+    }
+
 
     @Override
     public double getVelocityDegrees() {
-        return getVelocityRotations()*360;
+        return getVelocityRotationsPerMinute()*360;
     }
 
     @Override
     public void reset() {
         motor.setPosition(0);
-    }
-
-    @Override
-    public double getVelocity() {
-        return motor.getVelocity().getValue();
     }
 }
