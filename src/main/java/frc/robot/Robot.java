@@ -138,9 +138,12 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Max Velocity Right Rear", maxVelocityRightRear);
 
         // Auto NamedCommands
-        NamedCommands.registerCommand("Shoot", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+        NamedCommands.registerCommand("Shoot1", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+        NamedCommands.registerCommand("Shoot2", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
         NamedCommands.registerCommand("IntakeOut", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
         NamedCommands.registerCommand("IntakeIn", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
+        NamedCommands.registerCommand("RunIntake", new CommandGroup(new ConsumerCommand(floor), Config.lowIntake(intake), new ConsumerCommand(elevator)));
+
     }
     @Override
     public void teleopInit()

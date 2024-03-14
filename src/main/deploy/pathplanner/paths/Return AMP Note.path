@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9,
-        "y": 5.56
+        "x": 2.26,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.900000000000002,
-        "y": 5.56
+        "x": 2.977854936848207,
+        "y": 7.02448893175418
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AF Note"
     },
     {
       "anchor": {
-        "x": 1.31,
-        "y": 5.55593454044051
+        "x": 0.8565814232473583,
+        "y": 6.763845584140698
       },
       "prevControl": {
-        "x": 0.31000000000000005,
-        "y": 5.55593454044051
+        "x": 1.2055623003601914,
+        "y": 7.445141502774845
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AF Start"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 178.88116464264994,
+    "rotation": -124.69759437265462,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -179.56664731031992,
+    "rotation": 177.55285986185453,
     "velocity": 0
   },
   "useDefaultConstraints": true
