@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.REVPhysicsSim;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -14,8 +16,6 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.simulation.ADIS16448_IMUSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -60,6 +60,8 @@ public class Robot extends TimedRobot
     private SendableChooser<String> autoChooser = new SendableChooser<>();
     public static final Scheduler scheduler = new Scheduler();
 
+    private double maxVelocityLeftFront, maxVelocityLeftRear, maxVelocityRightFront, maxVelocityRightRear, maxVelocity;
+
     @Override
     public void robotInit()
     {
@@ -96,6 +98,7 @@ public class Robot extends TimedRobot
         autoChooser.addOption("Left Simple", "LS");
         autoChooser.addOption("Middle Simple", "MS");
         autoChooser.addOption("Right Simple", "RS");
+        autoChooser.addOption("Test Auto", "T");
         //*
         Sendable motors = builder -> {
             builder.addDoubleProperty("Left Rear", leftRear::get, null);
@@ -122,6 +125,22 @@ public class Robot extends TimedRobot
         SmartDashboard.putData("SchedulerActive", scheduler.getActiveSendable());
         SmartDashboard.putData("Motors", motors);
         SmartDashboard.putData("Position", pos);
+
+        maxVelocityLeftFront = 0;
+        maxVelocityLeftRear = 0;
+        maxVelocityRightFront = 0;
+        maxVelocityRightRear = 0;
+        maxVelocity = 0;
+
+        SmartDashboard.putNumber("Max Velocity Left Front", maxVelocityLeftFront);
+        SmartDashboard.putNumber("Max Velocity Left Rear", maxVelocityLeftRear);
+        SmartDashboard.putNumber("Max Velocity Right Front", maxVelocityRightFront);
+        SmartDashboard.putNumber("Max Velocity Right Rear", maxVelocityRightRear);
+
+        // Auto NamedCommands
+        NamedCommands.registerCommand("Shoot", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+        NamedCommands.registerCommand("IntakeOut", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
+        NamedCommands.registerCommand("IntakeIn", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
     }
     @Override
     public void teleopInit()
@@ -142,9 +161,7 @@ public class Robot extends TimedRobot
     }
 
     @Override
-    public void teleopPeriodic()
-    {
-
+    public void teleopPeriodic() {
         scheduler.run();
         shoot.periodic();
         highIntake.periodic();
@@ -152,7 +169,41 @@ public class Robot extends TimedRobot
         lowIntake.periodic();
         lowOuttake.periodic();
         cancelShoot.periodic();
+
+        double currentVelocityLeftFront, currentVelocityLeftRear, currentVelocityRightFront, currentVelocityRightRear, currentVelocity;
+        currentVelocityLeftFront = leftFront.getEncodedMotor().getEncoder().getVelocityRadiansPerSecond() * (Config.WheelDiameter / (2 * Config.GearboxRatio));
+        currentVelocityLeftRear = leftRear.getEncodedMotor().getEncoder().getVelocityRadiansPerSecond() * (Config.WheelDiameter / (2 * Config.GearboxRatio));
+        currentVelocityRightFront = rightFront.getEncodedMotor().getEncoder().getVelocityRadiansPerSecond() * (Config.WheelDiameter / (2 * Config.GearboxRatio));
+        currentVelocityRightRear = rightRear.getEncodedMotor().getEncoder().getVelocityRadiansPerSecond() * (Config.WheelDiameter / (2 * Config.GearboxRatio));
+        currentVelocity = gyro.getVelocityRadiansPerSecond();
+
+        if (currentVelocityLeftFront > maxVelocityLeftFront) {
+            maxVelocityLeftFront = currentVelocityLeftFront;
+        }
+
+        if (currentVelocityLeftRear > maxVelocityLeftRear) {
+            maxVelocityLeftRear = currentVelocityLeftRear;
+        }
+
+        if (currentVelocityRightFront > maxVelocityRightFront) {
+            maxVelocityRightFront = currentVelocityRightFront;
+        }
+
+        if (currentVelocityRightRear > maxVelocityRightRear) {
+            maxVelocityRightRear = currentVelocityRightRear;
+        }
+
+        if (currentVelocity > maxVelocity) {
+            maxVelocity = currentVelocity;
+        }
+
+        SmartDashboard.putNumber("Max Velocity Left Front", maxVelocityLeftFront);
+        SmartDashboard.putNumber("Max Velocity Left Rear", maxVelocityLeftRear);
+        SmartDashboard.putNumber("Max Velocity Right Front", maxVelocityRightFront);
+        SmartDashboard.putNumber("Max Velocity Right Rear", maxVelocityRightRear);
+        SmartDashboard.putNumber("Max Velocity", maxVelocity);
     }
+
     @Override
     public void autonomousInit() {
         scheduler.forceEnd();
@@ -182,19 +233,16 @@ public class Robot extends TimedRobot
                 break;
             case "MF":
                 gyro.setOffset(0);
-                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
-                scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, true, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
-                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("MF"), drive));
                 break;
             case "RF":
                 gyro.setOffset(45);
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
                 break;
+            case "T":
+                gyro.setOffset(0);
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("Test Auto"), drive));
         }
         //scheduler.scheduleCommand(new ShutUpWatchdog(drive));
     }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * All commands should call require(Subsystem c) for every
  * needed subsystem during its constructor.
  */
-public abstract class Command {
+public abstract class Command extends edu.wpi.first.wpilibj2.command.Command {
     public boolean started = false;
     public abstract String getName();
     protected final ArrayList<Subsystem> subsystemList = new ArrayList<>();
@@ -51,4 +51,13 @@ public abstract class Command {
      * @return A boolean representing whether the command is finished executing its main run() loop.
      */
     public abstract boolean isFinished();
+    public void initialize() {
+        start();
+    }
+    public void execute() {
+        run();
+    }
+    public void end(boolean ignored) {
+        clean();
+    }
 }

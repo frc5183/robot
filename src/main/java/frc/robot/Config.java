@@ -41,7 +41,7 @@ public class Config {
     /**
      * Represents the gearbox ratio of the drivetrain.
      */
-    public static final double GearboxRatio = 12.75 * 6;
+    public static final double GearboxRatio = 12.75;
 
 
     /**
@@ -79,6 +79,15 @@ public class Config {
             new Translation2d(10.125, -9),
             new Translation2d(-10.125, -9)
     );
+
+    /**
+     * Max velocity in meters per second.
+     */
+    public static final double maxVelocity = 3.37;
+    /**
+     * Radians per second
+     */
+    public static final double maxRotationalVelocity = 8.69;
     public static final ExponentialCurve dCurve = new ExponentialCurve();
     public static final LinearCurve dLinear = new LinearCurve().setIntercept(0).setSlope(1);
     public static final double maxDriveSpeed = 1.0;
@@ -86,6 +95,8 @@ public class Config {
     static {
         dCurve.setExaggeration(50);
     }
+
+    public static final double driveBaseRadius = Math.sqrt(Math.pow(Config.mecanumWheels.frontLeft.getY(), 2) + Math.pow(Config.mecanumWheels.frontLeft.getX(), 2));
 
     public static final Curve elevatorCurve = new TimedCurve(.2, .4);
 

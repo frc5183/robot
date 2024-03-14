@@ -27,18 +27,23 @@ public class NEOEncoder extends Encoder {
     }
 
     @Override
-    public double getVelocityRadians() {
-        return getVelocityRotations()*2*Math.PI;
+    public double getVelocityRadiansPerSecond() {
+        return getVelocityRotationsPerSecond()*2*Math.PI;
     }
 
     @Override
-    public double getVelocityRotations() {
+    public double getVelocityRotationsPerMinute() {
         return encoder.getVelocity();
     }
 
     @Override
+    public double getVelocityRotationsPerSecond() {
+        return getVelocityRotationsPerMinute() / 60;
+    }
+
+    @Override
     public double getVelocityDegrees() {
-        return getVelocityRotations()*360;
+        return getVelocityRotationsPerMinute()*360;
     }
 
     @Override

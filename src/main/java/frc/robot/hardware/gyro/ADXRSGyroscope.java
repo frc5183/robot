@@ -51,4 +51,9 @@ public class ADXRSGyroscope extends SingleAxisGyroscope{
     public double getRate() {
         return gyro.getRate();
     }
+
+    @Override
+    public double getVelocityRadiansPerSecond() {
+        return gyro.getRate() * 0.01745;
+    }
 }

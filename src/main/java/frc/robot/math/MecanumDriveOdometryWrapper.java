@@ -60,7 +60,11 @@ public class MecanumDriveOdometryWrapper {
         odometry.resetPosition(gyroscope.getRotation2D().unaryMinus(), getWheelPositions(), pose);
     }
     public ChassisSpeeds getRobotChassisSpeeds() {
-        MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds(leftFront.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio), rightFront.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio), leftRear.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio), rightRear.getEncoder().getVelocity() * (2 * Math.PI * wheelDiameter/gearboxRatio));
+        //todo fix calcs
+        MecanumDriveWheelSpeeds wheelSpeeds = new MecanumDriveWheelSpeeds(leftFront.getEncoder().getUnitsRadians() * (wheelDiameter/2)/gearboxRatio,
+                rightFront.getEncoder().getUnitsRadians() * (wheelDiameter/2)/gearboxRatio,
+                leftRear.getEncoder().getUnitsRadians() * (wheelDiameter/2)/gearboxRatio,
+                rightRear.getEncoder().getUnitsRadians() * (wheelDiameter/2)/gearboxRatio);
         return kinematics.toChassisSpeeds(wheelSpeeds);
     }
     public MecanumDriveWheelSpeeds getWheelSpeeds(ChassisSpeeds speeds) {

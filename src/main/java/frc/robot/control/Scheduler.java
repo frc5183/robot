@@ -58,6 +58,7 @@ public class Scheduler {
         for (Command c : activeCommands) {
             c.run();
             if (c.isFinished()) {
+                System.out.println(c.getName() + " Finishing!");
                 c.clean();
                 temp.add(c);
             } else {
@@ -98,6 +99,7 @@ public class Scheduler {
             commandQueue.remove(c);
             activeCommands.add(c);
             if (!c.started) {
+                System.out.println(c.getName() + " Starting!");
                 c.start();
                 c.started = true;
             }

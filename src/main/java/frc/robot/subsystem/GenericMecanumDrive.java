@@ -54,10 +54,10 @@ public class GenericMecanumDrive extends Subsystem {
                 this::drive,
                 new HolonomicPathFollowerConfig(
                         //todo
-                        new PIDConstants(5.0, 0.0, 0.0),
-                        new PIDConstants(5.0, 0.0, 0.0),
-                        4.5,
-                        0.4,
+                        new PIDConstants(0.0, 0.0, 0.0),
+                        new PIDConstants(0.0, 0.0, 0.0),
+                        Config.maxVelocity,
+                        Config.driveBaseRadius,
                         new ReplanningConfig()
                 ),
                 () -> {
@@ -91,7 +91,7 @@ public class GenericMecanumDrive extends Subsystem {
         }
     }
     public void drive(ChassisSpeeds speeds) {
-        //todo
+        drive.driveCartesian(speeds.vxMetersPerSecond / Config.maxVelocity, speeds.vyMetersPerSecond / Config.maxVelocity, -speeds.omegaRadiansPerSecond / Config.maxRotationalVelocity);
     }
     public MecanumDriveOdometryWrapper getOdometry() {
         return wrapper;
