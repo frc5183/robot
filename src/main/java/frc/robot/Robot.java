@@ -14,8 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.simulation.ADIS16448_IMUSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +28,9 @@ import frc.robot.hardware.motor.TalonFXMotor;
 import frc.robot.hardware.motor.TalonSRXMotor;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
+import org.littletonrobotics.urcl.URCL;
+
+import java.sql.Driver;
 
 
 /**
@@ -55,6 +57,7 @@ public class Robot extends TimedRobot
     private GenericSpinner floor;
     private SingleAxisGyroscope gyro;
     private final ADIS16448_IMU imu = new ADIS16448_IMU();
+    private PowerDistribution pdp;
     private ADIS16448_IMUSim imuSim;
     private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake, cancelShoot;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
@@ -65,6 +68,8 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
+        DataLogManager.start();
+        URCL.start();
         leftRear=new SparkMaxMotor(Config.rearLeftMotorID, CANSparkLowLevel.MotorType.kBrushless);
         rightRear=new SparkMaxMotor(Config.rearRightMotorID, CANSparkLowLevel.MotorType.kBrushless);
         leftFront=new SparkMaxMotor(Config.frontLeftMotorID, CANSparkLowLevel.MotorType.kBrushless);
@@ -82,6 +87,8 @@ public class Robot extends TimedRobot
         CameraServer.startAutomaticCapture(0);
         CameraServer.startAutomaticCapture(1);
 
+        pdp = new PowerDistribution(0, PowerDistribution.ModuleType.kCTRE);
+
         GenericMecanumDrive.MecanumMode mode = Config.mecanumMode;
         drive = new GenericMecanumDrive(leftRear.getEncodedMotor(), leftFront.getEncodedMotor(), rightFront.getEncodedMotor(), rightRear.getEncodedMotor(), Config.GearboxRatio, Config.WheelDiameter, gyro, mode, Config.mecanumWheels, new Pose2d()) ;
         floorMotor = new SparkMaxMotor(Config.floorMotor, CANSparkLowLevel.MotorType.kBrushless);
@@ -93,11 +100,13 @@ public class Robot extends TimedRobot
         elevator = new GenericSpinner(elevatorMotor, "Elevator");
         floor = new GenericSpinner(floorMotor, "Floor");
         autoChooser.setDefaultOption("Middle Full", "MF");
-        autoChooser.addOption("Left Full", "LF");
-        autoChooser.addOption("Right Full", "RF");
-        autoChooser.addOption("Left Simple", "LS");
+        autoChooser.addOption("Amp Full", "AF");
+        autoChooser.addOption("Source Full", "SF");
+        autoChooser.addOption("Amp Simple", "AS");
         autoChooser.addOption("Middle Simple", "MS");
-        autoChooser.addOption("Right Simple", "RS");
+        autoChooser.addOption("Source Simple", "SS");
+        autoChooser.addOption("Get Out Amp", "GOA");
+        autoChooser.addOption("Get Out Middle", "GOM");
         autoChooser.addOption("Test Auto", "T");
         //*
         Sendable motors = builder -> {
@@ -141,7 +150,7 @@ public class Robot extends TimedRobot
         NamedCommands.registerCommand("Shoot1", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
         NamedCommands.registerCommand("Shoot2", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
         NamedCommands.registerCommand("IntakeOut", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-        NamedCommands.registerCommand("IntakeIn", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.lowIntake(intake)));
+        NamedCommands.registerCommand("IntakeIn", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.flipIntake(intake)));
         NamedCommands.registerCommand("RunIntake", new CommandGroup(new ConsumerCommand(floor), Config.lowIntake(intake), new ConsumerCommand(elevator)));
 
     }
@@ -161,6 +170,14 @@ public class Robot extends TimedRobot
         lowIntake = Config.lowIntakeButton(intake);
         lowOuttake = Config.lowOuttakeButton(intake);
         cancelShoot = Config.cancelShootButton(intake, shooter);
+
+        if (autoChooser.getSelected().equals("AF") || autoChooser.getSelected().equals("AS") || autoChooser.getSelected().equals("GOA")) {
+            gyro.setOffset(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 45 : -45);
+        } else if (autoChooser.getSelected().equals("SS") || autoChooser.getSelected().equals("SF")) {
+            gyro.setOffset(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? -45 : 45);
+        } else {
+            gyro.setOffset(0);
+        }
     }
 
     @Override
@@ -217,35 +234,44 @@ public class Robot extends TimedRobot
                 new TimedConsumerCommand(floor, Config.revTime+Config.postRevTime)
         );
         switch (chosen) {
-            case "LS":
-                gyro.setOffset(-45);
+            case "AS":
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
             case "MS":
-                gyro.setOffset(0);
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
-            case "RS":
-                gyro.setOffset(45);
+            case "SS":
                 scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
                 break;
-            case "LF":
-                gyro.setOffset(-45);
-                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+            case "AF":
+//                if (DriverStation.getAlliance().isPresent()) {
+//                    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+//                        gyro.setOffset(45);
+//                    } else {
+//                        gyro.setOffset(-45);
+//                    }
+//                } else {
+//                    gyro.setOffset(45);
+//                }
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("AF"), drive));
                 break;
             case "MF":
-                gyro.setOffset(0);
                 scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("MF"), drive));
                 break;
-            case "RF":
-                gyro.setOffset(45);
-                scheduler.scheduleCommand(new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
-                scheduler.scheduleCommand(new CommandGroup(new RunMecanum(drive, false, 2), new ConsumerCommand(floor), new ConsumerCommand(shooter), Config.lowIntake(intake)));
+            case "SF":
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("SF"), drive));
+                break;
+            case "GOA":
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("GOA"), drive));
+                break;
+            case "GOM":
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("GOM"), drive));
                 break;
             case "T":
-                gyro.setOffset(0);
                 scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("Test Auto"), drive));
+                break;
+            default:
+                System.out.println("No known auto selected.");
         }
         //scheduler.scheduleCommand(new ShutUpWatchdog(drive));
     }
@@ -259,6 +285,8 @@ public class Robot extends TimedRobot
         intake.periodic();
         elevator.periodic();
         floor.periodic();
+
+        SmartDashboard.putNumber("Battery Voltage", pdp.getVoltage());
     }
     public void simulationInit() {
         sim = REVPhysicsSim.getInstance();

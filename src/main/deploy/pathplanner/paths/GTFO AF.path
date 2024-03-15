@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 6.57146515691854,
-        "y": 6.763845584140698
+        "x": 4.350887590664071,
+        "y": 7.012107357548048
       },
       "prevControl": {
-        "x": 5.57146515691854,
-        "y": 6.763845584140698
+        "x": 3.3508875906640707,
+        "y": 7.012107357548048
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SF Note"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -178.37549912634915,
+    "rotation": 178.53119928561415,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -122.74436290021727,
+    "rotation": -122.47154206591483,
     "velocity": 0
   },
   "useDefaultConstraints": true

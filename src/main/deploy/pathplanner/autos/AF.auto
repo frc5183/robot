@@ -5,7 +5,7 @@
       "x": 0.8565814232473583,
       "y": 6.763845584140698
     },
-    "rotation": -124.07496306359755
+    "rotation": -122.8204628852746
   },
   "command": {
     "type": "sequential",
@@ -43,22 +43,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeIn"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Return AMP Note"
-                }
-              }
-            ]
+            "pathName": "Return AMP Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeIn"
           }
         },
         {

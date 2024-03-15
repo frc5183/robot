@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.26,
-        "y": 7.0
+        "x": 3.5385092992408214,
+        "y": 7.05486410972822
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.977854936848207,
-        "y": 7.02448893175418
+        "x": 4.256364236089029,
+        "y": 7.0793530414824
       },
       "isLocked": false,
       "linkedName": "AF Note"
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -124.69759437265462,
+    "rotation": -120.48338202361654,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 177.55285986185453,
+    "rotation": -178.1523897340054,
     "velocity": 0
   },
   "useDefaultConstraints": true

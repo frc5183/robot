@@ -126,7 +126,7 @@ public class Config {
                 new RunSpinner(shooter, true, highIntakeTime)
         );
     }
-    public static final double FlipTime = 0.3;
+    public static final double FlipTime = 0.4;
     public static final double FlipSpeed = 0.7;
     public static final double FlipSpacing = 1;
     public static Command flipIntake(GenericSpinner floor) {
