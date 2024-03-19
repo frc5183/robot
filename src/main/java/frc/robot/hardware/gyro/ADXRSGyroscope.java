@@ -35,6 +35,11 @@ public class ADXRSGyroscope extends SingleAxisGyroscope{
         this.offset=offset;
     }
 
+    @Override
+    public double getOffset() {
+        return offset;
+    }
+
     public void calibrate() {
         gyro.calibrate();
     }

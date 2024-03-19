@@ -63,6 +63,11 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     }
 
     @Override
+    public double getOffset() {
+        return offset;
+    }
+
+    @Override
     public void calibrate() {
         gyro.calibrate();
     }

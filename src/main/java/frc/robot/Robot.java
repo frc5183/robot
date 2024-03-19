@@ -52,6 +52,7 @@ public class Robot extends TimedRobot
     private TalonSRXMotor shooterMotor;
     private TalonFXMotor elevatorMotor;
     private GenericSpinner shooter;
+
     private GenericSpinner intake;
     private GenericSpinner elevator;
     private GenericSpinner floor;
@@ -59,7 +60,7 @@ public class Robot extends TimedRobot
     private final ADIS16448_IMU imu = new ADIS16448_IMU();
     private PowerDistribution pdp;
     private ADIS16448_IMUSim imuSim;
-    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake, cancelShoot;
+    private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake, cancelShoot, slowShoot;
     private SendableChooser<String> autoChooser = new SendableChooser<>();
     public static final Scheduler scheduler = new Scheduler();
 
@@ -150,7 +151,7 @@ public class Robot extends TimedRobot
         NamedCommands.registerCommand("Shoot1", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
         NamedCommands.registerCommand("Shoot2", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
         NamedCommands.registerCommand("IntakeOut", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-        NamedCommands.registerCommand("IntakeIn", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(floor), Config.flipIntake(intake)));
+        NamedCommands.registerCommand("IntakeIn", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(intake), Config.flipIntake(floor)));
         NamedCommands.registerCommand("RunIntake", new CommandGroup(new ConsumerCommand(floor), Config.lowIntake(intake), new ConsumerCommand(elevator)));
 
     }
@@ -165,16 +166,17 @@ public class Robot extends TimedRobot
         TeleopSpinner teleopElevator = new TeleopSpinner(elevator, Config.botElevator);
         scheduler.scheduleCommand(teleopElevator);
         shoot = Config.shootButton(shooter, intake);
+        slowShoot = Config.slowShootButton(shooter, intake);
         highIntake = Config.highIntakeButton(shooter, intake);
         flip = Config.flipIntakeButton(floor);
         lowIntake = Config.lowIntakeButton(intake);
         lowOuttake = Config.lowOuttakeButton(intake);
         cancelShoot = Config.cancelShootButton(intake, shooter);
-
+//        resetHeading = Config.resetHeadingButton(gyro);
         if (autoChooser.getSelected().equals("AF") || autoChooser.getSelected().equals("AS") || autoChooser.getSelected().equals("GOA")) {
-            gyro.setOffset(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 45 : -45);
-        } else if (autoChooser.getSelected().equals("SS") || autoChooser.getSelected().equals("SF")) {
             gyro.setOffset(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? -45 : 45);
+        } else if (autoChooser.getSelected().equals("SS") || autoChooser.getSelected().equals("SF")) {
+            gyro.setOffset(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 45 : -45);
         } else {
             gyro.setOffset(0);
         }
@@ -189,7 +191,8 @@ public class Robot extends TimedRobot
         lowIntake.periodic();
         lowOuttake.periodic();
         cancelShoot.periodic();
-
+        slowShoot.periodic();
+//        resetHeading.periodic();
         double currentVelocityLeftFront, currentVelocityLeftRear, currentVelocityRightFront, currentVelocityRightRear, currentVelocity;
         currentVelocityLeftFront = leftFront.getEncodedMotor().getEncoder().getVelocityRadiansPerSecond() * (Config.WheelDiameter / (2 * Config.GearboxRatio));
         currentVelocityLeftRear = leftRear.getEncodedMotor().getEncoder().getVelocityRadiansPerSecond() * (Config.WheelDiameter / (2 * Config.GearboxRatio));

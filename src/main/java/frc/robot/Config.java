@@ -12,6 +12,7 @@ import frc.robot.control.single.SingleControl;
 import frc.robot.control.tuple.CombinedTuple;
 import frc.robot.control.tuple.JoystickTuple;
 import frc.robot.control.tuple.TupleControl;
+import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.VictorSPXMotor;
 import frc.robot.math.MecanumDriveOdometryWrapper;
 import frc.robot.math.curve.*;
@@ -92,6 +93,7 @@ public class Config {
     public static final LinearCurve dLinear = new LinearCurve().setIntercept(0).setSlope(1);
     public static final double maxDriveSpeed = 1.0;
     public static final Curve driveCurve = new LimitedCurve(dCurve, maxDriveSpeed);
+
     static {
         dCurve.setExaggeration(50);
     }
@@ -119,6 +121,13 @@ public class Config {
                 new ConsumerCommand(intake)
         );
     }
+    public static Command slowShoot(GenericSpinner shooter, GenericSpinner intake) {
+        return new CommandGroup(
+                new RunSpinner(shooter, false, revTime/2 + postRevTime),
+                new DelayedCommand(new RunSpinner(intake, true, postRevTime), revTime, true),
+                new ConsumerCommand(intake)
+        );
+    }
     public static final double highIntakeTime = 1.0;
     public static Command highIntake(GenericSpinner shooter, GenericSpinner intake) {
         return new CommandGroup(
@@ -128,7 +137,7 @@ public class Config {
     }
     public static final double FlipTime = 0.4;
     public static final double FlipSpeed = 0.7;
-    public static final double FlipSpacing = 1;
+    public static final double FlipSpacing = 0.2;
     public static Command flipIntake(GenericSpinner floor) {
         return new SwitchSpinner(floor, FlipTime, FlipSpeed, true);
     }
@@ -144,9 +153,16 @@ public class Config {
         return new RunSpinner(intake, false, LowIntakeTime);
     }
     public static Command lowOuttake(GenericSpinner intake) { return new RunSpinner(intake, true, LowIntakeTime);}
+    public static Command resetHeading(SingleAxisGyroscope gyro) {
+        return new HeadingReset(gyro);
+    }
 
     public static AutonomousButtonMapper shootButton(GenericSpinner shooter, GenericSpinner intake) {
         return new AutonomousButtonMapper(() -> shoot(shooter, intake), controllerManager.getSecondController(), Button.A, 2.0);
+    }
+
+    public static AutonomousButtonMapper slowShootButton(GenericSpinner shooter, GenericSpinner intake) {
+        return new AutonomousButtonMapper(() -> slowShoot(shooter, intake), controllerManager.getSecondController(), Button.X, 2.0);
     }
     public static AutonomousButtonMapper highIntakeButton(GenericSpinner shooter, GenericSpinner intake) {
         return new AutonomousButtonMapper(() -> highIntake(shooter, intake), controllerManager.getSecondController(), Button.B, 2.0);
@@ -164,5 +180,7 @@ public class Config {
     public static AutonomousButtonMapper cancelShootButton(GenericSpinner intake, GenericSpinner shooter) {
         return new AutonomousButtonMapper(() -> cancelShoot(intake, shooter), controllerManager.getSecondController(), Button.X, 2.0);
     }
-
+    public static AutonomousButtonMapper resetHeadingButton(SingleAxisGyroscope gyro) {
+        return new AutonomousButtonMapper(() -> resetHeading(gyro), controllerManager.getFirstController(), Button.A, 2.0);
+    }
 }
