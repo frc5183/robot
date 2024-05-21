@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 public class ADXRSGyroscope extends SingleAxisGyroscope{
+    private double offset = 0;
     private final ADXRS450_Gyro gyro;
 
     public ADXRSGyroscope(ADXRS450_Gyro Gyro) {
@@ -29,6 +30,16 @@ public class ADXRSGyroscope extends SingleAxisGyroscope{
         return gyro.getRotation2d();
     }
 
+    @Override
+    public void setOffset(double offset) {
+        this.offset=offset;
+    }
+
+    @Override
+    public double getOffset() {
+        return offset;
+    }
+
     public void calibrate() {
         gyro.calibrate();
     }
@@ -38,11 +49,16 @@ public class ADXRSGyroscope extends SingleAxisGyroscope{
     }
 
     public double getAngle() {
-        return gyro.getAngle();
+        return gyro.getAngle() + offset;
     }
 
     // DEGREES PER SECOND
     public double getRate() {
         return gyro.getRate();
+    }
+
+    @Override
+    public double getVelocityRadiansPerSecond() {
+        return gyro.getRate() * 0.01745;
     }
 }

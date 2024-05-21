@@ -1,5 +1,7 @@
 package frc.robot.control;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.control.command.Command;
 import frc.robot.subsystem.Subsystem;
 
@@ -7,7 +9,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Scheduler {
-
+    public interface SubsystemRemover {
+        abstract boolean remove(Subsystem s);
+    }
     /**
      * Simply a list used to prevent ConcurrentModificationExceptions
      */
@@ -30,6 +34,7 @@ public class Scheduler {
      * A list to hold all the currently active Commands
      */
     private final ArrayList<Command> activeCommands = new ArrayList<>();
+    private final ArrayList<Command> interruptQueue = new ArrayList<>();
 
     /**
      * Adds a command to the end of the queue.
@@ -49,9 +54,11 @@ public class Scheduler {
         // Iterate over every Active Command
         // Run it; If it's finished, End it, Mark it for removal by adding to temp
         // Else count its used subsystems into activeSubsystems
+        internal_interrupt();
         for (Command c : activeCommands) {
             c.run();
             if (c.isFinished()) {
+                System.out.println(c.getName() + " Finishing!");
                 c.clean();
                 temp.add(c);
             } else {
@@ -77,17 +84,26 @@ public class Scheduler {
             for (Subsystem s : c.getRequiredSubsystems()) {
                 if (activeSubsystems.contains(s)) {
                     okay = false;
-                    activeSubsystems.add(s);
                 }
             }
             if (okay) {
                 temp.add(c);
+                for (Subsystem s : c.getRequiredSubsystems()) {
+                    if (!activeSubsystems.contains(s)) {
+                        activeSubsystems.add(s);
+                    }
+                }
             }
         }
         for (Command c: temp) {
             commandQueue.remove(c);
             activeCommands.add(c);
-            c.start();
+            if (!c.started) {
+                System.out.println(c.getName() + " Starting!");
+                c.start();
+                c.started = true;
+            }
+
         }
     }
 
@@ -106,17 +122,26 @@ public class Scheduler {
         activeCommands.clear();
     }
 
+    private void internal_interrupt() {
+        for (Command command : interruptQueue) {
+            for (Command c : activeCommands) {
+                if (c != command) {
+                    commandQueue.add(0, c);
+                }
+            }
+            activeCommands.clear();
+            commandQueue.add(0, command);
+        }
+        interruptQueue.clear();
+    }
+
     /**
      * Interrupts the current queue with a single command.
      * The current active commands and pushed back to the front of the queue.
      * @param command the command to skip the que with
      */
     public void interrupt(Command command) {
-        for (Command c: activeCommands) {
-            commandQueue.add(0, c);
-        }
-        activeCommands.clear();
-        commandQueue.add(0, command);
+        interruptQueue.add(command);
     }
 
     /**
@@ -127,5 +152,53 @@ public class Scheduler {
     public void override(Command command) {
         forceEnd();
         commandQueue.add(command);
+    }
+
+    public Sendable getBasicSendable() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("Scheduler");
+                builder.addBooleanProperty("isRunning", () -> !activeCommands.isEmpty(), null);
+                builder.addBooleanProperty("isQueued", () -> !commandQueue.isEmpty(), null);
+            }
+        };
+    }
+    public Sendable getQueueSendable() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("Scheduler");
+                builder.addStringProperty("Queue", () -> {
+                    String out = "";
+                    for (int i = 0; i < commandQueue.size(); i++) {
+                        out += commandQueue.get(i).getName() + ",\n";
+                    }
+                    return out;
+                }, null);
+            }
+        };
+    }
+    public Sendable getActiveSendable() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("Scheduler");
+                builder.addStringProperty("Active", () -> {
+                        String out = "";
+                        for (int i=0; i<activeCommands.size(); i++) {
+                            out+= activeCommands.get(i).getName() + ",\n";
+                        }
+                    return out;
+                }, null);
+            }
+        };
+    }
+    public void runClear(SubsystemRemover remover) {
+        for (Subsystem s : activeSubsystems) {
+            if (remover.remove(s)) {
+                activeSubsystems.remove(s);
+            }
+        }
     }
 }

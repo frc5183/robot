@@ -36,9 +36,14 @@ public abstract class SingleAxisGyroscope {
      * @return the rotation2D
      */
     public abstract Rotation2d getRotation2D();
+
+    public abstract double getVelocityRadiansPerSecond();
     /**
      * Represents the Axis in a 3 axis gyroscope.
      */
+    public abstract void setOffset(double offset);
+
+    public abstract double getOffset();
     public enum Axis {
         YAW, PITCH, ROLL
     }

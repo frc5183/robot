@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.ADIS16448_IMU;
  * A wrapper for a single axis of the 3 axis ADIS16448_IMU
  */
 public class ADISAxisGyroscope extends SingleAxisGyroscope {
+    private double offset=0;
     public final ADIS16448_IMU gyro;
     public final Axis axis;
 
@@ -18,11 +19,11 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     public double getDegrees() {
         switch (axis) {
             case YAW:
-                return gyro.getGyroAngleZ();
+                return -gyro.getGyroAngleZ()+offset;
             case PITCH:
-                return gyro.getGyroAngleY();
+                return -gyro.getGyroAngleY()+offset;
             case ROLL:
-                return gyro.getGyroAngleX();
+                return -gyro.getGyroAngleX()+offset;
             default:
                 return 0;
         }
@@ -39,6 +40,31 @@ public class ADISAxisGyroscope extends SingleAxisGyroscope {
     @Override
     public Rotation2d getRotation2D() {
         return Rotation2d.fromRadians(getRadians());
+    }
+
+    @Override
+    public double getVelocityRadiansPerSecond() {
+        double conversion = 0.01745;
+        switch (axis) {
+            case YAW:
+                return gyro.getGyroRateZ() * conversion;
+            case PITCH:
+                return gyro.getGyroRateY() * conversion;
+            case ROLL:
+                return gyro.getGyroRateX() * conversion;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    public void setOffset(double offset) {
+        this.offset=offset;
+    }
+
+    @Override
+    public double getOffset() {
+        return offset;
     }
 
     @Override

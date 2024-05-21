@@ -1,8 +1,10 @@
 package frc.robot.hardware.motor;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import frc.robot.hardware.encoder.NEOEncoder;
 
 /**
  * A wrapper class around CANSparkMax to make it compatible with other motor types
@@ -17,6 +19,9 @@ public class SparkMaxMotor extends Motor {
     @Override
     public void set(double speed) {
         motor.set(speed);
+        if (RobotBase.isSimulation()) {
+            motor.setVoltage(speed);
+        }
     }
 
     @Override
@@ -51,6 +56,9 @@ public class SparkMaxMotor extends Motor {
     public void stopMotor() {
         motor.stopMotor();
     }
+    public EncodedMotor getEncodedMotor() {
+        return new EncodedMotor(this, new NEOEncoder(this));
+    }
 
     @Override
     public MotorController getRawMotor() {
@@ -59,5 +67,9 @@ public class SparkMaxMotor extends Motor {
 
     public CANSparkMax getTrueRawMotor() {
         return motor;
+    }
+    public void setRamp(double ramp) {
+        motor.setOpenLoopRampRate(ramp);
+        motor.setClosedLoopRampRate(ramp);
     }
 }
