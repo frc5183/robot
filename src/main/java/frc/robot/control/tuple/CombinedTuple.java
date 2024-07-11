@@ -24,7 +24,7 @@ public class CombinedTuple extends TupleControl {
 
     @Override
     public Tuple2<Double> getValue() {
-        return new Tuple2<>(xStyle.getValue(), yStyle.getValue());
+        return new Tuple2<>(xStyle.getValue() *.3, yStyle.getValue() *.3);
     }
 
     /** Sets the X Single Control

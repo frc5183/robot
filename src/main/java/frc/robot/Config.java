@@ -9,6 +9,7 @@ import frc.robot.control.enumeration.Button;
 import frc.robot.control.enumeration.StickMode;
 import frc.robot.control.single.HalfStick;
 import frc.robot.control.single.SingleControl;
+import frc.robot.control.tuple.CombinedTuple;
 import frc.robot.control.tuple.JoystickTuple;
 import frc.robot.control.tuple.TupleControl;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
@@ -101,12 +102,14 @@ public class Config {
 
     public static final Curve elevatorCurve = new TimedCurve(.2, .4);
 
-    public static final SingleControl botX = new HalfStick(StickMode.LEFTY, dLinear).setXboxController(controllerManager.getFirstController());
-    public static final SingleControl botY = new HalfStick(StickMode.LEFTX, dLinear).setXboxController(controllerManager.getFirstController());
+    public static final SingleControl controllerLeftY = new HalfStick(StickMode.LEFTY, dLinear).setXboxController(controllerManager.getFirstController());
+    public static final SingleControl controllerLeftX = new HalfStick(StickMode.LEFTX, dLinear).setXboxController(controllerManager.getFirstController());
+    public static final SingleControl controllerRightY = new HalfStick(StickMode.RIGHTY, dLinear).setXboxController(controllerManager.getFirstController());
+    public static final SingleControl controllerRightX = new HalfStick(StickMode.RIGHTX, dLinear).setXboxController(controllerManager.getFirstController());
     public static final SingleControl botTurn = new HalfStick(StickMode.RIGHTX, driveCurve).setXboxController(controllerManager.getFirstController());
     //public static final TupleControl translateBot = new CombinedTuple(botX, botY).setXboxController(controllerManager.getFirstController());
     private static final TupleControl botControl = new JoystickTuple(new Joystick(0)).setXboxController(controllerManager.getFirstController());
-    public static final TupleControl translateBot = new JoystickTuple(new Joystick(0)).setXboxController(controllerManager.getFirstController());
+    public static final TupleControl translateBot = new CombinedTuple(controllerLeftY, controllerRightX).setXboxController(controllerManager.getFirstController());
 
 
     public static final double revTime = 2.0;
