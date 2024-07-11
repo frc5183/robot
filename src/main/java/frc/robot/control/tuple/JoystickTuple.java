@@ -10,6 +10,6 @@ public class JoystickTuple extends TupleControl{
     }
     @Override
     public Tuple2<Double> getValue() {
-        return new Tuple2<>(stick.getMagnitude(), stick.getDirectionRadians());
+        return new Tuple2<>(stick.getMagnitude() * .1, stick.getDirectionRadians() *.1);
     }
 }

@@ -19,7 +19,7 @@ public class GenericTankDrive extends Subsystem {
     private final DifferentialDrive drive;
     private final Motor left;
     private final Motor right;
-    private final Encoder encoder;
+    // private final Encoder encoder;
     private final SingleAxisGyroscope gyroscope;
 
     /**
@@ -31,11 +31,13 @@ public class GenericTankDrive extends Subsystem {
      * @see Encoder
      * @see SingleAxisGyroscope
      */
-    public GenericTankDrive(Motor left, Motor right, Encoder encoder, SingleAxisGyroscope gyroscope) {
+    public GenericTankDrive(
+            Motor left,
+            Motor right,
+            SingleAxisGyroscope gyroscope) {
         this.drive = new DifferentialDrive(left, right);
         this.left = left;
         this.right = right;
-        this.encoder = encoder;
         this.gyroscope = gyroscope;
         this.left.setSafety(true);
         this.right.setSafety(true);
@@ -74,13 +76,6 @@ public class GenericTankDrive extends Subsystem {
      */
     public double getSpeed() {
         return (left.get() + right.get()) / 2;
-    }
-
-    /**
-     * @return the Encoder for use with Autonomy
-     */
-    public Encoder getEncoder() {
-        return encoder;
     }
 
     /**
