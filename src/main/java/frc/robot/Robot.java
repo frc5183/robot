@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkLowLevel;
@@ -22,6 +23,7 @@ import frc.robot.control.AutonomousButtonMapper;
 import frc.robot.control.Scheduler;
 import frc.robot.control.command.*;
 import frc.robot.hardware.gyro.ADISAxisGyroscope;
+import frc.robot.hardware.gyro.NavXGyro;
 import frc.robot.hardware.gyro.SingleAxisGyroscope;
 import frc.robot.hardware.motor.SparkMaxMotor;
 import frc.robot.hardware.motor.TalonFXMotor;
@@ -57,7 +59,7 @@ public class Robot extends TimedRobot
     private GenericSpinner elevator;
     private GenericSpinner floor;
     private SingleAxisGyroscope gyro;
-    private final ADIS16448_IMU imu = new ADIS16448_IMU();
+    private AHRS imu;
     private PowerDistribution pdp;
     private ADIS16448_IMUSim imuSim;
     private AutonomousButtonMapper shoot, highIntake, flip, lowIntake, lowOuttake, cancelShoot, slowShoot;
@@ -79,7 +81,8 @@ public class Robot extends TimedRobot
         leftFront.setInverted(false);
         rightRear.setInverted(true);
         leftRear.setInverted(false);
-        gyro = new ADISAxisGyroscope(imu, SingleAxisGyroscope.Axis.ROLL); // Roll because vertical Roborio
+        imu = new AHRS(SPI.Port.kMXP);
+        gyro = new NavXGyro(imu, SingleAxisGyroscope.Axis.YAW);
         gyro.calibrate();
         leftRear.setRamp(0.1);
         rightRear.setRamp(0.1);
@@ -293,7 +296,7 @@ public class Robot extends TimedRobot
     }
     public void simulationInit() {
         sim = REVPhysicsSim.getInstance();
-        imuSim = new ADIS16448_IMUSim(imu);
+        // imuSim = new ADIS16448_IMUSim(imu);
         sim.addSparkMax(leftFront.getTrueRawMotor(), DCMotor.getNEO(1));
         sim.addSparkMax(rightFront.getTrueRawMotor(), DCMotor.getNEO(1));
         sim.addSparkMax(leftRear.getTrueRawMotor(), DCMotor.getNEO(1));
