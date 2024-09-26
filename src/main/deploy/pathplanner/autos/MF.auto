@@ -65,12 +65,6 @@
           "data": {
             "pathName": "GTFO MF"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeOut2"
-          }
         }
       ]
     }
