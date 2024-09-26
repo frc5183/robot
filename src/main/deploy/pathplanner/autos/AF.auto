@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "IntakeOut"
+            "name": "IntakeOut1"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntake"
+                  "name": "RunIntake1"
                 }
               },
               {
@@ -51,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "IntakeIn"
+            "name": "IntakeIn1"
           }
         },
         {
