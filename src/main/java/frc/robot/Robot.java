@@ -30,7 +30,7 @@ import frc.robot.hardware.motor.TalonFXMotor;
 import frc.robot.hardware.motor.TalonSRXMotor;
 import frc.robot.subsystem.GenericMecanumDrive;
 import frc.robot.subsystem.GenericSpinner;
-import org.littletonrobotics.urcl.URCL;
+//import org.littletonrobotics.urcl.URCL;
 
 import java.sql.Driver;
 
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot
     public void robotInit()
     {
         DataLogManager.start();
-        URCL.start();
+        //RCL.start();
         leftRear=new SparkMaxMotor(Config.rearLeftMotorID, CANSparkLowLevel.MotorType.kBrushless);
         rightRear=new SparkMaxMotor(Config.rearRightMotorID, CANSparkLowLevel.MotorType.kBrushless);
         leftFront=new SparkMaxMotor(Config.frontLeftMotorID, CANSparkLowLevel.MotorType.kBrushless);
@@ -104,6 +104,7 @@ public class Robot extends TimedRobot
         elevator = new GenericSpinner(elevatorMotor, "Elevator");
         floor = new GenericSpinner(floorMotor, "Floor");
         autoChooser.setDefaultOption("Middle Full", "MF");
+        autoChooser.addOption("Middle Full (Far)", "MFF");
         autoChooser.addOption("Amp Full", "AF");
         autoChooser.addOption("Source Full", "SF");
         autoChooser.addOption("Amp Simple", "AS");
@@ -151,12 +152,12 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Max Velocity Right Rear", maxVelocityRightRear);
 
         // Auto NamedCommands
-        NamedCommands.registerCommand("Shoot1", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
-        NamedCommands.registerCommand("Shoot2", new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
-        NamedCommands.registerCommand("IntakeOut", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
-        NamedCommands.registerCommand("IntakeIn", new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(intake), Config.flipIntake(floor)));
-        NamedCommands.registerCommand("RunIntake", new CommandGroup(new ConsumerCommand(floor), Config.lowIntake(intake), new ConsumerCommand(elevator)));
-
+        for (int i = 1; i <= 50; i++) {
+            NamedCommands.registerCommand("Shoot" + i, new CommandGroup(Config.shoot(shooter, intake), new ConsumerCommand(drive), new ConsumerCommand(floor)));
+            NamedCommands.registerCommand("IntakeOut" + i, new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), Config.flipIntake(floor), new ConsumerCommand(intake)));
+            NamedCommands.registerCommand("IntakeIn" + i, new CommandGroup(new ConsumerCommand(drive), new ConsumerCommand(shooter), new ConsumerCommand(intake), Config.flipIntake(floor)));
+            NamedCommands.registerCommand("RunIntake" + i, new CommandGroup(new ConsumerCommand(floor), Config.lowIntake(intake), new ConsumerCommand(elevator)));
+        }
     }
     @Override
     public void teleopInit()
@@ -263,6 +264,9 @@ public class Robot extends TimedRobot
                 break;
             case "MF":
                 scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("MF"), drive));
+                break;
+            case "MFF":
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("Middle Full Far"), drive));
                 break;
             case "SF":
                 scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("SF"), drive));

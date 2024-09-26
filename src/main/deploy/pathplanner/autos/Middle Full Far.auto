@@ -57,19 +57,50 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "GTFO MF"
+            "name": "IntakeOut"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeOut2"
+            "name": "Shoot2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GTFO MF"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeIn"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Return Middle Far Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot3"
           }
         }
       ]

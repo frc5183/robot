@@ -16,30 +16,30 @@
     },
     {
       "anchor": {
-        "x": 4.963734371913189,
-        "y": 6.499026331385996
+        "x": 7.595921477557241,
+        "y": 7.403026234623898
       },
       "prevControl": {
-        "x": 3.963734371913189,
-        "y": 6.499026331385996
+        "x": 6.595921477557241,
+        "y": 7.403026234623898
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MFF Second Note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -177.61405596961137,
+    "rotation": 178.02506598911802,
     "rotateFast": false
   },
   "reversed": false,
@@ -48,5 +48,5 @@
     "rotation": 177.79657357840603,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
