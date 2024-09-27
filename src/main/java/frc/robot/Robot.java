@@ -112,7 +112,10 @@ public class Robot extends TimedRobot
         autoChooser.addOption("Source Simple", "SS");
         autoChooser.addOption("Get Out Amp", "GOA");
         autoChooser.addOption("Get Out Middle", "GOM");
-        autoChooser.addOption("Test Auto", "T");
+        autoChooser.addOption("Hide Middle", "HM");
+        autoChooser.addOption("Hide Source", "HS");
+        autoChooser.addOption("Hide Amp", "HA");
+        //autoChooser.addOption("Test Auto", "T");
         //*
         Sendable motors = builder -> {
             builder.addDoubleProperty("Left Rear", leftRear::get, null);
@@ -177,9 +180,9 @@ public class Robot extends TimedRobot
         lowOuttake = Config.lowOuttakeButton(intake);
         cancelShoot = Config.cancelShootButton(intake, shooter);
 //        resetHeading = Config.resetHeadingButton(gyro);
-        if (autoChooser.getSelected().equals("AF") || autoChooser.getSelected().equals("AS") || autoChooser.getSelected().equals("GOA")) {
+        if (autoChooser.getSelected().equals("AF") || autoChooser.getSelected().equals("AS") || autoChooser.getSelected().equals("GOA") || autoChooser.getSelected().equals("HA")) {
             gyro.setOffset(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? -45 : 45);
-        } else if (autoChooser.getSelected().equals("SS") || autoChooser.getSelected().equals("SF")) {
+        } else if (autoChooser.getSelected().equals("SS") || autoChooser.getSelected().equals("SF") || autoChooser.getSelected().equals("HS")) {
             gyro.setOffset(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 45 : -45);
         } else {
             gyro.setOffset(0);
@@ -276,6 +279,15 @@ public class Robot extends TimedRobot
                 break;
             case "GOM":
                 scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("GOM"), drive));
+                break;
+            case "HM":
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("Hide Middle"), drive));
+                break;
+            case "HS":
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("Hide Source"), drive));
+                break;
+            case "HA":
+                scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("Hide Amp"), drive));
                 break;
             case "T":
                 scheduler.scheduleCommand(new Command2Wrapper(new PathPlannerAuto("Test Auto"), drive));

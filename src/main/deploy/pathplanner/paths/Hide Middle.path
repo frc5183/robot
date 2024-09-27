@@ -8,31 +8,31 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.30629383641644026,
-        "y": 0.6032000147742679
+        "x": 2.0239247762773727,
+        "y": 4.533113708818393
       },
       "isLocked": false,
       "linkedName": "MF Start"
     },
     {
       "anchor": {
-        "x": 8.000362229940384,
-        "y": 0.7518198580141162
+        "x": 2.7970789438957584,
+        "y": 0.6225179515146241
       },
       "prevControl": {
-        "x": 7.106766310004574,
-        "y": 0.7361064786270033
+        "x": 1.7970789438957584,
+        "y": 0.6225179515146241
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MFF Second Note"
+      "linkedName": "Hide Middle/Source"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.65,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0

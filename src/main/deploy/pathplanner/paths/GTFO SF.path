@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.735295184876088,
-        "y": 4.339199535541929
+        "x": 0.1581364281353066,
+        "y": 0.21284485672426992
       },
       "isLocked": false,
       "linkedName": "SF Start"
     },
     {
       "anchor": {
-        "x": 3.2860408577960016,
-        "y": 2.3601727203454415
+        "x": 7.543896584246705,
+        "y": 0.7846270031283044
       },
       "prevControl": {
-        "x": 2.2860408577960016,
-        "y": 2.3601727203454415
+        "x": 7.45499394773288,
+        "y": 0.7674103642008245
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 149.93141717813756,
+    "rotation": 178.1354250820521,
     "rotateFast": false
   },
   "reversed": false,

@@ -18,9 +18,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "GTFO SF"
+            "name": "IntakeOut1"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake1"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GTFO SF"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeIn1"
           }
         }
       ]

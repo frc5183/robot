@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.404453575050949,
-        "y": 5.49846204428737
+        "x": 0.8565814232473583,
+        "y": 6.763845584140698
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.30629383641644026,
-        "y": 0.6032000147742679
+        "x": 0.061067428246510146,
+        "y": 7.941242058211292
       },
       "isLocked": false,
-      "linkedName": "MF Start"
+      "linkedName": "AF Start"
     },
     {
       "anchor": {
-        "x": 8.000362229940384,
-        "y": 0.7518198580141162
+        "x": 4.015550504738106,
+        "y": 7.726265842551689
       },
       "prevControl": {
-        "x": 7.106766310004574,
-        "y": 0.7361064786270033
+        "x": 2.989974374574229,
+        "y": 8.233505241611935
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MFF Second Note"
+      "linkedName": "Hide Amp"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.65,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 178.02506598911802,
+    "rotation": 178.53119928561415,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 177.79657357840603,
+    "rotation": -122.47154206591483,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

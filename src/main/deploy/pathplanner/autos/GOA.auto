@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Get Amp Note"
+                  "pathName": "GTFO AF"
                 }
               }
             ]
@@ -46,12 +46,6 @@
           "type": "named",
           "data": {
             "name": "IntakeIn1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "GTFO AF"
           }
         }
       ]
